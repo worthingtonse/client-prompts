@@ -93,5 +93,15 @@ exchange-peek
 show-config-info | Reads the configuration file | none | show-config-info | will return ini string (see format below)
 verify-password | creates a hash of the password and checks to see if it matches the ones in coin files | password | verify-password "I like turtles" | Returns "success" error string.
 
+# Echo-Raida Response format
+```
+{  
+	"online": 25,  
+	"pownstring": 
+	"ppppppppppppppppppppppppp",  
+	"pownarray": [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],  
+	"latencies": [1104,1104,1417,1407,1397,1416,1405,1412,1397,1407, 1406,1397,1413,1412,1405,1398,1413,1398,1414,1397,1410,1404,1403,1415,1113  ]
+}
+```
 
 
