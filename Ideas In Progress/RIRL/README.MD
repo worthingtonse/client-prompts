@@ -5,7 +5,7 @@ Developing the RIRL can be structured into a clear, multi-stage process. This ap
 * **Stage 1: Core Protocol Design & Prototyping (Months 1-3)**  
   * **Objective:** Define the core logic and data structures of the blockchain.  
   * **Key Tasks:**  
-    1. **Finalize DID Method Specification:** Formally define the did:raida method, specifying the structure of the identifier and the precise format of the DID Document. This document will contain essential information like public keys and service endpoints (IP address and port).1  
+    1. **Finalize DID (Decentralized Idenfitier) Method Specification:** Formally define the did:raida method, specifying the structure of the identifier and the precise format of the DID Document. This document will contain essential information like public keys and service endpoints (IP address and port).1  
     2. **Design Smart Contracts/Modules:** Architect the core on-chain logic for the DID Registry, the Proof-of-Stake (PoS) staking and slashing mechanisms, and the reputation tracking system.9  
     3. **Develop a Prototype:** Build a functional, single-node prototype of the RIRL to validate the core logic without the complexity of a distributed network.  
 * **Stage 2: Tooling and SDK Development (Months 2-4)**  
