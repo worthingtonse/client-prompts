@@ -6,7 +6,7 @@ CLI ASYNC
 Checks the health, status, and response times of all RAIDA servers by
 sending echo requests.
 
-C:\echo.exe 
+C:\echo.exe or just echo
 
 ## Description
 
