@@ -18,7 +18,6 @@ The implementation of this function relies on specifications detailed in the fol
 | Name | Type | Description |
 | :---- | :---- | :---- |
 | path\_to\_wallet\_folder | string | The full path to the folder containing Bank, Fracked and Limbo folders. |
-| locale	| string	| A language code (e.g., "en-US", "es-ES") for translating error messages. |
 
 ### **4.2. Return Value**
 
@@ -50,9 +49,6 @@ The implementation of this function relies on specifications detailed in the fol
 18. **Set index 19:**  The timer's time.
 19. **Print the return\_event\_array to the console**. 
 
-### **6.1.** translate\_error **Function**
-
-A local function translate\_error(locale, error\_code) must be created. It will take a language code and an error code and return a human-readable, translated string that describes the error and suggests a resolution. The AI should generate a translation table for the languages with more than 50 million speakers.
 
 ### **6.2. Error Codes**
 
