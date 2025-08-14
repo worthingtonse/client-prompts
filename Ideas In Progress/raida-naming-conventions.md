@@ -10,7 +10,7 @@ The root of Crystals
 2. Rockets
 3. Mazes
 4. Clouds
-5. Cats
+5. Giants
 6. Fire
 7. Ice
 8. Barrels
@@ -20,7 +20,7 @@ The root of Crystals
 12. Shrooms
 13. Stones
 14. Spheres
-15. Upside-down
+15. Tech
 16. Cones
 17. Pipes
 18. Arches
@@ -30,6 +30,7 @@ The root of Crystals
 22. Water
 23. Stars
 24. Obelisks
+25. Diagnals (only used for fault tollerance)
 
 **Ranks**
 0. Root
@@ -41,144 +42,63 @@ The root of Crystals
 6. General
 7. Knight
 8. Bishop
-9. Tower
+9. Castle
 10. Mage
 11. Biship
 12. Captain
 13. Commander
-14. Infiltrator
-15. Pawn
-16. Barron
+14. Madam
+15. Tower
+16. Baron
 17. Count
 18. Duke
-19. Monster
+19. Freak
 20. Ghost
-21. Devil
+21. Beast
 22. Angel
 23. Joker
+24. Killer
+25. Priest
+26. Scout
+27. Army
+28. Sage
+29. Prince
+30. Spy
+31. Brat
 
-The provided list of 25 ranks is already arranged from highest (most important) to lowest (least important), with "Root" at the top and "Joker" at the bottom, as requested. Therefore, no rearrangement is needed, and the list remains:
+**Descriptions**
+0. First (Reserved for Root Rank Raida)
+1. Forgoten
+2. Lost
+3. Flying
+4. Dark
+5. White
+6. Black
+7. Gray
+8. Blue
+9. Good
+10. Bad
+11. Stinky
+12. Angry
+13. Sneaky
+14. Golden
+15. Bold
+16. Velvet
+17. Rich
+18. Fat
+19. Gentle
+20. Mysterious
+21. Wise
+22. Generous
+23. Strong
+24. Loyal
 
-1. Root
-2. Ace
-3. Emperor
-4. Warlord
-5. Pope
-6. King
-7. General
-8. Knight
-9. Castle
-10. Ambassador
-11. Mage
-12. Bishop
-13. Captain
-14. Tower
-15. Spy
-16. Pawn
-17. Baron
-18. Count
-19. Duke
-20. Monster
-21. Ghost
-22. Devil
-23. Angel
-24. Fool
-25. Joker
+**Enemerated**
+1. First
+2. Second
+3. Third
+4. So on infinit
 
-**25 Other Possible Ranks**
-Below is a new list of 25 single-word, preferably one-syllable ranks, ordered from most important to least important, distinct from the original list:
-
-1. Chief
-2. Lord
-3. Star
-4. Crown
-5. Sage
-6. Prince
-7. Judge
-8. Hawk
-9. Blade
-10. Scout
-11. Priest
-12. Guard
-13. Helm
-14. Fox
-15. Wolf
-16. Rook
-17. Spear
-18. Shade
-19. Bolt
-20. Flame
-21. Mist
-22. Dusk
-23. Spark
-24. Dust
-25. Worm
-
-
-Captain, Barron, General, Mage, Tower, Jack, Queen, King, Emperes, General, Emperor, Knight, Bishop, Joker, 
-
-
-Each Rank has 25 : Eldest
-Honorable
-Rich
-Fat
-Ambitious
-Gentle
-Stubborn
-Cheerful
-Mysterious
-Athletic
-Wise
-Impulsive
-Generous
-Timid
-Creative
-Arrogant
-Compassionate
-Lazy
-Brilliant
-Moody
-Loyal
-Reckless
-Patient
-Cynical
-Charismatic
-
-
-
-Here are 25 Suits
-
-25 Ranks
-
-**Suits:**
-0. Crystals
-1. Cubes
-2. Tetrahedrons
-3. Octahedrons
-4. Dodecahedrons
-5. Wheels
-6. Capsules
-7. Spires
-8. Barrels
-9. Prisms
-10. Crescents
-11. Pyramids
-12. Mushrooms
-13. Stones
-14. Spheres
-15. Cylinders
-16. Cones
-17. Pipes
-18. Arches
-19. Pentagons
-20. Toruses
-21. Bells
-22. Wedges
-23. Stars
-24. Obelisks
-
-
-These shapes include the five Platonic solids (regular polyhedra), various prisms and pyramids, curved surfaces of revolution, and other common three-dimensional forms found in mathematics, engineering, and everyday objects. Each has distinct properties regarding faces, edges, vertices, and volume calculations.
 
 
 
