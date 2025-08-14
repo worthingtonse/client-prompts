@@ -2,7 +2,15 @@
 
 
 ## Types of RAIDA
-Root Raida
+
+Type | Description | Notes | Capabilities
+---|---|---|---
+Root Raida | The top 26 Raida | Track Coins in Default Location. Makes Change? | POWN, DKE, Directory, Mail
+Ranked Raida | Raida under the Roots | Holds coins. | POWN, DKE, Directory, Mail
+Mail Raida | Stores stuff | Stores Data for Users | DKE, Directory, Mail
+VPN Raida | Encrypt Traffic | Dumps off data and onboards data going somewhere else. | Directory
+Change RAIDA | ? | Makes Change
+
 
 
 There are 25 root zones called suits. 
