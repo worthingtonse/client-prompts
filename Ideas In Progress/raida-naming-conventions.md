@@ -1,10 +1,24 @@
 # Raida Naming Conventions: 
 
-There are 25 root zones. 
+
+## Types of RAIDA
+Root Raida
+
+
+There are 25 root zones called suits. 
+
+There are 32 pips called Ranks
+
+25 Descriptions
+
+Enless prefixes. 
+
 
 The root of Crystals
 
-**Suits:**
+## **Suits:**
+Example: Root of Crystals
+
 0. Crystals
 1. Cubes
 2. Rockets
@@ -32,7 +46,10 @@ The root of Crystals
 24. Obelisks
 25. Diagnals (only used for fault tollerance)
 
-**Ranks**
+## **Ranks**
+
+Example: Knight of Moutains
+
 0. Root
 1. Ace
 2. Emperor
@@ -66,7 +83,9 @@ The root of Crystals
 30. Spy
 31. Brat
 
-**Descriptions**
+## **Descriptions**
+Example: Lost Beast of Spheres
+
 0. First (Reserved for Root Rank Raida)
 1. Forgoten
 2. Lost
