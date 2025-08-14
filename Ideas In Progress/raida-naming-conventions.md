@@ -1,46 +1,182 @@
-# Raida naming conventions: 
+# Raida Naming Conventions: 
+
+There are 25 root zones. 
+
+The root of Crystals
+
+**Suits:**
+0. Crystals
+1. Cubes
+2. Rockets
+3. Mazes
+4. Clouds
+5. Cats
+6. Fire
+7. Ice
+8. Barrels
+9. Prisms
+10. Temples
+11. Pyramids
+12. Shrooms
+13. Stones
+14. Spheres
+15. Upside-down
+16. Cones
+17. Pipes
+18. Arches
+19. Dragons
+20. Moutains
+21. Bells
+22. Water
+23. Stars
+24. Obelisks
+
+**Ranks**
+0. Root
+1. Ace
+2. Emperor
+3. Warlord
+4. Pope
+5. King
+6. General
+7. Knight
+8. Bishop
+9. Tower
+10. Mage
+11. Biship
+12. Captain
+13. Commander
+14. Infiltrator
+15. Pawn
+16. Barron
+17. Count
+18. Duke
+19. Monster
+20. Ghost
+21. Devil
+22. Angel
+23. Joker
+
+The provided list of 25 ranks is already arranged from highest (most important) to lowest (least important), with "Root" at the top and "Joker" at the bottom, as requested. Therefore, no rearrangement is needed, and the list remains:
+
+1. Root
+2. Ace
+3. Emperor
+4. Warlord
+5. Pope
+6. King
+7. General
+8. Knight
+9. Castle
+10. Ambassador
+11. Mage
+12. Bishop
+13. Captain
+14. Tower
+15. Spy
+16. Pawn
+17. Baron
+18. Count
+19. Duke
+20. Monster
+21. Ghost
+22. Devil
+23. Angel
+24. Fool
+25. Joker
+
+**25 Other Possible Ranks**
+Below is a new list of 25 single-word, preferably one-syllable ranks, ordered from most important to least important, distinct from the original list:
+
+1. Chief
+2. Lord
+3. Star
+4. Crown
+5. Sage
+6. Prince
+7. Judge
+8. Hawk
+9. Blade
+10. Scout
+11. Priest
+12. Guard
+13. Helm
+14. Fox
+15. Wolf
+16. Rook
+17. Spear
+18. Shade
+19. Bolt
+20. Flame
+21. Mist
+22. Dusk
+23. Spark
+24. Dust
+25. Worm
 
 
-Root Raida
-Names of servers 
-0.Cubes
-1.Cubes
-2.Cubes
-3 of Cubes
-10 of Ovoids
-11 of Pyramids 
-.
-When a raida joins, they must join one of the Groups: 
+Captain, Barron, General, Mage, Tower, Jack, Queen, King, Emperes, General, Emperor, Knight, Bishop, Joker, 
 
 
-Here are 25 solid shapes (3D geometric forms):
+Each Rank has 25 : Eldest
+Honorable
+Rich
+Fat
+Ambitious
+Gentle
+Stubborn
+Cheerful
+Mysterious
+Athletic
+Wise
+Impulsive
+Generous
+Timid
+Creative
+Arrogant
+Compassionate
+Lazy
+Brilliant
+Moody
+Loyal
+Reckless
+Patient
+Cynical
+Charismatic
 
-**Basic Polyhedra:**
+
+
+Here are 25 Suits
+
+25 Ranks
+
+**Suits:**
+0. Crystals
 1. Cubes
 2. Tetrahedrons
 3. Octahedrons
 4. Dodecahedrons
-5. Icosahedrons
+5. Wheels
 6. Capsules
-7. Cuboids
+7. Spires
 8. Barrels
-9. Prismoids
-10. Ovoids
+9. Prisms
+10. Crescents
 11. Pyramids
-12. Hemispheres
-13. Disks
+12. Mushrooms
+13. Stones
 14. Spheres
 15. Cylinders
 16. Cones
-17. Ellipsoids
-18. Paraboloids
-19. Hyperboloids
+17. Pipes
+18. Arches
+19. Pentagons
 20. Toruses
-21. Frustums
+21. Bells
 22. Wedges
-23. Rhombohedrons
-24. Trapezohedrons
-25. Bipyramids
+23. Stars
+24. Obelisks
+
 
 These shapes include the five Platonic solids (regular polyhedra), various prisms and pyramids, curved surfaces of revolution, and other common three-dimensional forms found in mathematics, engineering, and everyday objects. Each has distinct properties regarding faces, edges, vertices, and volume calculations.
 
