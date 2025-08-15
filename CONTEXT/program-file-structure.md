@@ -7,7 +7,7 @@ This shows how the program is structured.
 D:/CloudCoin/       # Root parent folder. Assumes that drive 'D' is a USB drive. 
 ├── Pro/            # Container for all content
 │   ├── Wallets/
-│   ├── Client-Server-Keys/
+│   ├── Client Server Keys/
 │   │   ├── server.somedomain.com port 607623.txt
 │   │   ├── 143.74.11.42 port 80.txt
 │   │   └── company.org port 8892.txt
