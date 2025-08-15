@@ -96,15 +96,6 @@ The function should handle these error conditions:
 | File permission issues | Return error: "Unable to read receipt file" |
 | Empty receipt file | Return empty string |
 
-## Best Practices Compliance
-
-This function follows the established best practices:
-
-- **Never Delete Files**: Only reads receipt files, never modifies or deletes them
-- **Work Out of RAM**: Minimal memory usage for file reading
-- **Consistent Folder Structure**: Uses standardized wallet directory layout
-- **Data-Driven Approach**: Simple file reading without complex processing
-- **Error Recovery**: Handles various failure scenarios gracefully
 
 ## Integration Notes
 
