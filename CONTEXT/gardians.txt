@@ -2,4 +2,4 @@ guardian-id,url
 G0000,https://guardian0.chelgu.cz/host.txt
 G0007,https://ga7.nl/host.txt
 G0008,https://raidaguardian.nz/host.txt
-G0014,Keyword monitor for https://guardian14.gsxcover.com/host.txt, checking absence of RAIDA
+G0014,https://guardian14.gsxcover.com/host.txt
