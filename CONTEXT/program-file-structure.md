@@ -25,8 +25,9 @@ D:/CloudCoin/       # Root parent folder. Assumes that drive 'D' is a USB drive.
 │   ├── raidas.csv
 │   ├── last-export-folder-locations-dropdown.txt
 │   ├── program-config.txt
-│   ├── simple-log.txt         
-│   └── Statistics/            # Font files
+│   ├── simple-log.txt
+│   ├── last-echo-log.json         
+│   └── Performance Statistics/            # Font files
 │       ├── echos.csv
 │       ├── get-tickets.csv
 │       ├── fixes.csv
