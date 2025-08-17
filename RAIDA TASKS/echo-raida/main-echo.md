@@ -94,6 +94,6 @@ milliseconds for the corresponding RAIDA server.
   }
 }
 ```
-This JSON response object will also be written to the file named last-echo-log.json        
+If the status is completed, this JSON response object will also be written to the file named last-echo-log.json        
 
 That is found in CloudCoin/Pro/last-echo-log.json        
