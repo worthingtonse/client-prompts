@@ -18,9 +18,9 @@ D:/CloudCoin/       # Root parent folder. Assumes that drive 'D' is a USB drive.
 │   ├── Zipped Logs/           # Image assets
 │   │   ├── main-2025-08-07T03-23-17.494.log.txt
 │   │   └── main-2025-08-07T03-23-17.494.log.txt
-│   ├── main-log.csv
-│   ├── locations.txt
-│   ├── guardians.txt
+│   ├── main-log.txt
+│   ├── locations.csv
+│   ├── guardians.csv
 │   ├── root-hints.csv
 │   ├── raidas.csv
 │   ├── last-export-folder-locations-dropdown.txt
