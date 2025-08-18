@@ -29,7 +29,7 @@ Index | Code | Name | Info
 --- |---|---|---
 00 |RI | RAIDA ID  |  Integer 0 through 24. If the response is from RAIDA 3 it will be 3
 01 |SH | SHARD ID  |  Zero unless sharding is implemented
-02 |SS | Status    | That status code that is returned. See return [Status](#status-codes) codes.   
+02 |SS | Status    | That status code that is returned. See return [Status](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/status-codes-from-raida.md) codes.   
 03 | RV | Reserved  | For future use
 04 |UD | UDP Frame Count 0   |  This allows the client to know how to put the returned packets together in order. 
 05 |UD | UDP Frame Count 1   |  Lower Order Byte.
