@@ -1,7 +1,8 @@
 # Second 16 Bytes of the Request Headers For 128 Bit AES Encryption. 
 This specification is for when the client is sending requests encrypted in 128 bit AES. 
+Nouces should never be reused. Every RAIDA should get a different nouce if 25 calls are made in parallel.
 
-# Encryption Type 1, 2 and 3
+## Encryption Type 1, 2 and 3
 Encryption types 1, 2 and 3 have the same structure. The only thing that is different is how the numbers are calculated for the bytes in 17 through 21 (inclusive)
 
 ```mermaid
@@ -40,4 +41,30 @@ Index | Group | Code | Name | Notes
 
 * Nounce can do two jobs. Bytes 30, 31 are used as an Echo also.
 * The nounce is also a challenge. The RKE (RAIDA Key Exchange) server must decrypt this and place it in the response if RKE is enabled. 
+
+## Diferences Between Encryption Types 1, 2 and 3. 
+
+* Type 1 is for most calls and can use any coin file that the client has.
+* Type 2 is only used if the client has no coins but does have a locker number.
+* Type 3 is used only between Raida servers and does not need to be addressed here. 
+
+### Type 1
+All coins have shared secrets with raida servers that are the coins Authentiicy numbers. These Authenticity Numbers are 128 bits and are used as AES CTR 128 bit keys. 
+
+The Client can choose any coin to do the encryption. 
+
+Type 1 is the typical encryption used for all calls. The only calls that do not use Type 1 are case where the client does not have coins but the user has a locker number. 
+
+### Type 2
+Type 2 is when the client has no coins to use as encryption keys but does have a locker number. The locker numbers are 128 bit encryption keys. 
+The locker keys are actually unique identifies that allow the raida to associated coins with that UID. The client uses the first five bytes of the locker key to let 
+the Raida know which key it is using. The client does not show the remaining 11 bytes of the locker key. 
+
+The locker key maybe something like 343-HDEV but the real lockercode is the hash of this. So, any locker code provided by the client must be hashed using SHA 256 before it is used. 
+
+### Type 3
+Used by the raida servers and not covered here. 
+
+
+
 
