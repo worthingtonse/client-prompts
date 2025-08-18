@@ -6,14 +6,6 @@ This specification is for when the client is sending unencrypted requests or req
 
 [Request Headers Second 16 bytes](#second-16-bytes)
 
-[Request Header for Encryption Type 0](#encryption-type-0)
-
-[Request Header for Encryption Type 1](#encryption-type-1)
-
-[Request Header for Encryption Type 2](#encryption-type-2)
-
-[Request Header for Encryption Type 3](#encryption-type-3)
-
 # Overview
 This prodocol allows clients to send requests to the RAIDA. 
 
@@ -82,6 +74,15 @@ packet-beta
 
 # Second 16 Bytes
 The second 16 bytes are determined by the [Encryption Type](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/encryption-types-used-in-requests.md).
+
+[Request Header for Encryption Type 0](#encryption-type-0)
+
+[Request Header for Encryption Type 1](#encryption-type-1)
+
+[Request Header for Encryption Type 2](#encryption-type-2)
+
+[Request Header for Encryption Type 3](#encryption-type-3)
+
 
 ## Encryption Type 0
 Type zero uses no encryption so the values are almost always the same. Here is an example with the static numbers and the variables numbers with a dollar sign. 
