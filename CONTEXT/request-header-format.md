@@ -83,9 +83,13 @@ The second 16 bytes are determined by the [Encryption Type](https://github.com/w
 
 [Request Header for Encryption Type 3](#encryption-type-3)
 
+[Request Header for Encryption Type 4](#encryption-type-2)
+
+[Request Header for Encryption Type 5](#encryption-type-3)
+
 
 ## Encryption Type 0
-Type zero uses no encryption so the values are almost always the same. Here is an example with the static numbers and the variables numbers with a dollar sign. 
+Type zero uses no encryption so the values are almost always the same. Here is the second 16 bytes of the request header with the static numbers required and the variables numbers with a dollar sign. 
 
 ```
 00 00 00 00 00 $22 $23 00 00 00 00 00 00 00 $30 $31
@@ -109,7 +113,7 @@ packet-beta
 +32: "0"
 +16: "Body Length including two terminating bytes"
 +48: "0"
-+16: Random bytes that client uses as request task id. 
++16: "Random bytes that client uses as request task id"
 ```
 
 ### Request Header Byte by Byte Code Meanings
