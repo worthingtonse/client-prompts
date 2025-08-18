@@ -77,15 +77,15 @@ The second 16 bytes are determined by the [Encryption Type](https://github.com/w
 
 [Request Header for Encryption Type 0](#encryption-type-0)
 
-[Request Header for Encryption Type 1](#encryption-type-1)
+[Request Header for Encryption Type 1](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/request-header-format-for-128-encryption.md)
 
-[Request Header for Encryption Type 2](#encryption-type-2)
+[Request Header for Encryption Type 2](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/request-header-format-for-128-encryption.md)
 
-[Request Header for Encryption Type 3](#encryption-type-3)
+[Request Header for Encryption Type 3](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/request-header-format-for-128-encryption.md)
 
-[Request Header for Encryption Type 4](#encryption-type-2)
+[Request Header for Encryption Type 4](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/request-header-format-for-256-bit-encryption.md)
 
-[Request Header for Encryption Type 5](#encryption-type-3)
+[Request Header for Encryption Type 5](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/request-header-format-for-256-bit-encryption.md)
 
 
 ## Encryption Type 0
