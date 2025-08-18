@@ -64,7 +64,6 @@ Offset(h) |`0x00` | `0x01` | `0x02` | `0x03` |`0x04` |`0x05`|`0x06`|`0x07`|`0x08
 `0x00` | VR |SP |RI |SH| CG | CM |C#| C#| VR | AP| AP |CP | TR| AI| RE| RE 
 `0x10` | EN | 0 |0 |0| 0 | 0 |BL| BL| O| O | O| O |O | O| O| O 
 
-![Color Chart of Bytes](zips/h.png)
 
 ### Request Header Byte by Byte Code Meanings
 
@@ -74,8 +73,8 @@ Index | Group | Code | Name | Notes
 01 | Routing | SP | Split ID | For future use in case the token is to be split. Otherwise zero. 
 02 | Routing | RI | RAIDA ID  |  Detection Agents called RAIDA Servers. Value must be 0-24. 
 03 | Routing | SH | Shard ID  | For future use in case the token is to be sharded. For now, zero. 
-04 | Routing | CG | [Command Group](#command-groups) | High order byte for command number
-05 | Routing | CM | [Command](#commands)  | Low Number byte for command number
+04 | Routing | CG | [Command Group](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/commands.md#command-groups)| High order byte for command number
+05 | Routing | CM | [Command](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/commands.md#command-codes)  | Low Number byte for command number
 06 | Routing | C#  |  Coin ID | 0 unless there are coins numbered greater than 255.
 07 | Routing | C#  |  Coin ID | 6 for CloudCoin
 08 | Presentation | RS | Reserved | Reserved for future use. 
@@ -86,7 +85,7 @@ Index | Group | Code | Name | Notes
 13 | Presentation | AI  |AI Translation | Future Use. 0 means none. What type of AI should be used to translate.
 14 | Presentation | ii |  i | The packet index number in the message array
 15 | Presentation | LE |  AR | The length of packets in the message array.
-16 | Encryption | EN  | [Encryption](#encryption) Type  |  0x00 means no encryption. See encryption codes table.
+16 | Encryption | EN  | [Encryption](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/encryption-types-used-in-requests.md) Type  |  0x00 means no encryption. See encryption codes table.
 17 | Encryption | 0 | Not needed |
 18 | Encryption | 0 | Not needed| 
 19 | Encryption | 0 |  Not needed | 
@@ -107,8 +106,6 @@ Index | Group | Code | Name | Notes
 * If EN (byte 16) is zero (no encryption) then bytes 17-31 may take any values. In 'no encryption' mode, these values will be ignored except for the two echo bytes. 
 
 
-
-
 # Encryption Type 1
 
 ```javascript
@@ -117,8 +114,6 @@ VR AP AP CP TR AI RE RE  // 8 Presentation Bytes
 EN DN SN SN SN SN BL BL  // 8 Encryption Bytes
 NO NO NO NO NO NO EC EC  // 8 Nounce Bytes
 ```
-
-# Encryption Type 0
 ```mermaid
 ---
 title: "RAIDA Protocol Header 128 bit Encryption"
@@ -152,8 +147,6 @@ Offset(h) |`0x00` | `0x01` | `0x02` | `0x03` |`0x04` |`0x05`|`0x06`|`0x07`|`0x08
 `0x00` | VR |SP |RI |SH| CG | CM |C#| C#| VR | AP| AP |CP | TR| AI| RE| RE 
 `0x10` | EN | DN |SN |SN| SN | SN |BL| BL| NO| NO | NO| NO |NO | NO| NO| NO 
 
-![Color Chart of Bytes](zips/h.png)
-
 ### Request Header Byte by Byte Code Meanings
 
 Index | Group | Code | Name | Notes
@@ -162,8 +155,8 @@ Index | Group | Code | Name | Notes
 01 | Routing | SP | Split ID | For future use in case the token is to be split. Otherwise zero. 
 02 | Routing | RI | RAIDA ID  |  Detection Agents called RAIDA Servers. Value must be 0-24. 
 03 | Routing | SH | Shard ID  | For future use in case the token is to be sharded. For now, zero. 
-04 | Routing | CG | [Command Group](#command-groups) | High order byte for command number
-05 | Routing | CM | [Command](#commands)  | Low Number byte for command number
+04 | Routing | CG | [Command Group](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/commands.md#command-groups)| High order byte for command number
+05 | Routing | CM | [Command](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/commands.md#command-codes)  | Low Number byte for command number
 06 | Routing | ID  |  WEST's RAIDA ID 0 | Allways zero for WEST
 07 | Routing | ID  |  WEST's RAIDA ID | Always 1 for WEST
 08 | Presentation | BF | Bitfield  | Describes if the eight Routing fields are just random. The first bit is always random. 
@@ -174,8 +167,8 @@ Index | Group | Code | Name | Notes
 13 | Presentation | AI  |AI Translation | Future Use. 0 means none. What type of AI should be used to translate.
 14 | Presentation | ii |  i | The packet index number in the message array
 15 | Presentation | LE |  AR | The length of packets in the message array.
-16 | Encryption | EN  | [Encryption](#encryption) Type  |  0x00 means no encryption. See encryption codes table.
-17 | Encryption | DE | [Denomination](#denominations) | Denomination of the token used to encrypt the request body.
+16 | Encryption | EN  | [Encryption](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/encryption-types-used-in-requests.md) Type  |  0x00 means no encryption. See encryption codes table.
+17 | Encryption | DE | [Denomination](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/denominations.md) | Denomination of the token used to encrypt the request body.
 18 | Encryption | SN | Encryption token SN 0| Serial Number of the token used to encrypt the body. HOB
 19 | Encryption | SN |  Encryption token SN 1 | 2nd Highest Order Byte
 20 | Encryption | SN |  Encryption token SN 2 |  
@@ -204,8 +197,6 @@ VR AP AP CP TR AI RE RE  // 8 Presentation Bytes
 EN DN SN SN SN SN BL BL  // 8 Encryption Bytes
 NO NO NO NO NO NO EC EC  // 8 Nounce Bytes
 ```
-
-# Encryption Type 0
 ```mermaid
 ---
 title: "RAIDA Protocol Header 128 bit Encryption"
@@ -249,8 +240,8 @@ Index | Group | Code | Name | Notes
 01 | Routing | SP | Split ID | For future use in case the token is to be split. Otherwise zero. 
 02 | Routing | RI | RAIDA ID  |  Detection Agents called RAIDA Servers. Value must be 0-24. 
 03 | Routing | SH | Shard ID  | For future use in case the token is to be sharded. For now, zero. 
-04 | Routing | CG | [Command Group](#command-groups) | High order byte for command number
-05 | Routing | CM | [Command](#commands)  | Low Number byte for command number
+04 | Routing | CG | [Command Group](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/commands.md#command-groups)| High order byte for command number
+05 | Routing | CM | [Command](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/commands.md#command-codes)  | Low Number byte for command number
 06 | Routing | ID  |  WEST's RAIDA ID 0 | Allways zero for WEST
 07 | Routing | ID  |  WEST's RAIDA ID | Always 1 for WEST
 08 | Presentation | BF | Bitfield  | Describes if the eight Routing fields are just random. The first bit is always random. 
@@ -261,8 +252,8 @@ Index | Group | Code | Name | Notes
 13 | Presentation | AI  |AI Translation | Future Use. 0 means none. What type of AI should be used to translate.
 14 | Presentation | ii |  i | The packet index number in the message array
 15 | Presentation | LE |  AR | The length of packets in the message array.
-16 | Encryption | EN  | [Encryption](#encryption) Type  |  0x00 means no encryption. See encryption codes table.
-17 | Encryption | DE | [Denomination](#denominations) | Denomination of the token used to encrypt the request body.
+16 | Encryption | EN  | [Encryption](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/encryption-types-used-in-requests.md) Type  |  0x00 means no encryption. See encryption codes table.
+17 | Encryption | DE | [Denomination](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/denominations.md) | Denomination of the token used to encrypt the request body.
 18 | Encryption | SN | Encryption token SN 0| Serial Number of the token used to encrypt the body. HOB
 19 | Encryption | SN |  Encryption token SN 1 | 2nd Highest Order Byte
 20 | Encryption | SN |  Encryption token SN 2 |  
@@ -291,8 +282,6 @@ VR AP AP CP TR AI RE RE  // 8 Presentation Bytes
 EN DN SN SN SN SN BL BL  // 8 Encryption Bytes
 NO NO NO NO NO NO EC EC  // 8 Nounce Bytes
 ```
-
-# Encryption Type 0
 ```mermaid
 ---
 title: "RAIDA Protocol Header 128 bit Encryption"
@@ -325,8 +314,6 @@ Offset(h) |`0x00` | `0x01` | `0x02` | `0x03` |`0x04` |`0x05`|`0x06`|`0x07`|`0x08
 `0x00` | VR |SP |RI |SH| CG | CM |ID| ID| VR | AP| AP |CP | TR| AI| RE| RE 
 `0x10` | EN | DN |SN |SN| SN | SN |BL| BL| NO| NO | NO| NO |NO | NO| NO| NO 
 
-![Color Chart of Bytes](zips/h.png)
-
 ### Request Header Byte by Byte Code Meanings
 
 Index | Group | Code | Name | Notes
@@ -335,8 +322,8 @@ Index | Group | Code | Name | Notes
 01 | Routing | SP | Split ID | For future use in case the token is to be split. Otherwise zero. 
 02 | Routing | RI | RAIDA ID  |  Detection Agents called RAIDA Servers. Value must be 0-24. 
 03 | Routing | SH | Shard ID  | For future use in case the token is to be sharded. For now, zero. 
-04 | Routing | CG | [Command Group](#command-groups) | High order byte for command number
-05 | Routing | CM | [Command](#commands)  | Low Number byte for command number
+04 | Routing | CG | [Command Group](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/commands.md#command-groups)| High order byte for command number
+05 | Routing | CM | [Command](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/commands.md#command-codes)  | Low Number byte for command number
 06 | Routing | ID  |  WEST's RAIDA ID 0 | Allways zero for WEST
 07 | Routing | ID  |  WEST's RAIDA ID | Always 1 for WEST
 08 | Presentation | BF | Bitfield  | Describes if the eight Routing fields are just random. The first bit is always random. 
@@ -347,8 +334,8 @@ Index | Group | Code | Name | Notes
 13 | Presentation | AI  |AI Translation | Future Use. 0 means none. What type of AI should be used to translate.
 14 | Presentation | ii |  i | The packet index number in the message array
 15 | Presentation | LE |  AR | The length of packets in the message array.
-16 | Encryption | EN  | [Encryption](#encryption) Type  |  0x00 means no encryption. See encryption codes table.
-17 | Encryption | DE | [Denomination](#denominations) | Denomination of the token used to encrypt the request body.
+16 | Encryption | EN  | [Encryption](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/encryption-types-used-in-requests.md) Type  |  0x00 means no encryption. See encryption codes table.
+17 | Encryption | DE | [Denomination](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/denominations.md) | Denomination of the token used to encrypt the request body.
 18 | Encryption | SN | Encryption token SN 0| Serial Number of the token used to encrypt the body. HOB
 19 | Encryption | SN |  Encryption token SN 1 | 2nd Highest Order Byte
 20 | Encryption | SN |  Encryption token SN 2 |  
@@ -367,6 +354,3 @@ Index | Group | Code | Name | Notes
 * Nounce can do two jobs. Bytes 30, 31 are used as an Echo also.
 * If EN (byte 16) is zero (no encryption) then bytes 17-31 may take any values. In 'no encryption' mode, these values will be ignored except for the two echo bytes. 
 * The nounce is also a challenge. The RKE (RAIDA Key Exchange) server must decrypt this and place it in the response if RKE is enabled. 
-
-
-
