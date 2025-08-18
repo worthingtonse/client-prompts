@@ -16,8 +16,8 @@ D:/CloudCoin/       # Root parent folder. Assumes that drive 'D' is a USB drive.
 │   ├── Coin Images/
 │   ├── Drivers/           # For all the files that make the executable work such as dlls 
 │   ├── Zipped Logs/           # Image assets
-│   │   ├── main-2025-08-07T03-23-17.494.log.txt
-│   │   └── main-2025-08-07T03-23-17.494.log.txt
+│   │   ├── main-2025-08-07T03-23-17.494.log.zip
+│   │   └── main-2025-08-07T03-23-17.494.log.zip
 │   ├── main-log.txt
 │   ├── locations.csv
 │   ├── guardians.csv
