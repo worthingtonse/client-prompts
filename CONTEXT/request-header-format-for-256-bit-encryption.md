@@ -30,7 +30,7 @@ packet-beta
 +16: "BL"
 +8: "DN"
 +32: "Serial No"
-+200: "Nounce"
++128: "nonce"
 ```
 ### Request Header index bytes 16 to bytes 47
 
@@ -66,7 +66,7 @@ Index | Group | Code | Name | Notes
 43 | Nonce | NO |  Nonce 19 | 
 44 | Nonce | NO |  Nonce 20 |
 45 | Nonce | NO |  Nonce 21 | 
-46 | Nonce | NO |  Nonce 22 | The raida echo the last two bytes of the nounce in the Return Header. 
+46 | Nonce | NO |  Nonce 22 | The raida echo the last two bytes of the nonce in the Return Header. 
 47 | Nonce | NO |  Nonce 23 | The echo is to allow Clients to track which request the response was for. 
 
 
@@ -78,7 +78,7 @@ This is different from Encryption Type 4 which is used when the client and serve
 
 
 RAIDA Protocol Header Encryption Type 5 has 48 bytes fixed. It is exactly the same as Encryption Type 4 except that bytes 
-24, 25, 26, 27 and 28 are used to identify a second key as well as be part of the nounce. Byte 24 is the denomination of the second key
+24, 25, 26, 27 and 28 are used to identify a second key as well as be part of the nonce. Byte 24 is the denomination of the second key
 and bytes 25 though 28 are the four byte serial number of the second key. 
 
 ### Packet Format
@@ -92,9 +92,9 @@ packet-beta
 +16: "BL"
 +8: "DN"
 +32: "Serial No"
-+8: "DN2/Nounce"
++8: "DN2/nonce"
 +32: "Serial No 2/ Nounc"
-+160: "Nounce"
++152: "nonce"
 ```
 ### Request Header Byte by Byte Code Meanings
 
@@ -108,8 +108,8 @@ Index | Group | Code | Name | Notes
 21 | Encryption | SN |  Encryption token SN 1 | 2nd Highest Order Byte
 22 | Encryption | SN |  Encryption token SN 2 |  
 23 | Encryption | SN |  Encryption token SN 3| Lowest Order Byte
-24 | Nonce | NO |  DN 2 and Nonce 0 | This byte is the Denomination of key 2 but is also used in the nounce. 
-25 | Nonce | NO |  SN2 0 and Nonce 1 | These four bytes are the SNs of key 2 but are also used in the nounce. 
+24 | Nonce | NO |  DN 2 and Nonce 0 | This byte is the Denomination of key 2 but is also used in the nonce. 
+25 | Nonce | NO |  SN2 0 and Nonce 1 | These four bytes are the SNs of key 2 but are also used in the nonce. 
 26 | Nonce | NO |  SN2 and Nonce 2 |
 27 | Nonce | NO |  SN3 and Nonce 3 | 
 28 | Nonce | NO |  SN4 and Nonce 4 | 
@@ -130,5 +130,5 @@ Index | Group | Code | Name | Notes
 43 | Nonce | NO |  Nonce 19 | 
 44 | Nonce | NO |  Nonce 20 |
 45 | Nonce | NO |  Nonce 21 | 
-46 | Nonce | NO |  Nonce 22 | The raida echo the last two bytes of the nounce in the Return Header. 
+46 | Nonce | NO |  Nonce 22 | The raida echo the last two bytes of the nonce in the Return Header. 
 47 | Nonce | NO |  Nonce 23 | The echo is to allow Clients to track which request the response was for. 
