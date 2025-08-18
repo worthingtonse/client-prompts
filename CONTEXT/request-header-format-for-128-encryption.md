@@ -77,30 +77,30 @@ Index | Group | Code | Name | Notes
 05 | Routing | CM | [Command](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/commands.md#command-codes)  | Low Number byte for command number
 06 | Routing | C#  |  Coin ID | 0 unless there are coins numbered greater than 255.
 07 | Routing | C#  |  Coin ID | 6 for CloudCoin
-08 | Presentation | RS | Reserved | Reserved for future use. 
-09  | Presentation | AP | Application 0| | Applications are generally numbered by the port they use
-10 | Presentation | AP  | Application 1 |  0 means generic. 80 = HTTP, 25 =SMTP etc. 
+08 | Presentation | RS | Reserved | Reserved for future use. Zero for now
+09  | Presentation | AP | Application 0| | For future use. Applications are generally numbered by the port they use. Zero for now.
+10 | Presentation | AP  | Application 1 |  For future use. 0 means generic. 80 = HTTP, 25 =SMTP etc. Zero for now. 
 11 | Presentation | CP | Compression | Future Use. 0 means none (Future Use)
 12 | Presentation | TR | Translation | Future Use. 0 means none. Can be used to encode text-based protocols. 
 13 | Presentation | AI  |AI Translation | Future Use. 0 means none. What type of AI should be used to translate.
 14 | Presentation | ii |  i | The packet index number in the message array
 15 | Presentation | LE |  AR | The length of packets in the message array.
 16 | Encryption | EN  | [Encryption](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/encryption-types-used-in-requests.md) Type  |  0x00 means no encryption. See encryption codes table.
-17 | Encryption | 0 | Not needed |
-18 | Encryption | 0 | Not needed| 
-19 | Encryption | 0 |  Not needed | 
-20 | Encryption | 0 |  Not needed |  
-21 | Encryption | 0 |  Not needed| 
+17 | Encryption | 0 | Not needed | Use zero for encryption type 0.
+18 | Encryption | 0 | Not needed| Use zero for encryption type 0.
+19 | Encryption | 0 |  Not needed | Use zero for encryption type 0.
+20 | Encryption | 0 |  Not needed |  Use zero for encryption type 0.
+21 | Encryption | 0 |  Not needed| Use zero for encryption type 0.
 22 | Encryption | BL u16| Body Length | Length in bytes of the entire body including the last 2 terminating bytes. 
 23 | Encryption | BL u16| Body Length| LOB. if more than 65,535 bytes are sent, then bytes 22 and 23 will be FF FF and bytes 24, 25, 26 and 27 will be the body length. 
-24 | Nonce | 0 |  Not needed | 
-25 | Nonce | 0 |  Not needed | 
-26 | Nonce | 0 |  Not needed |
-27 | Nonce | 0 |  Not needed| 
-28 | Nonce | 0 |  Not needed | 
-29 | Nonce | 0 |  Not needed | 
-30 | Nonce | random |  Echo 0 | These bytes are always echoed back to the client so the client knows what the response if for. 
-31 | Nonce | random |   Echo 1 | 
+24 | Nonce | 0 |  Not needed | Use zero for encryption type 0.
+25 | Nonce | 0 |  Not needed | Use zero for encryption type 0.
+26 | Nonce | 0 |  Not needed |Use zero for encryption type 0.
+27 | Nonce | 0 |  Not needed| Use zero for encryption type 0.
+28 | Nonce | 0 |  Not needed | Use zero for encryption type 0.
+29 | Nonce | 0 |  Not needed | Use zero for encryption type 0.
+30 | Nonce | random |  Echo 0 | Random byte.  These bytes are always echoed back to the client so the client knows what the response if for. 
+31 | Nonce | random |   Echo 1 | Random byte.
 
 * Nounce can do two jobs. Bytes 30, 31 are used as an Echo also.
 * If EN (byte 16) is zero (no encryption) then bytes 17-31 may take any values. In 'no encryption' mode, these values will be ignored except for the two echo bytes. 
@@ -151,17 +151,17 @@ Offset(h) |`0x00` | `0x01` | `0x02` | `0x03` |`0x04` |`0x05`|`0x06`|`0x07`|`0x08
 
 Index | Group | Code | Name | Notes
 ---|---|---|---|---
-00 | Routing | BF | Bitfield  | Describes if the eight Routing fields are just random. The first bit is always random. 
+00 | Routing | VR | Bitfield  | The request header version. Should be zero. 
 01 | Routing | SP | Split ID | For future use in case the token is to be split. Otherwise zero. 
 02 | Routing | RI | RAIDA ID  |  Detection Agents called RAIDA Servers. Value must be 0-24. 
 03 | Routing | SH | Shard ID  | For future use in case the token is to be sharded. For now, zero. 
 04 | Routing | CG | [Command Group](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/commands.md#command-groups)| High order byte for command number
 05 | Routing | CM | [Command](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/commands.md#command-codes)  | Low Number byte for command number
-06 | Routing | ID  |  WEST's RAIDA ID 0 | Allways zero for WEST
-07 | Routing | ID  |  WEST's RAIDA ID | Always 1 for WEST
-08 | Presentation | BF | Bitfield  | Describes if the eight Routing fields are just random. The first bit is always random. 
-09  | Presentation | AP | Application 0| | Applications are generally numbered by the port they use
-10 | Presentation | AP  | Application 1 |  0 means generic. 80 = HTTP, 25 =SMTP etc. 
+06 | Routing | C#  |  Coin ID | 0 unless there are coins numbered greater than 255.
+07 | Routing | C#  |  Coin ID | 6 for CloudCoin
+08 | Presentation | RS | Reserved | Reserved for future use. Zero for now
+09  | Presentation | AP | Application 0| | For future use. Applications are generally numbered by the port they use. Zero for now.
+10 | Presentation | AP  | Application 1 |  For future use. 0 means generic. 80 = HTTP, 25 =SMTP etc. Zero for now. 
 11 | Presentation | CP | Compression | Future Use. 0 means none (Future Use)
 12 | Presentation | TR | Translation | Future Use. 0 means none. Can be used to encode text-based protocols. 
 13 | Presentation | AI  |AI Translation | Future Use. 0 means none. What type of AI should be used to translate.
@@ -235,17 +235,17 @@ Offset(h) |`0x00` | `0x01` | `0x02` | `0x03` |`0x04` |`0x05`|`0x06`|`0x07`|`0x08
 
 Index | Group | Code | Name | Notes
 ---|---|---|---|---
-00 | Routing | BF | Bitfield  | Describes if the eight Routing fields are just random. The first bit is always random. 
+00 | Routing | VR | Bitfield  | The request header version. Should be zero. 
 01 | Routing | SP | Split ID | For future use in case the token is to be split. Otherwise zero. 
 02 | Routing | RI | RAIDA ID  |  Detection Agents called RAIDA Servers. Value must be 0-24. 
 03 | Routing | SH | Shard ID  | For future use in case the token is to be sharded. For now, zero. 
 04 | Routing | CG | [Command Group](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/commands.md#command-groups)| High order byte for command number
 05 | Routing | CM | [Command](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/commands.md#command-codes)  | Low Number byte for command number
-06 | Routing | ID  |  WEST's RAIDA ID 0 | Allways zero for WEST
-07 | Routing | ID  |  WEST's RAIDA ID | Always 1 for WEST
-08 | Presentation | BF | Bitfield  | Describes if the eight Routing fields are just random. The first bit is always random. 
-09  | Presentation | AP | Application 0| | Applications are generally numbered by the port they use
-10 | Presentation | AP  | Application 1 |  0 means generic. 80 = HTTP, 25 =SMTP etc. 
+06 | Routing | C#  |  Coin ID | 0 unless there are coins numbered greater than 255.
+07 | Routing | C#  |  Coin ID | 6 for CloudCoin
+08 | Presentation | RS | Reserved | Reserved for future use. Zero for now
+09  | Presentation | AP | Application 0| | For future use. Applications are generally numbered by the port they use. Zero for now.
+10 | Presentation | AP  | Application 1 |  For future use. 0 means generic. 80 = HTTP, 25 =SMTP etc. Zero for now. 
 11 | Presentation | CP | Compression | Future Use. 0 means none (Future Use)
 12 | Presentation | TR | Translation | Future Use. 0 means none. Can be used to encode text-based protocols. 
 13 | Presentation | AI  |AI Translation | Future Use. 0 means none. What type of AI should be used to translate.
@@ -317,17 +317,17 @@ Offset(h) |`0x00` | `0x01` | `0x02` | `0x03` |`0x04` |`0x05`|`0x06`|`0x07`|`0x08
 
 Index | Group | Code | Name | Notes
 ---|---|---|---|---
-00 | Routing | BF | Bitfield  | Describes if the eight Routing fields are just random. The first bit is always random. 
+00 | Routing | VR | Bitfield  | The request header version. Should be zero. 
 01 | Routing | SP | Split ID | For future use in case the token is to be split. Otherwise zero. 
 02 | Routing | RI | RAIDA ID  |  Detection Agents called RAIDA Servers. Value must be 0-24. 
 03 | Routing | SH | Shard ID  | For future use in case the token is to be sharded. For now, zero. 
 04 | Routing | CG | [Command Group](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/commands.md#command-groups)| High order byte for command number
 05 | Routing | CM | [Command](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/commands.md#command-codes)  | Low Number byte for command number
-06 | Routing | ID  |  WEST's RAIDA ID 0 | Allways zero for WEST
-07 | Routing | ID  |  WEST's RAIDA ID | Always 1 for WEST
-08 | Presentation | BF | Bitfield  | Describes if the eight Routing fields are just random. The first bit is always random. 
-09  | Presentation | AP | Application 0| | Applications are generally numbered by the port they use
-10 | Presentation | AP  | Application 1 |  0 means generic. 80 = HTTP, 25 =SMTP etc. 
+06 | Routing | C#  |  Coin ID | 0 unless there are coins numbered greater than 255.
+07 | Routing | C#  |  Coin ID | 6 for CloudCoin
+08 | Presentation | RS | Reserved | Reserved for future use. Zero for now
+09  | Presentation | AP | Application 0| | For future use. Applications are generally numbered by the port they use. Zero for now.
+10 | Presentation | AP  | Application 1 |  For future use. 0 means generic. 80 = HTTP, 25 =SMTP etc. Zero for now. 
 11 | Presentation | CP | Compression | Future Use. 0 means none (Future Use)
 12 | Presentation | TR | Translation | Future Use. 0 means none. Can be used to encode text-based protocols. 
 13 | Presentation | AI  |AI Translation | Future Use. 0 means none. What type of AI should be used to translate.
