@@ -20,18 +20,18 @@ D:/CloudCoin/Pro/
 
 ## Primary Location File
 
-### locations.csv (Primary Format)
+### locations.csv (Simplified Format)
 
 **Format**: CSV with headers  
 **Encoding**: UTF-8  
-**Purpose**: Primary location configuration with metadata and active location tracking
+**Purpose**: Simple location configuration with only essential, non-calculated data
 
 ```csv
-path,active,type,label,last_used,accessible,size_mb,description
-D:\CloudCoin\Pro\Wallets,true,local,Default Location,2025-01-15T10:30:00Z,true,1250.5,Primary wallet storage
-C:\Users\User\Documents\CloudCoin\Backup,false,local,Backup Location,2025-01-14T15:20:00Z,true,850.2,Backup wallet location
-E:\USB_Backup\CloudCoin\Data,false,usb,USB Backup,2025-01-13T09:15:00Z,false,0,External USB drive
-\\NetworkDrive\CloudCoin\Shared,false,network,Network Share,2025-01-10T14:30:00Z,true,2100.8,Shared network storage
+path,type
+D:\CloudCoin\Pro\Wallets,local
+C:\Users\User\Documents\CloudCoin\Backup,local
+E:\USB_Backup\CloudCoin\Data,usb
+\\NetworkDrive\CloudCoin\Shared,network
 ```
 
 #### CSV Column Definitions
@@ -39,38 +39,35 @@ E:\USB_Backup\CloudCoin\Data,false,usb,USB Backup,2025-01-13T09:15:00Z,false,0,E
 | Column | Type | Required | Description |
 |--------|------|----------|-------------|
 | path | string | Yes | Absolute file system path |
-| active | boolean | Yes | Whether this is the active location |
-| type | enum | No | Location type: local, usb, network, cloud |
-| label | string | No | Human-readable location name |
-| last_used | datetime | No | Last access timestamp (ISO 8601) |
-| accessible | boolean | No | Whether location is currently accessible |
-| size_mb | float | No | Storage size in megabytes |
-| description | string | No | Location description |
+| type | enum | No | Location type for future use (optional) |
 
 #### Required CSV Structure
 - **Header row**: Must contain column names as specified above
 - **Path column**: First column must be the absolute file system path
-- **Active column**: Second column must be boolean indicating active status
-- **Additional columns**: Optional but recommended for enhanced functionality
+- **Type column**: Optional, for future use
+- **Order matters**: First location in file is the default/primary location
 
-#### Path Format Examples
+#### Cross-Platform Path Examples
 ```csv
-path,active,type,label,last_used,accessible,size_mb,description
-# Windows local paths
-D:\CloudCoin\Pro\Wallets,true,local,Primary Location,2025-01-15T10:30:00Z,true,1250.5,Main wallet storage
-C:\Users\username\Documents\CloudCoin\Backup,false,local,Backup Storage,2025-01-14T15:20:00Z,true,850.2,Backup location
+path,type
+# Windows paths
+D:\CloudCoin\Pro\Wallets,local
+C:\Users\%USERNAME%\Documents\CloudCoin\Backup,local
+\\server\share\CloudCoin\Data,network
 
-# Windows network paths
-\\server\share\CloudCoin\Data,false,network,Network Storage,2025-01-13T09:15:00Z,true,2100.8,Shared network drive
-\\192.168.1.100\cloudcoin\shared,false,network,IP Share,2025-01-12T14:30:00Z,false,0,Direct IP network share
-
-# Unix/Linux paths
-/home/username/cloudcoin/wallets,true,local,Home Directory,2025-01-15T10:30:00Z,true,500.3,User home storage
-/mnt/usb/cloudcoin/backup,false,usb,USB Backup,2025-01-14T08:45:00Z,false,0,External USB storage
+# Linux paths  
+/home/$USER/cloudcoin/wallets,local
+/mnt/usb/cloudcoin/backup,usb
+/media/external/cloudcoin,usb
 
 # Mac paths
-/Users/username/CloudCoin/Wallets,true,local,User Wallets,2025-01-15T10:30:00Z,true,750.8,Main wallet folder
-/Volumes/USB/CloudCoin/Data,false,usb,USB Drive,2025-01-13T16:20:00Z,false,0,External USB volume
+/Users/$USER/CloudCoin/Wallets,local
+/Volumes/USB/CloudCoin/Data,usb
+/Volumes/NetworkDrive/CloudCoin,network
+
+# Universal paths (using environment variables)
+%USERPROFILE%\Documents\CloudCoin\Wallets,local
+$HOME/cloudcoin/wallets,local
 ```
 
 ### last-export-folder-locations-dropdown.txt
@@ -92,59 +89,49 @@ E:\USB_Exports\CloudCoin
 - **Absolute paths**: All paths should be absolute
 - **Auto-cleanup**: Invalid paths may be automatically removed
 
-## Location Types and Classification
+## Location Types (Future Use)
 
-### Location Types
-| Type | Description | Detection Criteria |
-|------|-------------|-------------------|
-| **local** | Local file system path | Local drive letters (C:\, D:\) or home directories |
-| **usb** | USB drive or removable media | Removable media paths or mount points |
-| **network** | Network share or mapped drive | UNC paths (\\server\share) or network mounts |
-| **cloud** | Cloud storage mount point | Cloud service mount directories |
+### Location Type Enums
+| Type | Description | Detection Method |
+|------|-------------|------------------|
+| **local** | Local file system path | Auto-detected by path analysis |
+| **usb** | USB drive or removable media | Auto-detected by mount point |
+| **network** | Network share or mapped drive | Auto-detected by UNC/network path |
+| **cloud** | Cloud storage mount point | Auto-detected by known cloud paths |
 
-### Automatic Type Detection
-| Path Pattern | Detected Type | Examples |
-|-------------|---------------|----------|
-| `C:\`, `D:\`, etc. | `local` | `C:\Users\user\Wallets` |
-| `\\server\share` | `network` | `\\fileserver\cloudcoin\data` |
-| `/mnt/`, `/media/` | `usb` or `network` | `/mnt/usb/cloudcoin` |
-| `/Volumes/` | `usb` | `/Volumes/USB/CloudCoin` |
+**Note**: Type field is optional and for future use. The `list-locations` function will auto-detect types regardless of what's stored in the CSV.
 
-## Required Files and Validation
+## Cross-Platform Path Handling
 
-### Location Validation Requirements
-A location is considered valid if it:
-1. **Path exists**: The directory exists on the file system
-2. **Readable**: Application has read permissions
-3. **Writable**: Application has write permissions (for active location)
-4. **Contains wallets**: Contains valid wallet folder structures
+### Environment Variable Support
+| Platform | Variable | Example |
+|----------|----------|---------|
+| Windows | `%USERPROFILE%` | `%USERPROFILE%\Documents\CloudCoin` |
+| Windows | `%USERNAME%` | `C:\Users\%USERNAME%\CloudCoin` |
+| Linux/Mac | `$HOME` | `$HOME/cloudcoin/wallets` |
+| Linux/Mac | `$USER` | `/home/$USER/cloudcoin` |
 
-### Active Location Rules
-- **Single active**: Only one location can be marked as active (active=true)
-- **Must be accessible**: Active location must be currently accessible
-- **Auto-fallback**: If active location becomes inaccessible, switch to first available
-
-## Default Configuration Creation
-
-### When No Configuration Exists
-Create `locations.csv` with default location based on platform:
+### Platform-Specific Defaults
 
 #### Windows Default
 ```csv
-path,active,type,label,last_used,accessible,size_mb,description
-C:\Users\%USERNAME%\cloudcoin_desktop\Wallets,true,local,Default Location,2025-01-15T10:30:00Z,true,0,Default wallet storage location
+path,type
+D:\CloudCoin\Pro\Wallets,local
+%USERPROFILE%\Documents\CloudCoin\Backup,local
 ```
 
 #### Linux Default
 ```csv
-path,active,type,label,last_used,accessible,size_mb,description
-/home/$USER/cloudcoin/wallets,true,local,Default Location,2025-01-15T10:30:00Z,true,0,Default wallet storage location
+path,type
+/opt/cloudcoin/wallets,local
+$HOME/cloudcoin/backup,local
 ```
 
 #### Mac Default
 ```csv
-path,active,type,label,last_used,accessible,size_mb,description
-/Users/$USER/CloudCoin/Wallets,true,local,Default Location,2025-01-15T10:30:00Z,true,0,Default wallet storage location
+path,type
+/Applications/CloudCoin/Wallets,local
+$HOME/CloudCoin/Backup,local
 ```
 
 ## Validation Rules
@@ -152,31 +139,38 @@ path,active,type,label,last_used,accessible,size_mb,description
 ### CSV Format Validation
 - **Header required**: CSV must have proper column headers
 - **Path uniqueness**: No duplicate paths allowed
-- **Boolean consistency**: Boolean fields must use consistent format
-- **DateTime format**: Timestamps must be in ISO 8601 format
+- **Path format**: Must be valid file system paths
 
 ### Path Validation
 - **Absolute paths required**: All paths must be absolute file system paths
-- **Path accessibility**: Paths should be accessible with appropriate permissions
+- **Environment variables**: Support platform-specific environment variables
 - **Reserved characters**: Handle platform-specific reserved characters appropriately
 
 ### Data Type Validation
-- **Boolean fields**: Accept `true`, `false`, `1`, `0`, `yes`, `no` (case insensitive)
-- **DateTime fields**: Must use ISO 8601 format (`YYYY-MM-DDTHH:MM:SSZ`)
-- **Numeric fields**: Must be valid positive numbers
-- **Enum fields**: Must match predefined values (case insensitive)
+- **Path field**: UTF-8 encoded strings, platform-appropriate separators
+- **Type field**: Optional enum values (case insensitive)
 
-### Active Location Validation
+## Default Configuration Creation
+
+### When No Configuration Exists
+Create `locations.csv` with platform-appropriate default:
+
+#### Windows
 ```csv
-# Valid: Single active location
-path,active,type,label
-C:\Users\user\Wallets,true,local,Primary
-D:\Backup\Wallets,false,local,Backup
+path,type
+D:\CloudCoin\Pro\Wallets,local
+```
 
-# Invalid: Multiple active locations (will use first active)
-path,active,type,label
-C:\Users\user\Wallets,true,local,Primary
-D:\Backup\Wallets,true,local,Backup  # This will be set to false
+#### Linux
+```csv
+path,type
+/opt/cloudcoin/wallets,local
+```
+
+#### Mac
+```csv
+path,type
+/Applications/CloudCoin/Wallets,local
 ```
 
 ## Error Handling
@@ -188,36 +182,23 @@ D:\Backup\Wallets,true,local,Backup  # This will be set to false
 
 ### Invalid Data
 - **Malformed CSV**: Skip invalid rows, log warnings, continue with valid entries
-- **Invalid paths**: Mark as inaccessible, retain in configuration for potential recovery
-- **Multiple active locations**: Use first active location, mark others as inactive
+- **Invalid paths**: Skip invalid paths, log warnings
 - **Missing required columns**: Use default values for missing optional columns
-
-### Network and Media Issues
-- **Network timeouts**: Mark network locations as temporarily inaccessible (accessible=false)
-- **USB not mounted**: Mark USB locations as offline until reconnected
-- **Permission changes**: Re-validate permissions and update accessibility status
 
 ## CSV File Operations
 
 ### Reading Configuration
-```csv
-# Example reading logic pseudo-code:
-# 1. Check if locations.csv exists
-# 2. Parse CSV headers and validate required columns
-# 3. Process each row and validate data types
-# 4. Identify active location
-# 5. Return structured location data
-```
+1. Check if locations.csv exists
+2. Parse CSV headers and validate required columns
+3. Process each row and validate path format
+4. Return ordered list of locations (first = primary)
 
 ### Writing Configuration
-```csv
-# Example writing logic:
-# 1. Create temporary CSV file
-# 2. Write header row with all columns
-# 3. Write each location row with proper escaping
-# 4. Atomically replace original file
-# 5. Verify written file can be read back
-```
+1. Create temporary CSV file
+2. Write header row with required columns
+3. Write each location row with proper escaping
+4. Atomically replace original file
+5. Verify written file can be read back
 
 ### Backup Strategy
 - **Pre-modification backup**: Create `locations.csv.bak` before changes
@@ -227,28 +208,21 @@ D:\Backup\Wallets,true,local,Backup  # This will be set to false
 ## Best Practices
 
 ### File Management
-- **Never delete entries**: Mark inaccessible locations rather than removing them
-- **Preserve user data**: Maintain user-configured labels and descriptions
-- **Regular validation**: Periodically check location accessibility
-- **Backup configurations**: Keep backup copies of configuration files
+- **Keep it simple**: Store only essential, non-calculated data
+- **Order matters**: First location is primary/default
+- **Cross-platform**: Use environment variables when possible
+- **No calculated fields**: Let functions calculate accessibility, size, etc.
 
 ### CSV Handling
 - **Proper escaping**: Escape commas and quotes in path strings
 - **UTF-8 encoding**: Always use UTF-8 encoding for international characters
 - **Line endings**: Handle both LF and CRLF line endings
-- **Empty fields**: Handle empty optional fields gracefully
+- **Minimal columns**: Keep only path and optional type
 
 ### Performance Considerations
-- **Cache validation results**: Avoid repeated file system checks
-- **Async validation**: Check accessibility in background when possible
-- **Batch operations**: Process multiple location checks together
-- **Timeout limits**: Set reasonable timeouts for network location checks
-
-### Security Considerations
-- **Path sanitization**: Validate and sanitize all file paths
-- **Permission checking**: Verify read/write permissions before use
-- **Network security**: Be cautious with network path credentials
-- **Access logging**: Log location access for security auditing
+- **Lightweight file**: Minimal data means fast parsing
+- **No file updates**: File doesn't change during normal operations
+- **Real-time calculation**: All dynamic data calculated by functions
 
 ## Integration Notes
 
@@ -257,12 +231,21 @@ D:\Backup\Wallets,true,local,Backup  # This will be set to false
 - Read locations.csv from D:/CloudCoin/Pro/ directory
 - Create default configuration if none exists
 - Handle CSV parsing errors gracefully
-- Update accessibility status during operations
+- Calculate all dynamic data (accessibility, size, etc.) in real-time
 
-### For Wallet Operations
-- Use location configuration to find wallet directories
-- Validate wallet structure within each location
-- Update location usage timestamps during operations
-- Handle location switching gracefully
+### For list-locations Function
+- Read simple CSV with path and optional type
+- Calculate all dynamic information:
+  - Active status (based on current usage)
+  - Last used (from file system timestamps)
+  - Accessibility (by attempting access)
+  - Size (by scanning directories)
+  - Label (from folder name)
+  - Detailed type detection (auto-detect regardless of CSV type)
 
-This standardized format ensures that all CloudCoin Pro installations can consistently manage data locations across different platforms and storage types while maintaining compatibility with existing configurations.
+### Separation of Concerns
+- **CSV file**: Static configuration only
+- **Functions**: Dynamic calculations and status
+- **GUI**: Displays combined static + calculated data
+
+This simplified format ensures that the locations.csv file contains only essential, non-calculated data while allowing the list-locations function to provide rich, real-time information by calculating dynamic data on demand.

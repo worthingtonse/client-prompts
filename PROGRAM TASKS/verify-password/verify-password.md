@@ -1,9 +1,8 @@
 # Verify Password
-# Verify Password
 
-This is used to create a function called `verify-password(wallet_path: string, password: string)`. This function takes two arguments: the file path to a CloudCoin wallet directory and a password to verify.
+This is used to create a function called `verify-password(wallet_path: string, password_hash: string)`. This function takes two arguments: the file path to a CloudCoin wallet directory and a pre-computed password hash to verify.
 
-The primary purpose of this function is to verify that a given password matches the password used to encrypt coin files in the specified wallet by comparing SHA-256 password hashes stored in coin file headers.
+The primary purpose of this function is to verify that a given password hash matches the password hash stored in coin file headers by comparing the provided hash with the stored hash in encrypted coin files.
 
 ## Function Requirements
 
@@ -15,9 +14,9 @@ The function must read coin files from the wallet directory:
 - Support both single and multiple coin files
 
 ### 2. Password Hash Verification
-Verify the password using cryptographic hash comparison:
-- Generate SHA-256 hash of the provided password
-- Extract password hash from coin file headers (bytes 8-15)
+Verify the password using direct hash comparison:
+- Accept pre-computed SHA-256 hash from client
+- Extract password hash from coin file headers (bytes 8-14)
 - Compare hashes using secure comparison methods
 - Validate against multiple coin files for accuracy
 
@@ -25,7 +24,7 @@ Verify the password using cryptographic hash comparison:
 Support the standard CloudCoin binary file format:
 - Parse 32-byte file headers
 - Handle different encryption types (0=none, 1=128 AES CTR, 4=256 AES CTR)
-- Read password hash from header bytes 8-15 (7 bytes)
+- Read password hash from header bytes 8-14 (7 bytes)
 - Validate file structure and integrity
 
 ### 4. Return Value
@@ -33,7 +32,7 @@ The function must return a verification result with detailed status information 
 
 ## Input
 - **wallet_path** (string): The path to the CloudCoin wallet directory (e.g., "D:/CloudCoin/Pro/Wallets/MyWallet")
-- **password** (string): The password to verify against encrypted coin files
+- **password_hash** (string): The pre-computed SHA-256 hash (first 7 bytes as hex string)
 
 ## Output
 (object): Password verification result with detailed status and validation information
@@ -77,7 +76,7 @@ wallet_name/
 | 4 | Experimental | Reserved for app use | Any |
 | 5 | Encryption Type | Type of encryption used | 0, 1, 4 |
 | 6-7 | Token Count | Number of coins in file | 0-65535 |
-| 8-14 | **Password Hash** | **First 7 bytes of MD5 hash** | **Any** |
+| 8-14 | **Password Hash** | **First 7 bytes of SHA-256 hash** | **Any** |
 | 15 | State Flag | Coin state tracking | 0, 1, 2 |
 | 16-31 | POWN String/Task Data | Variable based on coin count | Various |
 
@@ -90,7 +89,7 @@ wallet_name/
 
 ### Password Hash Location
 - **Location**: Bytes 8-14 (7 bytes total)
-- **Format**: First 7 bytes of MD5 hash of the encryption password
+- **Format**: First 7 bytes of SHA-256 hash of the encryption password
 - **Purpose**: Non-reversible password verification
 
 ## Detailed Logic Flow
@@ -98,7 +97,7 @@ wallet_name/
 ### 1. Validate Input Parameters
 - Check if wallet_path exists and is accessible
 - Verify wallet_path points to valid wallet directory
-- Validate password parameter is not empty
+- Validate password_hash parameter is not empty and correct format
 - Check read permissions for wallet folders
 
 ### 2. Locate Coin Files for Verification
@@ -107,10 +106,10 @@ wallet_name/
 - Filter for .bin files with valid coin file structure
 - Prioritize files with encryption enabled (encryption type > 0)
 
-### 3. Generate Password Hash
-- Create SHA-256 hash of the provided password
-- Extract first 7 bytes of the hash for comparison
-- Handle password encoding (UTF-8) consistently
+### 3. Parse Password Hash Input
+- Accept hash as hex string (14 characters = 7 bytes)
+- Convert hex string to binary format for comparison
+- Validate hash format and length
 
 ### 4. Read and Parse Coin File Headers
 - Read first 32 bytes of each coin file (file header)
@@ -119,7 +118,7 @@ wallet_name/
 - Extract password hash from bytes 8-14
 
 ### 5. Perform Hash Comparison
-- Compare generated password hash with stored hash
+- Compare provided password hash with stored hash
 - Use secure comparison to prevent timing attacks
 - Test against multiple coin files for consistency
 - Handle edge cases (no encrypted files, corrupted headers)
@@ -139,7 +138,29 @@ wallet_name/
 ## Example Function Call
 
 ```bash
-verify-password "D:/CloudCoin/Pro/Wallets/MyWallet" "mySecretPassword123"
+verify-password "D:/CloudCoin/Pro/Wallets/MyWallet" "a1b2c3d4e5f6a7"
+```
+
+## Hash Format Requirements
+
+### Input Hash Format
+- **Length**: Exactly 14 hex characters (7 bytes)
+- **Format**: Hex string representing first 7 bytes of SHA-256 hash
+- **Example**: `"a1b2c3d4e5f6a7"` represents bytes [0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6, 0xA7]
+
+### Client-Side Hash Generation
+```pseudocode
+// Client responsibility - not part of verify-password function
+function generatePasswordHash(password: string): string {
+    // Convert password to UTF-8 bytes
+    passwordBytes = utf8Encode(password)
+    
+    // Generate SHA-256 hash
+    fullHash = sha256(passwordBytes)
+    
+    // Extract first 7 bytes and convert to hex string
+    return bytesToHex(fullHash[0:7])
+}
 ```
 
 ## Verification Output Structure
@@ -152,7 +173,7 @@ verify-password "D:/CloudCoin/Pro/Wallets/MyWallet" "mySecretPassword123"
     "verification_result": "success",
     
     "summary": {
-      "password_valid": true,
+      "hash_valid": true,
       "files_tested": 5,
       "files_matched": 5,
       "files_failed": 0,
@@ -161,7 +182,7 @@ verify-password "D:/CloudCoin/Pro/Wallets/MyWallet" "mySecretPassword123"
     },
     
     "verification_details": {
-      "password_hash_generated": "a1b2c3d4e5f6a7",
+      "provided_hash": "a1b2c3d4e5f6a7",
       "hash_method": "SHA-256 (first 7 bytes)",
       "comparison_method": "secure_compare",
       "consistency_check": "passed"
@@ -169,9 +190,9 @@ verify-password "D:/CloudCoin/Pro/Wallets/MyWallet" "mySecretPassword123"
     
     "files_analyzed": [
       {
-        "filename": "1.25.12345.bin",
-        "path": "Bank/1.25.12345.bin",
-        "file_size": 407,
+        "filename": "1,000 CloudCoin #7998 'From Ron'.bin",
+        "path": "Bank/1,000 CloudCoin #7998 'From Ron'.bin",
+        "file_size": 439,
         "encryption_type": 1,
         "encryption_name": "128-bit AES CTR",
         "stored_hash": "a1b2c3d4e5f6a7",
@@ -180,9 +201,9 @@ verify-password "D:/CloudCoin/Pro/Wallets/MyWallet" "mySecretPassword123"
         "coin_count": 1
       },
       {
-        "filename": "5.250.67890.bin",
-        "path": "Bank/5.250.67890.bin", 
-        "file_size": 407,
+        "filename": "0.001 CloudCoin #89269 ''.bin",
+        "path": "Bank/0.001 CloudCoin #89269 ''.bin", 
+        "file_size": 439,
         "encryption_type": 1,
         "encryption_name": "128-bit AES CTR",
         "stored_hash": "a1b2c3d4e5f6a7",
@@ -191,35 +212,24 @@ verify-password "D:/CloudCoin/Pro/Wallets/MyWallet" "mySecretPassword123"
         "coin_count": 1
       },
       {
-        "filename": "1.1.11111.bin",
-        "path": "Fracked/1.1.11111.bin",
-        "file_size": 407,
+        "filename": "12,441.0000-034 CloudCoin #12 ''.bin",
+        "path": "Fracked/12,441.0000-034 CloudCoin #12 ''.bin",
+        "file_size": 5236,
         "encryption_type": 1,
         "encryption_name": "128-bit AES CTR", 
         "stored_hash": "a1b2c3d4e5f6a7",
         "hash_match": true,
         "file_valid": true,
-        "coin_count": 1
+        "coin_count": 12
       },
       {
-        "filename": "25.100.22222.bin",
-        "path": "Bank/25.100.22222.bin",
-        "file_size": 407,
+        "filename": "Key CloudCoin #499 'IP 46.65.33.34 port 7099 app 25'.bin",
+        "path": "Bank/Key CloudCoin #499 'IP 46.65.33.34 port 7099 app 25'.bin",
+        "file_size": 439,
         "encryption_type": 0,
         "encryption_name": "No encryption",
         "stored_hash": null,
         "hash_match": "N/A",
-        "file_valid": true,
-        "coin_count": 1
-      },
-      {
-        "filename": "100.5.33333.bin",
-        "path": "Bank/100.5.33333.bin",
-        "file_size": 407,
-        "encryption_type": 0,
-        "encryption_name": "No encryption",
-        "stored_hash": null,
-        "hash_match": "N/A", 
         "file_valid": true,
         "coin_count": 1
       }
@@ -250,57 +260,51 @@ Wallet: D:/CloudCoin/Pro/Wallets/MyWallet
 
 VERIFICATION RESULT
 ====================================================
-Password Status: ✅ VALID
-Files Tested: 5 coin files
-Hash Matches: 5/5 encrypted files
+Password Hash Status: ✅ VALID
+Files Tested: 4 coin files
+Hash Matches: 3/3 encrypted files
 Consistency: All encrypted files match
 
 VERIFICATION DETAILS
 ====================================================
-Password Hash: a1b2c3d4e5f6a7 (SHA-256, first 7 bytes)
-Hash Method: Secure comparison
+Provided Hash: a1b2c3d4e5f6a7 (SHA-256, first 7 bytes)
+Hash Method: Direct comparison (client-generated)
 Encrypted Files: 3 found
-Unencrypted Files: 2 found (no verification needed)
+Unencrypted Files: 1 found (no verification needed)
 
 FILES ANALYZED
 ====================================================
 
-✅ 1.25.12345.bin (Bank/)
+✅ 1,000 CloudCoin #7998 'From Ron'.bin (Bank/)
    Encryption: 128-bit AES CTR
    Hash Match: ✅ Valid
-   File Size: 407 bytes
+   File Size: 439 bytes
    Coins: 1
 
-✅ 5.250.67890.bin (Bank/)
+✅ 0.001 CloudCoin #89269 ''.bin (Bank/)
    Encryption: 128-bit AES CTR  
    Hash Match: ✅ Valid
-   File Size: 407 bytes
+   File Size: 439 bytes
    Coins: 1
 
-✅ 1.1.11111.bin (Fracked/)
+✅ 12,441.0000-034 CloudCoin #12 ''.bin (Fracked/)
    Encryption: 128-bit AES CTR
    Hash Match: ✅ Valid
-   File Size: 407 bytes
-   Coins: 1
+   File Size: 5,236 bytes
+   Coins: 12
 
-ℹ️ 25.100.22222.bin (Bank/)
+ℹ️ Key CloudCoin #499 'IP 46.65.33.34 port 7099 app 25'.bin (Bank/)
    Encryption: None
    Hash Match: N/A (unencrypted)
-   File Size: 407 bytes
-   Coins: 1
-
-ℹ️ 100.5.33333.bin (Bank/)
-   Encryption: None
-   Hash Match: N/A (unencrypted)
-   File Size: 407 bytes
+   File Size: 439 bytes
    Coins: 1
 
 SUMMARY
 ====================================================
-✅ Password verification successful
+✅ Password hash verification successful
 ✅ All encrypted files use consistent password
 ✅ Wallet structure is valid
-ℹ️ 2 unencrypted files found (normal)
+ℹ️ 1 unencrypted file found (normal)
 ```
 
 ## Error Handling
@@ -311,24 +315,37 @@ SUMMARY
 | No coin files found | Return error: "No coin files available for verification" |
 | No encrypted files found | Return warning: "No encrypted files to verify against" |
 | Permission denied | Return error: "Unable to read coin files" |
-| Corrupted file headers | Return error with specific file corruption details |
-| Hash mismatch | Return error: "Password does not match" |
+| Invalid hash format | Return error: "Invalid hash format - must be 14 hex characters" |
+| Hash mismatch | Return error: "Password hash does not match" |
 | Invalid file format | Return error: "Invalid coin file format detected" |
-| Empty password | Return error: "Password cannot be empty" |
+| Empty hash | Return error: "Password hash cannot be empty" |
 
-## Hash Generation and Comparison
+## Hash Processing Implementation
 
-### Password Hash Generation
+### Hash Format Validation
 ```pseudocode
-function generatePasswordHash(password: string): bytes[7] {
-    // Convert password to UTF-8 bytes
-    passwordBytes = utf8Encode(password)
+function validateHashFormat(hash: string): boolean {
+    // Check length (7 bytes = 14 hex characters)
+    if hash.length != 14:
+        return false
     
-    // Generate SHA-256 hash
-    fullHash = sha256(passwordBytes)
+    // Check if all characters are valid hex
+    for char in hash:
+        if not isHexChar(char):
+            return false
     
-    // Extract first 7 bytes for comparison
-    return fullHash[0:7]
+    return true
+}
+```
+
+### Hash Conversion
+```pseudocode
+function hexStringToBytes(hexString: string): bytes[7] {
+    bytes = []
+    for i = 0 to 12 step 2:
+        byte = parseInt(hexString[i:i+2], 16)
+        bytes.append(byte)
+    return bytes
 }
 ```
 
@@ -344,37 +361,26 @@ function secureCompare(hash1: bytes[7], hash2: bytes[7]): boolean {
 }
 ```
 
-## File Reading Implementation
+## Client Integration Notes
 
-### Coin File Header Reading
-```pseudocode
-function readCoinFileHeader(filePath: string): CoinFileHeader {
-    file = openFile(filePath, "rb")
-    headerBytes = file.read(32)  // Read 32-byte header
-    
-    header = {
-        fileVersion: headerBytes[0],
-        cloudId: headerBytes[1], 
-        coinId: bytesToInt(headerBytes[2:4]),
-        experimental: headerBytes[4],
-        encryptionType: headerBytes[5],
-        tokenCount: bytesToInt(headerBytes[6:8]),
-        passwordHash: headerBytes[8:15],  // 7 bytes
-        stateFlag: headerBytes[15]
-        // ... remaining header fields
-    }
-    
-    file.close()
-    return header
-}
-```
+### Client Responsibilities
+- **Generate SHA-256 hash** of user password
+- **Extract first 7 bytes** from the hash
+- **Convert to hex string** format
+- **Pass hex string** to verify-password function
+
+### Function Responsibilities
+- **Accept pre-computed hash** from client
+- **Validate hash format** and length
+- **Compare with stored hashes** in coin files
+- **Return verification result** with detailed status
 
 ## Security Considerations
 
-### Password Handling
-- **Never store plaintext passwords**: Only compare hashes
-- **Secure memory**: Clear password from memory after use
-- **Timing attacks**: Use constant-time comparison functions
+### Hash Handling
+- **No password storage**: Function never receives plaintext passwords
+- **Client flexibility**: Allows client to implement custom hashing
+- **Secure comparison**: Uses constant-time comparison functions
 - **Hash validation**: Verify hash format and length
 
 ### File Access Security
@@ -387,10 +393,11 @@ function readCoinFileHeader(filePath: string): CoinFileHeader {
 
 - Works with all CloudCoin wallet implementations following standard structure
 - Compatible with different encryption types (none, 128-bit AES, 256-bit AES)
-- Supports both single and multiple coin files
+- Supports both single and multiple coin files with proper naming convention
 - Can be used for wallet access control and security validation
 - Provides foundation for password change and encryption management
 - Useful for troubleshooting wallet access issues
 - References wallet-folder-structure.md for wallet validation
-- Integrates with coin file format specifications
-- Compatible with all supported CloudCoin file formats
+- Integrates with coin file naming convention specifications
+- Uses SHA-256 for quantum-safe hashing
+- Allows client flexibility in hash generation methods

@@ -1,158 +1,152 @@
 # List Locations
 
-This function takes no arguments and returns a list of all configured data locations for the CloudCoin Pro application.
+This function takes no arguments and returns a list of all configured data locations for the CloudCoin Pro application with real-time calculated information.
 
-The primary purpose of this function is to read and display all configured data locations from the locations configuration file, showing which location is currently active and providing details about each configured path.
+The primary purpose of this function is to read the simple locations configuration file and enhance it with calculated data including accessibility, size, usage information, and detailed metadata.
 
 ## Function Requirements
 
 ### 1. Location File Reading
-The function must read the locations configuration file from the CloudCoin Pro installation:
-- Primary locations file: `locations.csv`
+The function must read the simplified locations configuration file:
+- Primary locations file: `locations.csv` (simplified format with path and optional type)
 - Fallback to default location if no configuration exists
 
-### 2. Location Data Processing
-Parse and organize location data to identify:
-- All configured data locations
-- Currently active location (marked with asterisk or active flag)
-- Location accessibility and validation status
-- Path types (local, network, USB, cloud storage)
+### 2. Real-Time Data Calculation
+Calculate all dynamic information for each location:
+- **Accessibility**: Test if location is currently accessible
+- **Size and usage**: Calculate storage used and available space
+- **Last used**: Determine from file system timestamps
+- **Label**: Extract from folder name
+- **Type detection**: Auto-detect location type regardless of CSV value
+- **Wallet enumeration**: Count and validate wallet structures
 
-### 3. Structured Output Format
-Return location information in a clear, organized format showing:
-- List of all configured locations
-- Active location indicator
-- Path validation status
-- Location metadata (type, accessibility, size, etc.)
+### 3. Primary Location Logic
+- **First location in CSV**: Treated as primary/default location
+- **No "active" flag**: All locations can be used simultaneously
+- **Order matters**: File order determines priority
 
 ### 4. Return Value
-The function must return a structured object containing all location information with validation status and accessibility details.
+The function must return enhanced location information with all calculated data while keeping the CSV file simple.
 
 ## Input
 - **No parameters required** - Function reads from standard CloudCoin Pro configuration
 
 ## Output
-(object): Comprehensive list of all configured data locations with status information
+(object): Comprehensive list with calculated information for all configured locations
 
 ## File Structure
 Your code will interact with the following CloudCoin Pro location files:
 
 ```
 D:/CloudCoin/Pro/
-├── locations.csv               # Primary location configuration
+├── locations.csv               # Simple location configuration (path, type)
 ├── last-export-folder-locations-dropdown.txt  # Recent export folders
 └── Wallets/                   # Individual wallet locations
-    ├── [wallet_name]/         # Each wallet is a location
+    ├── [wallet_name]/         # Each wallet location
     └── [other_wallets]/
 ```
 
-## Location File Formats
+## Simplified Location File Format
 
-### 1. locations.csv (Primary Format)
+### locations.csv (Simplified Format)
 ```csv
-path,active,type,label,last_used,accessible,size_mb,description
-D:\CloudCoin\Pro\Wallets,true,local,Default Location,2025-01-15T10:30:00Z,true,1250.5,Primary wallet storage
-C:\Users\User\Documents\CloudCoin\Backup,false,local,Backup Location,2025-01-14T15:20:00Z,true,850.2,Backup wallet location
-E:\USB_Backup\CloudCoin\Data,false,usb,USB Backup,2025-01-13T09:15:00Z,false,0,External USB drive
-\\NetworkDrive\CloudCoin\Shared,false,network,Network Share,2025-01-10T14:30:00Z,true,2100.8,Shared network storage
+path,type
+D:\CloudCoin\Pro\Wallets,local
+C:\Users\User\Documents\CloudCoin\Backup,local
+E:\USB_Backup\CloudCoin\Data,usb
+\\NetworkDrive\CloudCoin\Shared,network
 ```
 
 **Format Rules:**
-- CSV format with required headers
-- Active location marked with `active=true`
-- Absolute file system paths
-- Support for local, network, and USB paths
-
-### 3. last-export-folder-locations-dropdown.txt (Recent Folders)
-```
-C:\Users\User\Documents\CloudCoin\Exports
-C:\Users\User\Desktop\CloudCoin_Backup
-D:\CloudCoin\Exports
-E:\USB_Exports\CloudCoin
-```
-
-## Location Types and Validation
-
-### Location Types
-| Type | Description | Validation Required |
-|------|-------------|-------------------|
-| **local** | Local file system path | Check directory exists and writable |
-| **usb** | USB drive or removable media | Check drive mounted and accessible |
-| **network** | Network share or mapped drive | Check network connectivity and permissions |
-| **cloud** | Cloud storage mount point | Check cloud service connection |
-
-### Validation Checks
-- **Existence**: Path exists on file system
-- **Accessibility**: Read/write permissions available
-- **Space**: Available disk space
-- **Type Detection**: Automatically determine location type
-- **Wallet Structure**: Contains valid wallet folders
+- **Minimal data**: Only path and optional type
+- **No calculated fields**: No active, last_used, accessible, size_mb
+- **Order matters**: First location is primary/default
+- **Cross-platform paths**: Support environment variables
 
 ## Detailed Logic Flow
 
-### 1. Read Location Configuration
+### 1. Read Simple Configuration
 - Read locations.csv file from D:/CloudCoin/Pro/
-- Parse CSV data according to format specification
+- Parse minimal CSV with path and optional type
 - Handle missing or corrupted configuration files
+- Use first location as primary/default
 
-### 2. Validate Each Location
+### 2. Calculate Accessibility for Each Location
 - Test path existence and accessibility
 - Check read/write permissions
-- Calculate storage usage if accessible
-- Determine location type (local/usb/network/cloud)
-- Validate wallet structure if applicable
+- Determine if location is currently available
+- Handle network timeouts and USB drive detection
 
-### 3. Identify Active Location
-- Find location marked as active in configuration
-- Verify active location is accessible
-- Fallback to first accessible location if active is unavailable
+### 3. Calculate Storage Information
+- Calculate storage used if accessible
+- Determine available disk space
+- Handle inaccessible locations gracefully
 
-### 4. Scan Wallet Locations
-- Enumerate wallet folders in each location
-- Count wallets and calculate total storage
-- Validate wallet structure integrity
+### 4. Determine Last Used Times
+- Read file system timestamps from location directories
+- Check wallet modification times
+- Calculate most recent activity
 
-### 5. Read Recent Export Folders
-- Parse last-export-folder-locations-dropdown.txt from D:/CloudCoin/Pro/
-- Include recent export destinations in output
-- Mark which recent folders are still accessible
+### 5. Generate Labels from Folder Names
+- Extract folder name from path
+- Use folder name as label
+- Handle special cases (root drives, network shares)
 
-### 6. Return Structured Data
-- Organize all location information
+### 6. Auto-Detect Location Types
+- Analyze path patterns for type detection
+- Override CSV type with calculated type
+- Support cross-platform detection
+
+### 7. Scan and Validate Wallets
+- Enumerate wallet folders in each accessible location
+- Count wallets and validate structure
+- Calculate total storage across wallets
+
+### 8. Read Recent Export Folders
+- Parse last-export-folder-locations-dropdown.txt
+- Calculate accessibility for recent folders
+- Include in output with status
+
+### 9. Return Enhanced Data
+- Combine simple CSV data with calculated information
+- Provide comprehensive location details
 - Include validation status and metadata
-- Provide clear active location indication
 
 ## Example Function Call
 
 ```bash
 list-locations
-# Reads from D:/CloudCoin/Pro/locations.csv
+# Reads simple CSV and calculates all dynamic data
 ```
 
-## Configuration Output Structure
+## Enhanced Output Structure
 
 ```json
 {
   "locations_info": {
     "timestamp": "2025-01-15T10:30:00Z",
     "total_locations": 4,
-    "active_location": "D:\\CloudCoin\\Pro\\Wallets",
+    "primary_location": "D:\\CloudCoin\\Pro\\Wallets",
     "config_source": "locations.csv",
     
     "locations": [
       {
         "path": "D:\\CloudCoin\\Pro\\Wallets",
-        "active": true,
-        "type": "local",
-        "label": "Default Location",
-        "accessible": true,
-        "exists": true,
-        "writable": true,
-        "last_used": "2025-01-15T10:30:00Z",
-        "storage": {
-          "total_size_mb": 1250.5,
-          "available_space_gb": 45.2,
-          "wallet_count": 3
+        "is_primary": true,
+        "order_index": 0,
+        "csv_type": "local",
+        "calculated_data": {
+          "label": "Wallets",
+          "detected_type": "local",
+          "accessible": true,
+          "exists": true,
+          "writable": true,
+          "last_used": "2025-01-15T10:30:00Z",
+          "storage": {
+            "total_size_mb": 1250.5,
+            "available_space_gb": 45.2,
+            "wallet_count": 3
+          }
         },
         "validation": {
           "status": "valid",
@@ -162,17 +156,21 @@ list-locations
       },
       {
         "path": "C:\\Users\\User\\Documents\\CloudCoin\\Backup",
-        "active": false,
-        "type": "local",
-        "label": "Backup Location",
-        "accessible": true,
-        "exists": true,
-        "writable": true,
-        "last_used": "2025-01-14T15:20:00Z",
-        "storage": {
-          "total_size_mb": 850.2,
-          "available_space_gb": 120.5,
-          "wallet_count": 2
+        "is_primary": false,
+        "order_index": 1,
+        "csv_type": "local",
+        "calculated_data": {
+          "label": "Backup",
+          "detected_type": "local",
+          "accessible": true,
+          "exists": true,
+          "writable": true,
+          "last_used": "2025-01-14T15:20:00Z",
+          "storage": {
+            "total_size_mb": 850.2,
+            "available_space_gb": 120.5,
+            "wallet_count": 2
+          }
         },
         "validation": {
           "status": "valid",
@@ -182,17 +180,21 @@ list-locations
       },
       {
         "path": "E:\\USB_Backup\\CloudCoin\\Data",
-        "active": false,
-        "type": "usb",
-        "label": "USB Backup",
-        "accessible": false,
-        "exists": false,
-        "writable": false,
-        "last_used": "2025-01-13T09:15:00Z",
-        "storage": {
-          "total_size_mb": 0,
-          "available_space_gb": 0,
-          "wallet_count": 0
+        "is_primary": false,
+        "order_index": 2,
+        "csv_type": "usb",
+        "calculated_data": {
+          "label": "Data",
+          "detected_type": "usb",
+          "accessible": false,
+          "exists": false,
+          "writable": false,
+          "last_used": "2025-01-13T09:15:00Z",
+          "storage": {
+            "total_size_mb": 0,
+            "available_space_gb": 0,
+            "wallet_count": 0
+          }
         },
         "validation": {
           "status": "error",
@@ -202,17 +204,21 @@ list-locations
       },
       {
         "path": "\\\\NetworkDrive\\CloudCoin\\Shared",
-        "active": false,
-        "type": "network",
-        "label": "Network Share",
-        "accessible": true,
-        "exists": true,
-        "writable": true,
-        "last_used": "2025-01-10T14:30:00Z",
-        "storage": {
-          "total_size_mb": 2100.8,
-          "available_space_gb": 500.0,
-          "wallet_count": 5
+        "is_primary": false,
+        "order_index": 3,
+        "csv_type": "network",
+        "calculated_data": {
+          "label": "Shared",
+          "detected_type": "network",
+          "accessible": true,
+          "exists": true,
+          "writable": true,
+          "last_used": "2025-01-10T14:30:00Z",
+          "storage": {
+            "total_size_mb": 2100.8,
+            "available_space_gb": 500.0,
+            "wallet_count": 5
+          }
         },
         "validation": {
           "status": "valid",
@@ -225,23 +231,17 @@ list-locations
     "recent_export_folders": [
       {
         "path": "C:\\Users\\User\\Documents\\CloudCoin\\Exports",
-        "accessible": true,
-        "last_used": "2025-01-15T09:45:00Z"
-      },
-      {
-        "path": "C:\\Users\\User\\Desktop\\CloudCoin_Backup",
-        "accessible": true,
-        "last_used": "2025-01-14T16:20:00Z"
-      },
-      {
-        "path": "D:\\CloudCoin\\Exports",
-        "accessible": true,
-        "last_used": "2025-01-13T11:30:00Z"
+        "calculated_data": {
+          "accessible": true,
+          "last_used": "2025-01-15T09:45:00Z"
+        }
       },
       {
         "path": "E:\\USB_Exports\\CloudCoin",
-        "accessible": false,
-        "last_used": "2025-01-12T14:15:00Z"
+        "calculated_data": {
+          "accessible": false,
+          "last_used": "2025-01-12T14:15:00Z"
+        }
       }
     ],
     
@@ -257,21 +257,40 @@ list-locations
 }
 ```
 
-## Human-Readable Format Option
+## Cross-Platform Type Detection
 
-The function can also return information in a human-readable text format:
+### Automatic Type Detection Logic
+```javascript
+function detectLocationType(path) {
+  // Windows detection
+  if (path.match(/^[A-Z]:\\/)) return "local";
+  if (path.match(/^\\\\[^\\]+\\/)) return "network";
+  
+  // Linux/Mac detection  
+  if (path.match(/^\/home\/|^\/Users\//)) return "local";
+  if (path.match(/^\/mnt\/|^\/media\//)) return "usb";
+  if (path.match(/^\/Volumes\//)) return "usb";
+  
+  // Network mounts
+  if (path.match(/^\/mnt\/.*network|^\/media\/.*network/)) return "network";
+  
+  return "local"; // default
+}
+```
+
+## Human-Readable Format Option
 
 ```
 ====================================================
 CLOUDCOIN PRO DATA LOCATIONS
 ====================================================
 Generated: January 15, 2025 at 10:30 AM
-Configuration Source: locations.csv
+Configuration Source: locations.csv (simplified)
 
-ACTIVE LOCATION
+PRIMARY LOCATION
 ====================================================
-📁 D:\CloudCoin\Pro\Wallets
-   Type: Local Drive
+📁 D:\CloudCoin\Pro\Wallets (Wallets)
+   Type: Local Drive (auto-detected)
    Status: ✅ Accessible
    Storage: 1,250.5 MB used, 45.2 GB available
    Wallets: 3 wallets found
@@ -280,103 +299,85 @@ ACTIVE LOCATION
 ALL CONFIGURED LOCATIONS
 ====================================================
 
-1. 📁 D:\CloudCoin\Pro\Wallets [ACTIVE]
+1. 📁 D:\CloudCoin\Pro\Wallets (Wallets) [PRIMARY]
    Type: Local Drive
    Status: ✅ Accessible and writable
    Storage: 1,250.5 MB used, 45.2 GB available
    Wallets: 3 wallets found
    Last Used: January 15, 2025 at 10:30 AM
 
-2. 📁 C:\Users\User\Documents\CloudCoin\Backup
+2. 📁 C:\Users\User\Documents\CloudCoin\Backup (Backup)
    Type: Local Drive  
    Status: ✅ Accessible and writable
    Storage: 850.2 MB used, 120.5 GB available
    Wallets: 2 wallets found
    Last Used: January 14, 2025 at 3:20 PM
 
-3. 💾 E:\USB_Backup\CloudCoin\Data
+3. 💾 E:\USB_Backup\CloudCoin\Data (Data)
    Type: USB Drive
    Status: ❌ Not accessible (Drive not mounted)
    Storage: Unknown (drive offline)
    Wallets: Unknown
    Last Used: January 13, 2025 at 9:15 AM
 
-4. 🌐 \\NetworkDrive\CloudCoin\Shared
+4. 🌐 \\NetworkDrive\CloudCoin\Shared (Shared)
    Type: Network Share
    Status: ⚠️ Accessible with warnings (Network latency detected)
    Storage: 2,100.8 MB used, 500.0 GB available
    Wallets: 5 wallets found
    Last Used: January 10, 2025 at 2:30 PM
 
-RECENT EXPORT FOLDERS
+CALCULATION DETAILS
 ====================================================
-• C:\Users\User\Documents\CloudCoin\Exports ✅
-• C:\Users\User\Desktop\CloudCoin_Backup ✅
-• D:\CloudCoin\Exports ✅
-• E:\USB_Exports\CloudCoin ❌
-
-SUMMARY
-====================================================
-Total Locations: 4
-Accessible: 3
-Inaccessible: 1
-Total Wallets: 10 across all locations
-Total Storage Used: 4,201.5 MB
-Locations with Issues: 2 (1 error, 1 warning)
-
-RECOMMENDATIONS
-====================================================
-⚠️ USB drive E:\ is not accessible - check if drive is connected
-⚠️ Network location has latency issues - consider local backup
-✅ Active location is healthy and accessible
+• All accessibility, size, and usage data calculated in real-time
+• Labels generated from folder names
+• Location types auto-detected regardless of CSV values
+• Primary location determined by order in CSV file
+• No calculated data stored in configuration files
 ```
 
 ## Error Handling
 
 | Error Condition | Response Action |
 |-----------------|-----------------|
-| No configuration file found | Create default configuration with current directory |
+| No configuration file found | Create default configuration with single location |
 | Configuration file corrupted | Use default location and log warning |
-| Active location inaccessible | Switch to first accessible location |
 | All locations inaccessible | Return error with troubleshooting guidance |
 | Permission denied | Report specific permission issues |
 | Network location timeout | Mark as inaccessible with timeout error |
 
-## Location Path Validation
-
-### Path Format Support
-- **Windows**: `C:\path\to\location`, `\\server\share\path`
-- **Linux/Mac**: `/path/to/location`, `/mnt/network/path`
-- **Relative**: `./wallets`, `../backup/wallets`
-
-### Drive Type Detection
-```ini
-# Local drives
-C:\, D:\, E:\ = local
-# Network paths  
-\\server\share = network
-# Mounted drives
-/media/usb = usb
-/mnt/cloud = cloud
-```
-
 ## Default Location Configuration
 
-When no configuration exists, create default:
+When no configuration exists, create platform-appropriate default:
 
+### Windows
 ```csv
-path,active,type,label,last_used,accessible,size_mb,description
-C:\Users\[username]\cloudcoin_desktop\Wallets,true,local,Default Location,[current_time],true,0,Default wallet storage location
+path,type
+D:\CloudCoin\Pro\Wallets,local
+```
+
+### Linux
+```csv
+path,type
+/opt/cloudcoin/wallets,local
+```
+
+### Mac
+```csv
+path,type
+/Applications/CloudCoin/Wallets,local
 ```
 
 ## Integration Notes
 
-- Works with all CloudCoin Pro installations following standard structure
-- Compatible with both simple and enhanced location configuration formats
-- Supports local, network, USB, and cloud storage locations
-- Can be used for location management and troubleshooting
-- Provides foundation for location switching functionality
-- Useful for backup and recovery planning
-- References configuration-files-format.md for validation rules
-- Integrates with wallet management system
-- Compatible with export folder history tracking
+- **Simplified CSV**: Stores only essential path and optional type data
+- **Real-time calculation**: All dynamic data calculated during function execution
+- **No file updates**: CSV file remains static during normal operations
+- **Cross-platform**: Supports environment variables and platform-specific paths
+- **Primary location**: First location in CSV is treated as primary/default
+- **Multiple usage**: All locations can be used simultaneously
+- **Type override**: Auto-detected types override CSV type values
+- **Label generation**: Folder names used as labels automatically
+- **Performance**: Lightweight CSV parsing with on-demand calculations
+
+This approach separates static configuration (CSV) from dynamic data (calculated by function), ensuring the configuration file remains simple and accurate while providing rich information to the application.
