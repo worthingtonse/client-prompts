@@ -1,6 +1,43 @@
 # QMail Protocol
 The QMail protocol is designed to replace the existing email system. 
 
+## RAIDA Mail Folder Structure
+The all-folders folder holds all the user and public files. 
+
+Each user is identified by a five byte identifier. Each user has a folder in the private folders that is based on their identifier. The user-folder folder has 256 sub folders
+named after the first hexidecimal characters in the users ID. Then, there are four levels of subfolders so that the leaf folders are five folders deep. 
+
+Each user has some standard folders. The user can create any folders that they want but there will always be a Mail folder. 
+Within the mail folder there are two types of files, file stipes (.bin) and pointers (.lnk) to file stripes that are located in the public-files. 
+
+00
+--Mail
+----c10d92f83091496d893f8e20f30372ea.0.bin // First Version of the file. 
+----c10d92f83091496d893f8e20f30372ea.1.bin // File 0 after it haws been changed. 
+----c10d92f83091496d893f8e20f30372ea.2.bin
+----.c10d92f83091496d893f8e20f30372ea.3.bin // File after it has been deleted (has a . infont of it. Users can still see deleted files and undelete them)
+----e08b3a6835c34716bad5bfe5a6d556cc.lnk // Link to a public file. 
+
+6ccf0acc2a404b7eb723c8bb6dd4d7be
+66e3bef30126424998c5702bd0f2365d
+cd54303dd6dc47c391f555b209033561
+
+
+Files have a GUID for a name.
+
+```tree
+all-folders
+--public-folders
+----00
+------00
+--user-folders
+----00
+----01
+----02
+----03
+----00
+
+```
 ## Requirments
 
 1. Must to require a domain owener to give email.
