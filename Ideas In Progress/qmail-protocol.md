@@ -21,6 +21,17 @@ Within the mail folder there are two types of files, file stipes (.bin) and poin
 
 ```
 
+## File Nameing convention. 
+The file name is composed of two parts:
+1. The 1 byte hexidencimal charactger identifier (Random and the same on all 
+1. The 8 hexidencimal charactger identifier (Random and the same on all 
+1. The 16 hexidecimal character Metadata name.
+2. The 16 hexidecimal character shuffling order identifiers. These are used to encrypt the message. 
+
+### The common name is added with the other bytes from other 
+
+This part is returned by the "List Mail Names" service. All the names are added together to create 128 bytes. These bytes can converted into UTF-8. 
+
 Files have a GUID for a name.
 
 ```tree
