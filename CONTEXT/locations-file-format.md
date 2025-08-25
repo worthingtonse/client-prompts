@@ -6,7 +6,7 @@ This document defines the format and structure of location configuration files u
 
 CloudCoin Pro uses multiple files to track and manage data locations within the installation directory:
 
-```
+```python
 D:/CloudCoin/Pro/
 ├── locations.csv               # Primary location configuration
 ├── last-export-folder-locations-dropdown.txt  # Recent export folders
@@ -26,7 +26,7 @@ D:/CloudCoin/Pro/
 **Encoding**: UTF-8  
 **Purpose**: Simple location configuration with only essential, non-calculated data
 
-```csv
+```python
 path,type
 D:\CloudCoin\Pro\Wallets,local
 C:\Users\User\Documents\CloudCoin\Backup,local
@@ -48,7 +48,7 @@ E:\USB_Backup\CloudCoin\Data,usb
 - **Order matters**: First location in file is the default/primary location
 
 #### Cross-Platform Path Examples
-```csv
+```python
 path,type
 # Windows paths
 D:\CloudCoin\Pro\Wallets,local
@@ -75,7 +75,7 @@ $HOME/cloudcoin/wallets,local
 **Format**: Plain text file with one folder per line  
 **Purpose**: Track recently used export folder locations
 
-```
+```python
 C:\Users\User\Documents\CloudCoin\Exports
 C:\Users\User\Desktop\CloudCoin_Backup
 D:\CloudCoin\Exports
@@ -114,21 +114,21 @@ E:\USB_Exports\CloudCoin
 ### Platform-Specific Defaults
 
 #### Windows Default
-```csv
+```python
 path,type
 D:\CloudCoin\Pro\Wallets,local
 %USERPROFILE%\Documents\CloudCoin\Backup,local
 ```
 
 #### Linux Default
-```csv
+```python
 path,type
 /opt/cloudcoin/wallets,local
 $HOME/cloudcoin/backup,local
 ```
 
 #### Mac Default
-```csv
+```python
 path,type
 /Applications/CloudCoin/Wallets,local
 $HOME/CloudCoin/Backup,local
@@ -156,19 +156,19 @@ $HOME/CloudCoin/Backup,local
 Create `locations.csv` with platform-appropriate default:
 
 #### Windows
-```csv
+```python
 path,type
 D:\CloudCoin\Pro\Wallets,local
 ```
 
 #### Linux
-```csv
+```python
 path,type
 /opt/cloudcoin/wallets,local
 ```
 
 #### Mac
-```csv
+```python
 path,type
 /Applications/CloudCoin/Wallets,local
 ```
