@@ -10,7 +10,7 @@ Coin files have a naming convention that makes it easier for software to use the
 
 The coin file header is exactly 32 bytes and contains metadata about the entire file:
 
-```
+
 Byte Position | Field Name | Size | Description | Values
 -------------|------------|------|-------------|--------
 0            | File Version | 1    | Coin file format version | 9 (current)
@@ -22,7 +22,7 @@ Byte Position | Field Name | Size | Description | Values
 8-14         | Password Hash | 7    | First 7 bytes of SHA-256 hash | Any
 15           | State Flag | 1       | Coin state tracking | 0, 1, 2
 16-31        | POWN/Task Data | 16  | Variable based on coin count | Various
-```
+
 
 ## File Header Byte Explanation
 
@@ -83,14 +83,13 @@ wallet-name/
 Each coin within the file has its own header and body:
 
 ### Coin Header (7 bytes)
-```
+
 Byte | Field | Values | Description
 -----|-------|--------|-------------
 0    | Split | 0      | Future use for splits
 1    | Shard | 0      | Future use for shards  
 2    | Denomination | -8 to +11 | Binary denomination value
 3-6  | Serial Number | Any | Unique coin identifier
-```
 
 ### Coin Body Structure
 
@@ -113,13 +112,13 @@ Byte | Field | Values | Description
 4. **Verification**: Compare first 7 bytes of password hash with stored hash
 
 ### Hash Storage Format
-```c
+```java
 // Example hash storage in header
 unsigned char password_hash[7] = {0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6, 0xA7};
 ```
 
 ### Verification Algorithm
-```pseudocode
+```c
 function verifyPasswordHash(file, providedHash):
     header = readHeader(file, 32)
     if header.encryption_type == 0:
