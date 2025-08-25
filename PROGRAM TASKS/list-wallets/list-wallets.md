@@ -1,7 +1,7 @@
 # List Wallets
 
 ## 1. Overview
-The list wallets command scans the wallets directory and returns a simple list of all valid wallet names found. This is used for wallet selection interfaces and initial wallet discovery.
+This document specifies the list-wallets() function. This command scans the wallets directory and returns a simple list of all valid wallet names found. This is used for wallet selection interfaces and initial wallet discovery.
 
 ## 2. Return Value
 The function returns a JSON array containing wallet names as strings, or an error as listed in the error table below.
@@ -12,7 +12,7 @@ The function returns a JSON array containing wallet names as strings, or an erro
 
 | Name | Type | Description |
 |---|---|---|
-| $wallets_path | string | The path to the Wallets folder such as: "C:\Users\User\CloudCoin_Pro\Wallets\" |
+| $wallets_path | string | The path to the Wallets folder such as: "C:\Users\User\CloudCoin\Pro\Wallets\" |
 
 ### 3.2. Return Value
 **Type**: JSON array of strings  
@@ -20,7 +20,7 @@ The function returns a JSON array containing wallet names as strings, or an erro
 
 ### 3.3. Example Function Call
 ```bash
-list-wallets "C:\Users\User\CloudCoin_Pro\Wallets\"
+list-wallets "C:\Users\User\CloudCoin\Pro\Wallets\"
 ```
 
 ### 3.4. Example JSON Output
@@ -149,7 +149,7 @@ for each directory in wallets_path:
 
 ### 7.4. Example Directory Structure
 ```
-C:\Users\User\CloudCoin_Pro\Wallets\
+C:\Users\User\CloudCoin\Pro\Wallets\
 ├── Default/                    ← INCLUDE (default user wallet)
 ├── Templates/                  ← SKIP (template collection)  
 ├── .config/                    ← SKIP (hidden system directory)

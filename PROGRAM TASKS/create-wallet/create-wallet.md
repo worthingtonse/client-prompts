@@ -12,7 +12,7 @@ The variable that is returned will be either "success" or an error as listed in 
 
 | Name | Type | Description |
 |---|---|---|
-| $wallets_path | string | The path to the Wallets directory such as: "C:\Users\User\CloudCoin_Pro\Wallets\" |
+| $wallets_path | string | The path to the Wallets directory such as: "C:\Users\User\CloudCoin\Pro\Wallets\" |
 | $wallet_name | string | The name of the folder to become the wallet. Must not contain any illegal characters for file names. |
 
 ### 3.2. Return Value
