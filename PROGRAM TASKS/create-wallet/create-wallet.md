@@ -34,7 +34,7 @@ The variable that is returned will be either "success" or an error as listed in 
 ### 4.3. Write Wallet Structure
 Create the following complete structure in the specified path:
 
-```
+```python
 $wallets_path/
 └── $wallet_name/
     ├── Bank/                       # Authenticated coins ready for use

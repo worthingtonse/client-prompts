@@ -7,25 +7,21 @@ The primary purpose of this function is to verify that a given password hash mat
 ## Function Requirements
 
 ### 1. Coin File Reading
-The function must read coin files from the wallet directory:
-- Read coin files from Bank/ and Fracked/ folders (authenticated coins)
-- Parse coin file headers to extract password hash information
-- Handle different coin file formats and encryption types
-- Support both single and multiple coin files
+The function must read one coin file from the wallet directory:
+- Read coin file from Bank/ or Fracked/ folders (authenticated coins)
+- Parse coin file headers to extract password test bytes
 
 ### 2. Password Hash Verification
 Verify the password using direct hash comparison:
 - Accept pre-computed SHA-256 hash from client
 - Extract password hash from coin file headers (bytes 8-14)
 - Compare hashes using secure comparison methods
-- Validate against multiple coin files for accuracy
 
 ### 3. Coin File Format Support
 Support the standard CloudCoin binary file format:
 - Parse 32-byte file headers
 - Handle different encryption types (0=none, 1=128 AES CTR, 4=256 AES CTR)
 - Read password hash from header bytes 8-14 (7 bytes)
-- Validate file structure and integrity
 
 ### 4. Return Value
 The function must return a verification result with detailed status information including success/failure and any validation issues encountered.
@@ -38,7 +34,9 @@ The function must return a verification result with detailed status information 
 (object): Password verification result with detailed status and validation information
 
 ## File Structure
-Your code will interact with the following wallet directory structure:
+Your code will interact with the following wallet directory structure and access the Bank or Fracked folder to look for any coin file: 
+
+
 
 ```
 wallet_name/
@@ -101,7 +99,7 @@ wallet_name/
 - Check read permissions for wallet folders
 
 ### 2. Locate Coin Files for Verification
-- Scan Bank/ folder for authenticated coin files
+- Scan Bank/ folder for coin files
 - Scan Fracked/ folder for partially authenticated coins
 - Filter for .bin files with valid coin file structure
 - Prioritize files with encryption enabled (encryption type > 0)
@@ -120,7 +118,6 @@ wallet_name/
 ### 5. Perform Hash Comparison
 - Compare provided password hash with stored hash
 - Use secure comparison to prevent timing attacks
-- Test against multiple coin files for consistency
 - Handle edge cases (no encrypted files, corrupted headers)
 
 ### 6. Validate File Integrity
@@ -131,7 +128,7 @@ wallet_name/
 
 ### 7. Return Verification Result
 - Compile verification status and details
-- Include information about files tested
+- Include information about file tested
 - Report any inconsistencies or errors
 - Provide debugging information if needed
 

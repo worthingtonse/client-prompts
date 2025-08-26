@@ -37,7 +37,7 @@ The function must return enhanced location information with all calculated data 
 ## File Structure
 Your code will interact with the following CloudCoin Pro location files:
 
-```
+```python
 D:/CloudCoin/Pro/
 ├── locations.csv               # Simple location configuration (path, type)
 ├── last-export-folder-locations-dropdown.txt  # Recent export folders
@@ -49,7 +49,7 @@ D:/CloudCoin/Pro/
 ## Simplified Location File Format
 
 ### locations.csv (Simplified Format)
-```csv
+```python
 path,type
 D:\CloudCoin\Pro\Wallets,local
 C:\Users\User\Documents\CloudCoin\Backup,local
@@ -280,7 +280,7 @@ function detectLocationType(path) {
 
 ## Human-Readable Format Option
 
-```
+```python
 ====================================================
 CLOUDCOIN PRO DATA LOCATIONS
 ====================================================
