@@ -93,6 +93,8 @@ The client will download the file as above and that can be searched.
 No formatting encryption for phase one. But, there should be some meta data in the email saying the encryption type is zero
 See the meta data file. However, there must be some heading for a text file. 
 
+This will use the (Compact Binary Document Format)[https://github.com/worthingtonse/client-prompts/main/Ideas In Progress/compact-binary-document-format.md]
+
 
 ## Send email
 
