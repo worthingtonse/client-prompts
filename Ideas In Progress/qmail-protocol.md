@@ -13,11 +13,7 @@ The QMail protocol is designed to replace the existing email system.
 6. Encrypt email
 7. Send email
 8. check for new emails
-9. Sell Coins Page
-10.  Email Marketing site
-11. Sell Account Page (buy certificates)
-12. Email server rules
-13. Email server software sales site.
+9. Marketing
 
 
 ## Finding the Email Servers
@@ -54,7 +50,7 @@ The format for this file will be one row per user and in comma seperated vlues. 
 Binary File Format Specification
 The binary file consists of concatenated records, each representing a user's data. Below is the format for a single record, described in a table.
 
-# Binary User Lookup File Format Specification
+### Binary User Lookup File Format Specification
 
 The binary file consists of concatenated records, each representing a user's data. Below is the format for a single record, described in a table.
 
@@ -81,7 +77,46 @@ The binary file consists of concatenated records, each representing a user's dat
   - Pair 2: Key `0x01` (1 byte), Length `0x05` (1 byte), Value `0x32 0x32 0x33 0x32 0x33` (5 bytes, "22323").
   - Total: 24 bytes.
 
+## Posting Info To the Directory
+To begin with, users will only be able to post: 
+1. Display Name
+2. Discription
+3. Price
+4. White List
+5. Blacklist
+6. My Email Servers
+   
+## Search user directory
+The client will download the file as above and that can be searched. 
 
+## Format and Encrypt Email
+No formatting encryption for phase one. But, there should be some meta data in the email saying the encryption type is zero
+See the meta data file. However, there must be some heading for a text file. 
+
+
+## Send email
+
+Send Meta Data and striped file to Raida useing the stiping format
+Nee
+### Meta Data Needed For Emails
+1. Encryption Type
+2. Raid Type
+3. Number of servers used
+4. CCR Check if the message has been tampered with
+5. Compression type
+6. Expiration Date
+7. Allowed to be viewed by (array of user IDs). Deletes after that.
+
+
+
+## Call One Random RAIDA to Checkcheck for new emails
+This protocol may already be created in the chat software 
+
+# Marketing
+1. Email Marketing site
+2. Sell Account Page (buy certificates)
+3. Email server rules
+4. Email server software sales site.
 
 ## RAIDA Mail Folder Structure
 The all-folders folder holds all the user and public files. 
