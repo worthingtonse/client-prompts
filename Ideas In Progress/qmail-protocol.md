@@ -23,6 +23,20 @@ The QMail protocol is designed to replace the existing email system.
 ## Finding the Email Servers
 Each raida will have an identical copy of all the email servers. This will be a file in the  public folder. They users will call the GET_OBJECT raidax command and specify the email server file. The email server file will will not be encrypted. The user only has to call it from one server. The Raid type will be NULL raid. 
 
+
+The binary file consists of concatenated records, each representing a user's data. Below is the format for a single record, described in a table. All integers are (big-endian).
+
+| Field                     | Size (Bytes) | Description                                                                 |
+|---------------------------|--------------|-----------------------------------------------------------------------------|
+| Server ID                   | 5            | Unique identifier for the user (binary-encoded, fixed length).              |
+| Percentage take           | 6            | Unsigned integer  % Server takes of payment in Satoshi. (Lik |
+| Number of Key-Value Pairs | 1            | Unsigned integer (0–255) indicating the number of key-value pairs that follow. |
+| Key-Value Pair(s)         | Variable     | Repeated for each pair (as specified by Number of Key-Value Pairs):         |
+| &nbsp;&nbsp;Key           | 1            | Unsigned integer (0–255) representing a predefined key (e.g., 0 = "name").  |
+| &nbsp;&nbsp;Value Length  | 1            | Unsigned integer (0–255) specifying the length of the value in bytes.       |
+| &nbsp;&nbsp;Value         | 0–255        | Binary data for the value (length as specified by Value Length).            |
+
+
 The user can also download the code word files that will change the bytes into Titles, Adjitives and Plural Nouns. 
 
 ## Pay For Email Severs
