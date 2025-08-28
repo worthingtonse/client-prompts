@@ -70,29 +70,34 @@ all-folders
 
 ## Service
 
-[Update Directory](#update-director)
+Phase | Name | Description
+---|---|---
+1 | [Update Directory](#update-director) | Allows people to advertise themselves in the directory
 
-[Post Master Key](#receiver-post-master-key)
+1 |[Read Directory](#read-directory) | User can search for the email they want to send to
 
-[Get Receiver's Key](#get-receiver-key)
+1 |[Fetch Email](#fetch-email)
 
-[Read Directory](#read-directory)
+1 |[Send To One](#send-to-one) | From to To
 
-[Send To Many](#send-to-many)
+2 |[Send To Many](#send-to-many) | One person can send email to many people. 
 
-[Send To One](#send-to-one)
+2 |[Send Associated File](#send-associated-file)
 
-[Send Associated File](#send-associated-file)
+2 |[Fetch Attachement](#fetch-attachement)
 
-[Fetch Email](#fetch-email)
+3 |[Set Autoresponse](#set-autoresponse)
 
-[Fetch Attachement](#fetch-attachement)
+3 |[Vouch For or Against Sender](#vouch-for-or-against-sender)
 
-[Set Autoresponse](#set-autoresponse)
+3 |[Confirm Receipt](#confirm-receipt)
 
-[Vouch For or Against Sender](#vouch-for-or-against-sender)
+4 |[Post Master Key](#receiver-post-master-key) | Allows peer to perr encryption but may not be so secure
 
-[Confirm Receipt](#confirm-receipt)
+4 |[Get Receiver's Key](#get-receiver-key) | Allows peer to perr encryption but may not be so secure
+
+
+
 
 ## Update Director
 This service allows a receiver to tell people how to contact them, how much it costs to send email to them and weather a sender is free or blocked. 
