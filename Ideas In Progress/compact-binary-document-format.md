@@ -26,7 +26,47 @@ A CBDF file consists of two main sections: a **Header** followed by a **Body**.
 
 ## **3\. The Header**
 
-The header defines all the resources needed to render the document. It is composed of four optional tables, each preceded by a byte indicating the number of entries in that table.
+The header defines all the resources needed to render the document. It is composed of four optional tables, each preceded by a byte indicating the number of entries in that table. To begin with, there will only 
+
+
+
+| Field                     | Size (Bytes) | Description                                                                 |
+|---------------------------|--------------|-----------------------------------------------------------------------------|
+| Sender ID                   | 5            | Unique identifier for the user (binary-encoded, fixed length).              |
+| Number of Key-Value Pairs | 1            | Unsigned integer (0–255) indicating the number of key-value pairs that follow. |
+| Key-Value Pair(s)         | Variable     | Repeated for each pair (as specified by Number of Key-Value Pairs):         |
+| &nbsp;&nbsp;Key           | 1            | Unsigned integer (0–255) representing a predefined key (e.g., 0 = "name").  |
+| &nbsp;&nbsp;Value Length  | 1            | Unsigned integer (0–255) specifying the length of the value in bytes.       |
+| &nbsp;&nbsp;Value         | 0–255        | Binary data for the value (length as specified by Value Length).            |
+
+Key Table
+
+Key | Name
+---|---
+1: |"template"
+2: |"recieved from"
+3: |"coin"
+4: |"Acknowledgment Number"
+5:| "email guid"
+6:| "version"
+7:| "styles"
+8: |"Embedded Object Table"
+9: |"Attachment GUIDs"
+10: |"time stamp"
+11:| "Text Direction"
+12:| "Encryption Key ID"
+13:| "Subjects"
+128-143:| "Checksum"
+144-159:| "Sender's Avatar"
+160-191: |"Senders signature"
+192-255:| "CCs"
+256-264:| "Receiving Raidas"
+265: |"read"
+266: |"stared"
+267: |"grouped"
+268: |"Responded to"
+269: |"trashed"
+
 
 ```mermaid
 ---
