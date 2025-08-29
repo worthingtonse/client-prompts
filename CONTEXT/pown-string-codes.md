@@ -19,7 +19,7 @@ String | Binary | Name | Meaning
 --|---|---|---
 U | 0x0 | Untried   | The client did not send that raida a pown request because an earlier echo request showed that the raida was not reachable.
 P | 0xA | Authentic/Pass | The raida responded that the coin was authentic. 
-B | 0xB | Broke Encryption Key | The raida could not decrypt the request because the encryption key that was used was not authentic.  
+B | 0xB | Broke Encryption Key | The raida could not decrypt the request because the encryption key that was used was not authentic.  This comes from status 37 in a raida's response code. 
 N | 0xC | Clock Timeout/No Response | The raida did not respond in the expected timeframe. This is usally caused by lost packets while using the UPD protocol, a workplace firewall blocking outgoing traffic or network issues like a roaming cell phone. 
 E | 0xE | Error |The raida responded with an error. Could be an issue with the RAIDA software. 
 F | 0xF | Failed |The raida responded that the coin was counterfeit. 
