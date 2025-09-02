@@ -75,10 +75,17 @@ This allows the user to search for a person in the directory. It will only warn 
 
 ```C
 CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH 
-TT TT /Term
-## Response 
+Directory Search CBDF
 E3 E3
 ```
+Directory Search CBDF
+Fixed Key | Bytes | Description
+---|---|---
+0| ob | yt
 
-
-
+ID | Field Name | Example | Description
+---|---|---|---
+1 | Return Columns | 05 DE 23 | One byte per Directory Key 
+2 | Limit | 0xA5 | 256 max
+3 | Page | 3 bytes | 256 per page. Default is 0
+4 | Where Clause | 3 bytes | Directory Key, Comparison Operator, Term
