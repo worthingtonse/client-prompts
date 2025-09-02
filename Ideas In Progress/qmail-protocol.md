@@ -192,27 +192,16 @@ all-folders
 Phase | Name | Description
 ---|---|---
 1 | [Update Directory](#update-director) | Allows people to advertise themselves in the directory
-
 1 |[Read Directory](#read-directory) | User can search for the email they want to send to
-
 1 |[Fetch Email](#fetch-email)
-
 1 |[Send To One](#send-to-one) | From to To
-
 2 |[Send To Many](#send-to-many) | One person can send email to many people. 
-
 2 |[Send Associated File](#send-associated-file)
-
 2 |[Fetch Attachement](#fetch-attachement)
-
 3 |[Set Autoresponse](#set-autoresponse)
-
 3 |[Vouch For or Against Sender](#vouch-for-or-against-sender)
-
 3 |[Confirm Receipt](#confirm-receipt)
-
 4 |[Post Master Key](#receiver-post-master-key) | Allows peer to perr encryption but may not be so secure
-
 4 |[Get Receiver's Key](#get-receiver-key) | Allows peer to perr encryption but may not be so secure
 
 
