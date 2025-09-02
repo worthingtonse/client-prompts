@@ -28,12 +28,12 @@ CBDF File Format
 | &nbsp;&nbsp;Value Length  | 1            | Unsigned integer (0–255) specifying the length of the value in bytes.       |
 | &nbsp;&nbsp;Value         | 0–255        | Binary data for the value (length as specified by Value Length).            |
 
-Key Table
+Resource Key Table
 
-Key | Name
----|---
-1: |"Memo to self"
-2: |""
+Key | Name | Note
+---|---|---
+1: |"Memo to self" | This is not read by other people but allows the user to remember why they made updates. 
+2: |"" | 
 3: |"coin"
 4: |"Acknowledgment Number"
 5:| "email guid"
