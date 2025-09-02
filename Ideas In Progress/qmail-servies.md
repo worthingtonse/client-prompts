@@ -1,4 +1,4 @@
-@ QMail Services
+# QMail Services
 This coveres the actual servics used by Qmail starting with Phase I
 
 ## Note about Compact Binary Document Format
@@ -29,7 +29,7 @@ The direcotry can be complicated so we use the Compact Binary Document Format.
 
 ```C
 CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH
-CBDF
+Update Directory CBDF
 E3 E3 //end of body
 ```
 
@@ -39,27 +39,46 @@ This is for phase I. There is a much larger list available for phase II.
 Directory Update CBDF Fixed Fields:
 Name | Bytes | Description
 ---|---|---
-Resource Table Version | 1 | Allows for many different listed key tables (Default is zero) 
+Update Directory Resource Table Version | 0 | Allows for many different listed key tables (Default is zero) 
 
-Note: All strings are UTC-8 Encoded.
+Note: All data is in binary. Strings are UTC-8 Encoded.
 
-** Resource Table Version 0 **
+** Update Request Resource Table Version 0 **
 ID | Field Name | Example | Description
 ---|---|---|---
-6 |Update Payment Coin Code | 1 | What coin is being used for payment (00 is CloudCoin)
-3 | Update Payment Locker Code | ca8d0787f2a84b4babf1ef9f3d118b16 | Locker code for the payment type
+1 |Update Payment Coin Code | 1 | What coin is being used for payment (00 is CloudCoin)
+2 | Update Payment Locker Code | ca8d0787f2a84b4babf1ef9f3d118b16 | Locker code for the payment type
 3 |"Display Name/Alias" | Varies |"TechWizard" in binary | Primary display name or chosen alias for the user
-3 |"Self Description" | Varies |"I'm a nice guy" | Public info about self
-2 |"Memo to self" | Varies | This is not read by other people but allows the user to remember why they made updates to the Directory
-0 | Allow User List | 00 A3 67 98 E6 72 | Don't need to pay. An array of coin type (Cloudcoin is zero), Denomination, Serial Number 
-0 | Deny User List | 00 A3 67 98 E6 72 | Cannot Send. An array of coin type (Cloudcoin is zero), Denomination, Serial Number 
-0 | Locker Code Payment for Receiving | 00 08 | 2 bytes. Coin type and Denomination
-4 |"Email Server 0" |00 8E 82 89 mail.server.com& | First Byte: Coin type, Three Bytes: Port Number, Variable Bytes: FQDN. Ampersam seperates servers. 
-4 | Thumbnail Stripe| 00 18 77 Data  | RAID type, Stripe number of Total Stripes. 
+4 |"Self Description" | Varies |"I'm a nice guy" | Public info about self
+5 |"Memo to self" | Varies | This is not read by other people but allows the user to remember why they made updates to the Directory
+6 | Allow User List | 00 A3 67 98 E6 72 | Don't need to pay. An array of coin type (Cloudcoin is zero), Denomination, Serial Number 
+7 | Deny User List | 00 A3 67 98 E6 72 | Cannot Send. An array of coin type (Cloudcoin is zero), Denomination, Serial Number 
+8 | Locker Code Payment for Receiving | 00 08 | 2 bytes. Coin type and Denomination
+9 | Thumbnail Stripe| 00 00 18 77 Data  | Data Type (0 for thumbnaile) RAID type, Stripe number, Total Stripes, Data rounded to 100. Up to 250x100=25K bytes
+10 |"Email Server 0" |00 8E 82 89 mail.server.com | First Byte: Coin type, Three Bytes: Port Number, Variable Bytes: Server Name or IP max 250 bytes.
+45 |"Email Server 35" |00 8E 82 89 mail2.server.com | First Byte: Coin type, Three Bytes: Port Number, Variable Bytes: Server Name or IP max 250 bytes
+46 | public key| 00 00 18 77 Data  | Data Type (0 for thumbnaile) RAID type, Stripe number, Total Stripes, Data rounded to 100. Up to 250x100=25K bytes
+47 | Verification Servers  |00 8E 82 89 mail.server.com | First Byte: Coin type, Three Bytes: Port Number, Variable Bytes: FQDN. Ampersam seperates servers bytes. 
+
+Return Status Codes
+
+All Good
+
+All Fail
+
+Error Code
+
+Payment Bad
+
+## Search Directory
+This allows the user to search for a person in the directory. It will only warn people if they are blacklisted. 
+
+```C
+CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH 
+TT TT /Term
+## Response 
+E3 E3
+```
 
 
 
-
-5 |"Acknowledgment Number"
-6| "email guid"
-7| "version"
