@@ -1,63 +1,238 @@
-# **Function Specification: parse_echo_response() for determining RAIDA server status**
+# **Function Specification: parse_echo_response() for processing RAIDA echo responses**
 
-This document specifies the parse_echo_response() function, which is responsible for parsing the binary response received from a single RAIDA server after an echo request has been sent and determining if the RAIDA server is online and functioning correctly.
+This document specifies the parse_echo_response() function, which parses a binary response from a RAIDA server to determine if the `echo` command was successful. This is the corrected version with the accurate status code location.
 
 ## **Function Signature:**
 
-function parse_echo_response(response_data: byte array, server_index: integer): Status | boolean
+function parse_echo_response(response_data: byte array): Tuple<boolean, integer>
 
 * **Input Parameters:**  
-  * response_data (byte array): A byte array containing the UDP response packet from a RAIDA server.
-  * server_index (integer): The index (0-24) of the RAIDA server that sent the response.
+  * response_data (byte array): The binary response received from a RAIDA server after an echo request.
 * **Return Value:**  
-  * A status indicator for the corresponding RAIDA server (e.g., a boolean isOnline, or an enum value like Status.PASS or Status.FAIL).
+  * A tuple containing:
+    1. `is_pass` (boolean): `True` if the response indicates success, `False` otherwise.
+    2. `status_code` (integer): The raw status code extracted from the response (or `None`/`null` if parsing fails).
 
 ## **Detailed Logic:**
 
 ### **1. Response Length Validation:**
 
-* **Check Response Data:**
-  * Validate that the received byte array (response_data) is not null.
-  * Verify that the byte array has the expected length for a header-only response.
-  * Refer to CONTEXT/response-header-format.md for the exact size requirements.
-  * If the length is incorrect, treat the response as invalid and the RAIDA as offline.
+* **Minimum Length Requirement:**
+  * Ensure the received byte array (`response_data`) is at least 32 bytes long.
+  * The minimum expected response size is 32 bytes for a complete response header.
+  * This validation prevents array access errors and ensures we have sufficient data for parsing.
 
-### **2. Header Parsing:**
+* **Length Validation Implementation:**
+  ```
+  if response_data is null or response_data.length < 32:
+      return (False, None)
+  ```
 
-* **Deserialize Response Header:**
-  * Parse the byte array into a response header object according to the structure defined in CONTEXT/response-header-format.md.
-  * Extract all relevant fields from the header structure.
+* **Validation Logic:**
+  * Check for null or undefined response data first
+  * Verify array length meets minimum requirements
+  * Return failure immediately if validation fails
 
-### **3. Status Code Examination:**
+### **2. Challenge Response Validation:**
 
-* **Check Status Field:**
-  * Extract the status field from the parsed header.
-  * Refer to CONTEXT/status-codes-from-raida.md for status code definitions.
-  * **Status Code 1 (pass):** Indicates the RAIDA is online and healthy.
-  * **Any other status code:** (e.g., 2 for fail, or any error codes) means the RAIDA is considered offline or has a problem.
+**Before status code validation**, verify the challenge response:
+
+* **Challenge Location:** Bytes 16-32 of the response header contain the echoed challenge
+* **Validation Method:** Compare response[16:32] with the original sent challenge
+* **Exact Match Required:** Challenge must match byte-for-byte
+* **Validation Logic:**
+  ```
+  if len(response) < 32 or response[16:32] != expected_challenge:
+      return (False, None)  # Failed challenge validation
+  ```
+
+* **Error Handling:** Failed challenge validation should return `error:failed_challenge`
+* **Security Purpose:** Prevents response spoofing and validates authentic server responses
+
+### **3. Status Code Extraction (Corrected):**
+
+* **Corrected Status Code Location:**
+  * **Status Code Location:** The status code is located at **Byte 2** (zero-indexed) of the response header.
+  * This corrects the previous specification that incorrectly stated Byte 4.
+  * Extract the single byte value at position index 2.
+
+* **Extraction Process:**
+  ```
+  status_code = response_data[2]  // Extract byte at index 2 (corrected)
+  ```
+
+* **Data Type Handling:**
+  * Convert the extracted byte to an appropriate integer type
+  * Handle potential signed/unsigned byte interpretation based on platform
+  * Ensure consistent data type for further processing
+
+### **4. Success Condition Check:**
+
+* **Valid Success Status Codes:**
+  A response is considered a "Pass" if the extracted `status_code` matches one of the following values, as confirmed by `protocol.h`:
+  
+  * `0` (`NO_ERROR`) - Standard success response indicating no errors occurred
+  * `1` (`REQUEST_PASS`) - Request was processed successfully and passed all validations
+  * `250` (`STATUS_SUCCESS`) - Operation completed successfully with positive confirmation
+
+* **Success Determination Logic:**
+  ```
+  is_pass = (status_code == 0) || (status_code == 1) || (status_code == 250)
+  ```
+
+* **Boolean Result Generation:**
+  * Evaluate status code against known success values
+  * Return `True` for any matching success code
+  * Return `False` for any other status code value
+
+### **5. Combined Validation Process:**
+
+The complete validation process must be:
+1. **Length validation** (minimum 32 bytes)
+2. **Challenge validation** (bytes 16-32 match sent challenge)  
+3. **Status code extraction** (byte 2 of response)
+4. **Success determination** (status code 0, 1, or 250)
+
+### **6. Return Value Construction:**
+
+* **Successful Parsing:**
+  * Return a tuple containing the boolean success indicator and the extracted status code
+  * Format: `(is_pass, status_code)`
+  * Both values should be valid and meaningful
+
+* **Failed Parsing:**
+  * Return `(False, None)` when validation fails or data cannot be parsed
+  * Use consistent null/None representation based on target language
+
+## **Implementation Details:**
+
+### **7. Protocol Compliance:**
+
+* **Header Format Reference:**
+  * Ensure parsing logic aligns with the official RAIDA protocol specification
+  * Reference `protocol.h` for authoritative status code definitions
+  * Maintain compatibility with existing protocol implementations
+
+* **Status Code Definitions (from protocol.h):**
+  * `NO_ERROR = 0`: Standard success response
+  * `REQUEST_PASS = 1`: Request validation and processing successful
+  * `STATUS_SUCCESS = 250`: Operation completed successfully
+  * All other codes: Various error conditions (treated as failures)
+
+### **8. Data Safety and Validation:**
+
+* **Array Bounds Checking:**
+  * Always verify array bounds before accessing elements
+  * Use safe array access patterns to prevent buffer overflows
+  * Handle edge cases where response might be exactly 32 bytes
+
+* **Type Safety:**
+  * Ensure proper byte-to-integer conversion
+  * Handle potential endianness issues if relevant
+  * Maintain consistent data types throughout processing
 
 ## **Error Handling:**
 
-* **Timeout Handling:**
-  * If a response is not received before the timeout period, the RAIDA associated with that request is considered offline.
+### **9. Exception Management:**
 
-* **Malformed Response Handling:**
-  * If the response is malformed (incorrect length, invalid structure), the RAIDA is considered offline.
-  * If the status code is not 1 (pass), the RAIDA is considered offline.
+* **IndexError Prevention:**
+  * Handle potential `IndexError` if the response is too short
+  * Return `(False, None)` for any array access errors
+  * Implement defensive programming practices
+
+* **Input Validation:**
+  * Check for null, undefined, or invalid response data
+  * Validate data type compatibility before processing
+  * Provide meaningful error responses for invalid inputs
+
+* **Graceful Degradation:**
+  * Ensure function never crashes due to invalid input
+  * Return consistent failure indicators for all error conditions
+  * Maintain predictable behavior under all circumstances
 
 ## **Logging Requirements:**
 
-* **Successful Operations:** Log successful parsing and status determination for each RAIDA server.
-* **Error Logging:**  
-  * Log timeout events with server index and timeout duration.
-  * Log malformed response errors with server index and response details.
-  * Log invalid status codes with server index and received status code.
-  * Example: ERROR: RAIDA Server 5 response timeout after 5000ms.
-  * Example: ERROR: RAIDA Server 12 returned invalid response length. Expected: 32 bytes, Received: 24 bytes.
-  * Example: WARNING: RAIDA Server 8 returned status code 2 (fail). Server considered offline.
+### **10. Debug and Operational Logging:**
+
+* **Successful Operations:**
+  * Log successful parsing with status code information
+  * Include response data length for debugging purposes
+  * Example: DEBUG: Echo response parsed successfully. Length: 32 bytes, Status: 0 (NO_ERROR), Result: Pass
+
+* **Warning Conditions:**
+  * Log responses with valid format but failure status codes
+  * Include status code value and interpretation
+  * Example: WARNING: Echo response indicates failure. Status: 2 (REQUEST_FAIL), Result: Fail
+
+* **Error Logging:**
+  * Log parsing failures due to insufficient data length
+  * Log any unexpected errors during status code extraction
+  * Include diagnostic information for troubleshooting
+  * Example: ERROR: Echo response parsing failed. Response length: 28 bytes, Expected: ≥32 bytes
+  * Example: ERROR: IndexError during status extraction. Response may be corrupted.
+
+## **Performance Considerations:**
+
+### **11. Optimization Guidelines:**
+
+* **Efficient Processing:**
+  * Optimize for quick parsing as this function may be called frequently (up to 25 times per echo command)
+  * Minimize computational overhead for simple validation checks
+  * Use efficient byte array access methods
+
+* **Memory Management:**
+  * Avoid unnecessary data copying during parsing
+  * Handle large response datasets efficiently if applicable
+  * Clean up any temporary variables appropriately
+  * Consider memory pooling for high-frequency operations
+
+## **Testing Requirements:**
+
+### **12. Test Coverage:**
+
+* **Valid Response Testing:**
+  * Test with properly formatted 32+ byte responses
+  * Verify correct status code extraction from Byte 2
+  * Confirm proper success/failure determination
+
+* **Invalid Response Testing:**
+  * Test with responses shorter than 32 bytes
+  * Test with null or undefined response data
+  * Verify proper error handling and return values
+
+* **Edge Case Testing:**
+  * Test with exactly 32-byte responses
+  * Test with various status codes (success and failure)
+  * Test with malformed or corrupted response data
+
+## **Usage Examples:**
+
+```
+// Successful response parsing (status code 0)
+response = [0x01, 0x00, 0x00, ...] // 32+ byte response with status 0 at byte 2
+(is_pass, status_code) = parse_echo_response(response)
+// Result: (True, 0)
+
+// Failed response parsing - insufficient length
+short_response = [0x01, 0x02] // Only 2 bytes
+(is_pass, status_code) = parse_echo_response(short_response)
+// Result: (False, None)
+
+// Failed response parsing - error status
+error_response = [0x01, 0x00, 0x02, ...] // 32+ bytes with status code 2
+(is_pass, status_code) = parse_echo_response(error_response)
+// Result: (False, 2)
+
+// Successful response parsing (status code 250)
+success_response = [0x01, 0x00, 0xFA, ...] // 32+ bytes with status 250 (0xFA)
+(is_pass, status_code) = parse_echo_response(success_response)
+// Result: (True, 250)
+```
 
 ## **General Considerations:**
 
-* **Performance:** Optimize parsing operations for speed, as this function may be called frequently.
-* **Reliability:** Ensure robust error handling to prevent crashes from malformed or unexpected responses.
-* **Thread Safety:** If used in a multi-threaded environment, ensure thread-safe operations.
+* **Protocol Adherence:** Maintain strict compliance with RAIDA protocol specifications
+* **Backward Compatibility:** Ensure changes don't break existing implementations
+* **Documentation Accuracy:** Keep function documentation synchronized with protocol updates
+* **Code Maintainability:** Structure implementation for easy updates as protocol evolves
+* **Thread Safety:** Ensure function is thread-safe for concurrent usage in multi-threaded echo operations
