@@ -1,95 +1,165 @@
 # QMail Overview
 
-## Glossary of QMail Terms
- Here are some terms that are useful to know before reading further:
+QMail is developed by the **Perfect Money Foundation**, an organization dedicated to engineering distributed information systems that champion strong user privacy and a decentralized internet economy (Web 3.0). Our mission is to foster a more equitable and resilient digital ecosystem, not controlled by a few tech giants or surveillance organizations.
 
-* [QMail](#qmail) A protocol for sending and receing quantum-safe distributed messages.
-* [qmail](#qmail) The lowercase version of QMail allows for people to differentiate between email and qmail. Now a person can say "I just sent you a qmail" and the other person will understand it is not an email. 
-* [PMF](#perfect-money-foundation) The Pefect Money Foundation has created QMail.
-* [QKE](qkey.md) (Quantum-Safe Key Exchange) A distributdd system for exchanging 256 bit AEAS Keys.
-* [Chips](#cloudcoin.md) Raida-based currency used to pay for services. These are true digial cash denominations that do not require a public ledger. The user is not required to have an account or password. 
-* [Tip] A microtransaction paid in Chips. Often included in a request for service. 
-* [CBDF](#cbdf.md)(Compact Binary Document Format) for sending and receiving information.
-* [qmail file](#qmail-file.md) The CBDF used in qmails. Has a qmail extension like "MyMessage.qmail". 
-* [DRD](#drd.md) (Distributed Resource Directory) a public CBDF file for QMail users to publish their presence and for locating users' QMail addresses and other network resources such as servers for RAIDA, Key Exchange and QMail.
-* [CloudCoin](#CloudCoin)The first and default Chip used for QMail tips.
-* [ACL](#acl.md) The receiver's Access Control List kept in the DRD that the reciever can use to add other uses to the built-in White List and Black List groups.
-* [STC](#stc.md) The Shuffle Transposition Cipher is a technique for requiring an attacker to possess and decrypt all the shards to decrypt the message. Its purpose is to ensure that even if some of the shards are decrypted, no information can be gleaned from the decrypted shards.This is mainly to eliminate the threat of the QMail Server Administrators themselves who have access to the message shards.
-  
+### Glossary of Terms
+
+  * **[ACL](access-control-list.md) (Access Control List)**: A list stored in a user's DRD that the receiver uses to manage permissions by adding other users to built-in groups like a White List or Black List.
+  * **[CBDF](compact-binary-document-format.md) (Compact Binary Document Format)**: The proprietary binary format used for structuring and sending information within the QMail protocol.
+  * **[Chips](chips.md)**: A RAIDA-based digital currency used to pay for services. As a form of digital cash, it does not require a public ledger, accounts, or passwords.
+  * **[CloudCoin](cloudcoin.md)**: The first and default implementation of **Chips** used for QMail tips.
+  * **[DRD](distributed-resource-directory.md) (Distributed Resource Directory)**: A public directory file used to publish a user's presence and locate QMail addresses and other network resources, such as servers for RAIDA and **QKE**.
+  * **[PMF](perfect-money-foundation.md) (Perfect Money Foundation)**: The organization that created and maintains the QMail standard and its related technologies.
+  * **[QKE](quantum-safe-key-exchange.md) (Quantum-Safe Key Exchange)**: A distributed system for securely exchanging 256-bit AES encryption keys.
+  * **[QMail](qmail-protocol.md)**: An open protocol for sending and receiving quantum-safe, distributed messages. A message sent via the protocol is often called a "qmail."
+  * **[qmail file](qmail-file.md)**: A file with a `.qmail` extension that contains the message content in the **CBDF** format.
+  * **[STC](shuffle-transposition-cipher.md) (Shuffle Transposition Cipher)**: A method of sharding a message so that all shards are required for decryption. This is designed to prevent partial information leaks, even if an attacker gains access to some of the shards.
+  * **[Tip](tip.md)**: A microtransaction, paid in **Chips**, that is often included in a request for service.## QMail Open Standard
+
 ## Open Standard
-QMail is an open standard that any person or organization can adopt. This stardard is provided free of charge with all defects and vulnerabilities by the Perfect Money Foundation. The Perfect Money Foundation is dedicated to creating distributed information systems that provide absolute privacy and decentralizeation of internet resources (AKA Web 3.0). Our goal is to shape the internet economy so that it is not centralized in a few tech giants, payment systems, data centers or survelance organizations.
+The QMail protocol is an open standard for decentralized communication, free for any person or organization to implement.
+
+
+### License
+
+This specification document is licensed under the **Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0)**.
+
+> This means you are free to share and adapt this standard, even for commercial purposes, as long as you give appropriate credit and distribute any adaptations under the same license.
+
+To view a copy of this license, visit:
+[http://creativecommons.org/licenses/by-sa/4.0/](http://creativecommons.org/licenses/by-sa/4.0/)
 
 The QMail service works with other PMF open standards that are being released at the same time such as Quantum Key Exchange, Distributed Resource Directory, Compact Binary Document Format, Compact Binary Mail Format and the Redundant Array of Independent Detection Agents. Other services being developed are QWeb, QText, QVPN and QData. 
 
 ## Open Source Software
-In addition to the open standards, the PMF is releasing open source code and AI prompts that can be used to create and modify the software needed to make client and server software. This software is released with a license that allows you to do anything with the code except:
-1. Patent the technology.
-2. Claim that it was you who conceived of the standard or code.
-3. Add code that attempts to manipulate the user as specified in the [anti-survailance and anti-manipulation rules](#anti-manipulation-rules). 
+In addition to the open standards, the PMF is releasing open source code and AI prompts that can be used to create and modify the software needed to make client and server software. This software is released with an MIT license.
 
-## What is Not Included in the QMail License
-** Registration in the Root Distributed Resource Directory **
+## The Distributed Resource Directory
 
-The PMF provides the Root DRD for your convience so that others can have information about your servers, contact information and other network resources. You are not required to register any of your resources except Chip IDs. There are a limited number of Chip IDs and it is likely that one person would take them all if the PMF did not force registation. The Root DRD contains a list of all Chip IDs that are not registed to police the use of unregisted Chip IDs. 
+The Root Distributed Resource Directory (DRD), maintained by the PMF, serves as a public directory where users can publish information about their servers, contact details, and other network resources.
 
-The PMF charges fees for publishing resources in the Root DRD. Servers used for QMail, QKEY, RAIDA, QMail Address Verfication, Currency Swaps and even DRD require fees to register. In addition to server registration, fees are charged for the registration of Chip IDs (except ID  127 which cannot be registerd and is free for all to use), QMail addresses, Document Pointers, your CBDF Standards and publically available files and text records. These fees helps fund the development of the QMail system including new functionality and open source software. 
-  
-## Benefits of QMail
-The QMail system provides for true privacy and quantum safe 
-transmission. QMail allows everyone to get paid for their attention through a system of 'tips'. A famouse person could charge thousands of dollars to recieve an email making sure that the qmails they receive are worth their time reading. Anyone can eliminate spammers and phishers by increasing the fees that they charge. Users can white list friends and family so that no fees are needed for them to send the receiver messages. 
+### Registration
 
-## System Administration
-QMail server admins can take a cut of their customer's payments (Tips) and compete for customers by proving efficient and producitve services. Admins can compete on price, quickness of replies, maximum email attachment size, screening of malevelon senders, level of trust, political juristictions, geolgraphical location and fault tolerance. In this way, QMail eliminmates the need for data centers to be run by tech giants and distributes the IT economy. Users can even choose to use QMail servers that are admistrated by their friends and families. Users can decide how many qmail servers that they want to distribut their emails accross. The more servers the better but also the more expensive. 
+While the registration of most resources like servers and QMail addresses is optional, the registration of **Chip IDs** is mandatory. This requirement is in place to ensure the fair allocation of the limited number of available IDs and to prevent squatting or unauthorized use.
 
-## Qmail Efficiency
-QMail radically reduces the size of emails by using the CBDF protocol. The CBDF is a novel alternative to HTML, CSS and JavaScript that may only be 1% of the bytes needed for an equivilant email used today. The QMail system nearly eliminates the bandwidth and storage space required to support spam and phishing. Emails sent to groups are stored securily in shared distributed storage eliminating the need for servers to save multiple copies of the same thing. The CBDF allows formatted emails to be filtered into plain text so that emails do not have to include both formatted and text version of the same email. Users can be required to download their emails to read them instead of keeping them on the servers. This massive reduction in needed system resources (bandwith, harddrives, RAM, processor power, electricity, physical space), allows the general public to host these QMail servers in their garages using old computers.
+The Root DRD maintains the definitive list of all registered Chip IDs.
 
-## QMail Privacy
-QMail is inherintly secure because qmail messages are shred bit by bit into "Stripes" that can be distibued accross 2 to 32 mail servers. Each stripe is encypted using its own 256 AES CTR encryption key. These keys are exchanged using the quantum safe QKE. Each stripe maybe routed through different networks so that tappers are less likely to be able to capture all the stipes needed to even attempt to dectypt. E.g. a sender could have internet access through a Starlink satilite, T-Mobile cellular and Comcast Cable. Striped qmails can be distributed amoung these gateways keeping the packets on different networks where they cannot be easily captured and assembled. The order in which the stripes are placed on the mail servers can be randomized so that the order they need to be put back together in and makes it impossible for a mail server admin to know what order they are in unless he is able to get the email from 
-all 32 mail servers. Users who store just one QMail server in their house are vertually guaranteed privacy that this is impossible. 
+### Registration Fees
 
-The only data that can be understood from a message is some meta data. If the QVPN service (work in
-progress) is used, then only the following can be know by anyone except the QMail Administrator. 
+To fund the ongoing development of the QMail ecosystem, the PMF charges modest fees for publishing resources in the Root DRD. Revenue from these fees directly supports the creation of new features and the maintenance of the open-source software.
 
-1. It can be  known that users are using a VPNs, but only If the tapper can associate the VPN origination IP to the user.
+Fees are required to register resources such as:
 
-Regardless of the use of VPNs, the QMail Adminstrators would be able to know the additional meta information: 
-1. The sender and receiver's 7-byte user ID which is psudo annonymous like a Bitcoin Addresses
-2. The time the sender sent the message and the time that the receiver collected messages.
-3. The IP addresses of the sender and receiver.
-4. The number of bytes in a message can be infered. 
+* **Server Endpoints**: Servers for QMail, QKE, RAIDA, address verification, and currency swaps.
+* **Unique Identifiers**: QMail addresses and most Chip IDs (excluding the freely usable ID 127).
+* **Public Documents**: CBDF standard definitions, document pointers, files, and text records.
 
-To fathum what would be required for a QMail administrator to infir any meaning from a message, the administrator would need to: 
-1. Capture up to 32 stripes of data that maybe traveling on many different networks.
-2. Decrypt a quantum safe stripe of data that has 115,792,089,237,316,195,423,570,985,008,687,907,853,269,984,665,640,564,039,457,584,007,913,129,639,936 different combinations.
-3. Repeat step 2 up to 32 times.
-5. Decrypt the message's public key encryption using a quantum computer.
-6. Unshuffle the transposition cipher that may have up to 263,130,836,933,693,530,167,218,012,160,000,000 different combinations. This cipher requires that the attacker decypt all of the stripes to infer any meaning. 
+### Benefits of QMail
 
-For QMail Administrators to be able to infer any information, they would need to:
-1. Have access to all of the receiver's QMail server's hard drives to get all the message's stripes.
-2. Decrypt the message's public key encryption using a quantum computer.
-3. Decrypt the message's Shuffle Transposition Cipher. This may have up to 263,130,836,933,693,530,167,218,012,160,000,000 different combinations and is quantum safe. 
+The QMail system is designed to provide robust privacy and quantum-safe message transmission. It also introduces a novel economic model, allowing users to get paid for their attention through a system of 'tips'. For example, a high-profile individual could set a high tip fee to ensure the qmails they receive are substantive.
+
+This same mechanism empowers all users to eliminate spam and phishing attempts by setting a prohibitive cost for unknown senders. Friends, family, and trusted contacts can be added to a whitelist, allowing them to send messages without a fee.
+
+### System Administration
+
+QMail server administrators can earn a percentage of the tip payments processed by their servers. This creates a competitive marketplace where admins are incentivized to provide efficient and reliable services. Admins can compete on a variety of factors, including:
+
+* Price and fee structure
+* Speed of message processing
+* Maximum attachment size
+* Screening of malicious senders
+* Trust, political jurisdiction, and geographical location
+* Fault tolerance and uptime
+
+This model fosters a distributed IT economy, reducing the reliance on centralized data centers run by tech giants. Users can choose servers administered by anyone, from established businesses to trusted friends, and can distribute their messages across multiple servers for enhanced resilience. While using more servers improves security and reliability, it may also increase costs.
+
+### QMail Efficiency
+
+QMail radically reduces message size by using the Compact Binary Document Format (CBDF). As a novel alternative to HTML, a CBDF-formatted message can be as little as 1% of the size of an equivalent modern email. For example, instead of creating an email's layout using HTML and CSS, qmails have 255 unique layouts to choose from making it possible to create the qmail layout with one byte. Qmail layouts are made up of panels that can themselves be divided into sub panels using one byte. Each panel is described by a 16-byte code. Colors are reduced from 16,777,216 to 65,535 choices. The number of fonts possible are limited to 256. Since this is all encoded in binary, it is extreemly effficient. 
+
+This efficiency nearly eliminates the bandwidth and storage required to handle spam. Furthermore, messages sent to groups are stored securely in shared distributed storage, removing the need for servers to hold multiple copies. This massive reduction in required system resources (bandwidth, storage, RAM, electricity) makes it feasible for individuals to host QMail servers on consumer-grade hardware.
+
+### QMail Privacy
+
+**Architectural Privacy**
+QMail's security is inherent to its architecture. Messages are sharded into 2 to 32 encrypted "stripes," which can be distributed across multiple mail servers. Each stripe is encrypted with a unique AES-256 key, established using the quantum-safe QKE protocol.
+
+These stripes can be routed through different physical networks (e.g., satellite, cellular, and cable), making it extraordinarily difficult for an attacker to intercept all the components of a single message. The storage order of the stripes on the servers can also be randomized, making reassembly impossible without the correct metadata.
+
+**Metadata Considerations**
+The only data an observer can glean from a message is the sender's ID. This ID is an alias and is psudo anonymous like the address of a Bitcoin user. Even so, if a VPN service is used, such as our upcomming Qvpn, an external observer can't even see the sender's ID.
+
+The biggest threat are the QMail administrators themselves. QMail admins are able to see the folloing meta data:
+* The sender and receiver's 7-byte pseudo-anonymous user ID.
+* The IP addresses of the sender and receiver.
+* The time when the message was sent and received.
+* An approximation of the message's total size in bytes.
+
+**Threat Model: Decryption Feasibility**
+To comprehend the difficulty of compromising a QMail message, consider the steps an attacker would need to complete.
+
+***An External Attacker or Malicious QMail Administrator would need to:***
+1.  **Capture All Stripes:** Intercept up to 32 message stripes, which may be traveling across completely different global networks.
+2.  **Break Public Key Encryption:** Decrypt the message's session key using a quantum computer.
+3.  **Break AES-256 (x32):** Decrypt each of the individual stripes, each secured with AES-256 (a key space of $2^{256}$).
+4.  **Break the Transposition Cipher:** Unshuffle the stripes, a task with up to 32! (over $2.6 \times 10^{35}$) combinations, which requires all stripes to be decrypted first.
+
+This document outlines a strong security model and a clear development roadmap. The following revised version polishes the language for a more professional and authoritative tone, corrects errors, and improves the structure for better readability.
+
+***
+### Evaluation
+
+* **Clarity**: The original text had some awkward phrasing and run-on sentences. The distinction between development phases can be made sharper.
+* **Consistency**: Key terms like "workflow" and the use of markdown for headings were inconsistent.
+* **Tone**: The language was generally good but occasionally too informal for a technical specification.
+* **Errors**: There were several spelling, grammar, and punctuation errors that needed correction.
+
+***
+### Improved Version
+
+### Securing the Client
+
+Server-side encryption is ineffective if the user's device is compromised. To mitigate this risk, the QMail client is designed to run as a portable application from a USB drive, where all keys and CloudCoins are stored.
+
+This data is encrypted with the user's password. For added security, the application will automatically log the user out and eject the USB drive after a period of inactivity.
 
 
-
-
-To make things easier to understand, this document with include the hyperlinks above to a document that explains each of these components. 
 
 # Development Phases
-Inorder 
-## Work Flow
-1. The QMail Server Admins registers* their servers with the Root RAIDA if they want to publish there IP address and other valuable information needed by the public.
-2. The QMail Users search* the DRD to find QMail Servers they can hire to store their qmail on.
-3. The QMail Users use the QKE to exchange keys between their computers and the QMail servers that they employ.
-4. The QMail Users register* themselves in the DRD assuming they want to be found by others and use QMail's advanced functionality
-5. The QMail Users exchange usernames or find* the usernames of others in the DRD.
-6. The QMail Sender sends* qmail file and attachments to one or more other users. Byte limits depend on the QMail Server Administrators and may be between 800MB to 3.2TB maximum per message
-7. * The cost of sending mail and attachments depends on size. e.g. 800MB costs 32 CCs while 3.2 TB costs 128 CCs.
-8. The QMail Server Admins check the receiver's ACL (Access Control Lists) in the DRD, processes the payment and stores the data for the receiver.
-9. The QMail Receiver downloads   
 
-* These operations cost CloudCoins in order to stop DDOS, Stop malevelent activity and pay the server administrators.
+## Phase I: Foundational Workflow
 
-*  
+In this initial phase, the core messaging functionality is established without a public directory.
 
+1.  **Server Discovery**: The client downloads a basic, static directory to locate the initial beta QMail servers.
+2.  **Key Exchange**: Users establish secure keys with their chosen QMail servers via the QKE protocol.
+3.  **Contact Exchange**: Users must exchange their user IDs manually (e.g., over another secure channel).
+4.  **Sending Messages**: Users can send plain-text qmails with small attachment limits. No tips or fees are implemented yet.
+5.  **Receiving Messages**: The client periodically polls the QMail servers for new messages.
+6.  **Message Download**: The receiver downloads their qmails and attachments for local storage and viewing.
+
+## Phase II: Public Directory and Economy
+
+This phase introduces the public DRD and the CloudCoin-based economy.
+
+1.  **Server Registration***: Server admins register their services in the Root DRD to publish their IP addresses, fees, and other metadata.
+2.  **Server Discovery***: Users can search the DRD to find and hire QMail servers that meet their needs.
+3.  **Key Exchange**: Users perform the QKE with their hired servers.
+4.  **User Registration***: Users can register in the DRD to be discoverable and access advanced features.
+5.  **Contact Discovery***: Users can find each other by searching for usernames in the DRD.
+6.  **Sending Messages***: Senders transmit qmails and attachments, with size limits and costs determined by the server admin.
+    * *Cost Example: An 800 MB message might cost 32 CC, while a 3.2 GB message could cost 128 CC.*
+7.  **Processing and Storage**: The destination server verifies the receiver's ACL, processes the tip payment, and stores the message.
+8.  **Message Download**: The receiver is notified and can download the message.
+
+***
+*\*These operations require a small payment in CloudCoins to prevent DDoS attacks, deter malicious activity, and incentivize server administrators.*
+***
+
+## Phase III: Advanced Features
+
+The third phase will focus on expanding functionality and decentralization.
+
+1.  **Rich Content**: Implementation of message formatting using CBDF.
+2.  **Advanced DRD**: Enhanced search capabilities and expanded data storage options within the directory.
+3.  **Decentralized Administration**: Development of trust and registration systems for independent server administrators.
