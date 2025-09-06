@@ -104,19 +104,6 @@ To comprehend the difficulty of compromising a QMail message, consider the steps
 3.  **Break AES-256 (x32):** Decrypt each of the individual stripes, each secured with AES-256 (a key space of $2^{256}$).
 4.  **Break the Transposition Cipher:** Unshuffle the stripes, a task with up to 32! (over $2.6 \times 10^{35}$) combinations, which requires all stripes to be decrypted first.
 
-This document outlines a strong security model and a clear development roadmap. The following revised version polishes the language for a more professional and authoritative tone, corrects errors, and improves the structure for better readability.
-
-***
-### Evaluation
-
-* **Clarity**: The original text had some awkward phrasing and run-on sentences. The distinction between development phases can be made sharper.
-* **Consistency**: Key terms like "workflow" and the use of markdown for headings were inconsistent.
-* **Tone**: The language was generally good but occasionally too informal for a technical specification.
-* **Errors**: There were several spelling, grammar, and punctuation errors that needed correction.
-
-***
-### Improved Version
-
 ### Securing the Client
 
 Server-side encryption is ineffective if the user's device is compromised. To mitigate this risk, the QMail client is designed to run as a portable application from a USB drive, where all keys and CloudCoins are stored.
