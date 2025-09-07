@@ -91,9 +91,8 @@ Descriptor ID | Name | Description
 0 | QMAIL | The actual qmail file
 1 | QTEXT | Reserved for future use
 2 | QMESSAGE | Reserved for future use
-3 | USERS_SECRETE_CBDF | A CBDF file containing avatars, code names descriptions, styles that are not available to the public. 
-4 | GROUPS_SECRETE_CBDF |  A CBDF file containing avatars, codenames, descriptions, styles that are not available to the public. These help 
-people identify spoofing a user.  
+3 | PEER_TO_PEER_SECRET_CBDF | For identificaiton of users, a CBDF file containing avatars, code names, etc that are not available to the public. 
+4 | GROUPS_SECRETE_CBDF | For identificaiton of groups, a CBDF file like the PEER_TO_PEER_SECRET_CBDF.  
 5 | QPACKET | Reserved for future use
 10 | Attachment 0 | The first attachment
 11 | Attachment 1 | The second attachment
