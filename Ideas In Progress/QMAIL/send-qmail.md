@@ -1,6 +1,8 @@
 # Send Qmail
 Allows people to send and receive qmail including attachments, group and user data for mutual identification.
 
+<code style="color : green">text</code>
+
 ## File Transfer
 Send Qmail is a file transfer protocol that transfer files from the user's computer to the mail folder owned by the receiver that is located on the Qmail server. 
 The qmail files stored on the QMail servers named like "e85105d6-7972-4493-8e98.stripe005.type001.exp00d.gmail" and attachments with file names like "e85105d6-7972-4493-8e98.stripe005.type001.v001.bin" with the qmail id, stipe number, file type, days until deletion, and version depending on the file type.
@@ -23,7 +25,7 @@ Before users can recieve email on a QMail server, they first must create an acco
 
 The client may need to first query the DRD to find the QMail server's IP and Port as well as its fee to start an 
 account. The fee maybe paid with a chip like CloudCoin.
-    <span style="background-color: lightgrey;">This text is highlighted.</span>
+    <code style="color : yellow;">This text is highlighted.</code>
 ## Mutual Authenticating with the QMail Server
 A QMail server must authenticate the sender and the receiver and visa versa. This is done using RAIDA authentication. The clients
 and servers will authenticat with the RAIDA and receive a ticket proving they authenticated. QMail servers may require more than
