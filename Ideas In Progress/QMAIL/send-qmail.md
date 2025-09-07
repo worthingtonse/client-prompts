@@ -1,27 +1,29 @@
 # Send Qmail
-Allows people to send and receive qmail including attachments. 
+Allows people to send and receive qmail including attachments, group and user data for mutual identification.
 
 ## File Transfer
 Send Qmail is a file transfer protocol that transfer files from the user's computer to the mail folder owned by the receiver that is located on the Qmail server. 
-The qmail files are named like "e85105d6-7972-4493-8e98.stripe005.type001.exp00d.gmail" and attachments with file names like "e85105d6-7972-4493-8e98.stripe005.type001.v001.bin" with the qmail id, stipe number, file type, days until deletion, and version depending on the file type.
-If the file is stored on the client computer, it's stipe ID will be replaced with the word "whole" and will contain all the stripes.
+The qmail files stored on the QMail servers named like "e85105d6-7972-4493-8e98.stripe005.type001.exp00d.gmail" and attachments with file names like "e85105d6-7972-4493-8e98.stripe005.type001.v001.bin" with the qmail id, stipe number, file type, days until deletion, and version depending on the file type.
+If the file is stored on the client computer, its stipe ID will be replaced with the word "whole" and will not be striped.
 Each file is sent seperatly. Therefor, there will need to be an extra call to the QMail server for every attachment that is included. 
 Each call to the send-qmail service that includes many files must use the same qmail ID (GUID), but with a unque file type. A QMail server can store more than one stipe if the user decides to do that (not recommended).
 
 ## Editing Sent Qmails
 If the user would like to edit the qmail after it was sent (or any file uploaded to the RAIDA), they can upload a file with the settings with a new version number and with the "Overwrite" command set. The RAIDA will set the version if versioning is supported by the QMail server. 
-If the overwrite is successful, and the email has not already been received by the sender, then the QMail server will respond with success (0xFA). However, if the file to be overwritten is no longer on the server, because it has been downloaded, the overwrite request status
-will be an error. 
+If the overwrite is successful, and the email has not already been received by the sender, then the QMail server will respond with success (0xFA). However, if the file to be overwritten is no longer on the server, because it has been downloaded or does not exist, the response status will be an error. 
 
 ## File Size
-The size of the total file sent that is allowed is determined by the QMail server and found in the DRD.
+The size of the total file sent that is allowed is determined by the QMail server and found in the DRD. QMail servers will charge differnt amounts of chips depending on the file size. The number of days the file is to be stored is encoded in the "Days to Store" table below. 
+
+## File Expiration
+Files will be kept on the QMail server until they are downloaded or expire. QMail servers will charge more for file storge the longer the user wants the files to be stored for. 
 
 ## Account Creation on the QMail Server
 Before users can recieve email on a QMail server, they first must create an account on that server. Note that to take advantage of the distributed properties of QMail, the user needs to create accounts on many QMail servers to divide the load. This requires the user to first create a shared secret with the QMail server using QKE so that quantum safe communication is possible. Next, the client must call the QMail server's create account service. 
 
 The client may need to first query the DRD to find the QMail server's IP and Port as well as its fee to start an 
 account. The fee maybe paid with a chip like CloudCoin.
-
+    <span style="background-color: lightgrey;">This text is highlighted.</span>
 ## Mutual Authenticating with the QMail Server
 A QMail server must authenticate the sender and the receiver and visa versa. This is done using RAIDA authentication. The clients
 and servers will authenticat with the RAIDA and receive a ticket proving they authenticated. QMail servers may require more than
@@ -50,8 +52,8 @@ RAID Type | 1 | 0 = Stripe, 1 = Mirror, 5 = Stripe with Parity, 6 = Stripe with 
 Stripe Number | 1 | A number 0 to N (up to 32 servers)
 Of Number |1 | Such as "7" of "25" Where 25 is the Of Number
 
-
-Send Mail Resource Table
+### Variable Part
+Send Mail Resource/Command Table
 ID | Field Name | Example | Description
 ---|---|---|---
 1 | To Array | 00 06 12 45 43 A4 00 06 12 D3 35 02 | Seven bytes each. Coin type 0x0006, Denomination, 4 byte serial number. 
@@ -60,10 +62,10 @@ ID | Field Name | Example | Description
 4 | Ticket Array* | 00 06 R1 00 01 02 03, 00 06 R2 00 01 02 03 04 | Tickets obtained through the RAIDA  
 5 | Session ID | GUID | Client received this from the QMail server after client's previous authenticated.  
 6 | Subject Stripe | 05 DE 23 | Raid type, Stripe Number, 'Of Number' all remaining bytes (253) can be used for the subject. 
-7 | Peer-to-peer Secret CBDF** | GUID | The user can pay the QMail server to store a file that is unavailable to the general public and is not 
+~~7 | Peer-to-peer Secret CBDF** | GUID | The user can pay the QMail server to store a file that is unavailable to the general public and is not 
 8 | Group ID*** | GUID | Reserved for future use
 9 | version number | for file types other than 0. Default is zero. Version must be included if the user wants to store versions without overwriting existing versions. Versions allow the user to roll back changes. 
-
+~~
 <!--
 6 | Shuffle Table Shard 1 | A square of the Of Number. If there are 16 servers, the shuffle table will be 16 x 16 or 256 bytes. This is the first 8 rows.  The numbers in each cell will be represented by five bits. See table below. | PHASE II
 7 | Shuffle Table Shard 2 | Like above. This is the Second 8 rows. | PHASE II
@@ -94,6 +96,17 @@ Descriptor ID | Name | Description
 3 | PEER_TO_PEER_SECRET_CBDF | For identificaiton of users, a CBDF file containing avatars, code names, etc that are not available to the public. 
 4 | GROUPS_SECRETE_CBDF | For identificaiton of groups, a CBDF file like the PEER_TO_PEER_SECRET_CBDF.  
 5 | QPACKET | Reserved for future use
-10 | Attachment 0 | The first attachment
+6 | QDATA | Used for manaing files on a QData Server that may or may not be enabled on a QMail Server. 
+ment 0 | The first attachment
 11 | Attachment 1 | The second attachment
 255 | Attachment 255 | The 255th attachment // IDs 12 to 254 left out for brevity
+
+## File Expiration Encoding
+Code | D = 1 Day | Exlanation
+---|---
+0 | Code * 1 Day | Free: File will be stored until the QMail server decides to delete it (Free of charge). 
+1-6 | Code * 7 Days | File will be stored for 1 day x the Code.
+7 -52 | Weeks: The number of weeks the email will be stored before deletion. 
+
+
+
