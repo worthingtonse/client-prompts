@@ -1,7 +1,9 @@
 # Send Qmail
 Allows people to send and receive qmail including attachments, group and user data for mutual identification.
 
-<code style="color : green">text</code>
+
+
+$${\color{lightgreen}Light \space Green}$$
 
 ## File Transfer
 Send Qmail is a file transfer protocol that transfer files from the user's computer to the mail folder owned by the receiver that is located on the Qmail server. 
