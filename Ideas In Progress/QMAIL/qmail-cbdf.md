@@ -1,8 +1,8 @@
-# **Compact Binary Document Format (CBDF) \- v0.1 Specification**
+# **Qmail File Format v0.1 Specification**
 
 ## **1\. Overview**
 
-The Compact Binary Document Format (CBDF) is designed for the efficient storage and transmission of richly formatted documents. Its primary goals are to be significantly smaller than equivalent HTML/CSS files and to provide a consistent rendering experience within a closed ecosystem.
+The qmail Compact Binary Document Format (CBDF) is designed for the efficient storage and transmission of richly formatted documents. Its primary goals are to be significantly smaller than equivalent HTML/CSS files and to provide a consistent rendering experience within a closed ecosystem.
 
 The format achieves its compactness through several key strategies:
 
@@ -14,35 +14,25 @@ The standard character encoding for all text content is **UTF-8**.
 
 ## **2\. File Structure**
 
-A CBDF file consists of two main sections: a **Header** followed by a **Body**.
+A CBDF file consists of two main sections: a **Fixed Header** followed by a **Variable Body**.
 
-\+------------------------+  
-|         HEADER         |  
-| (Resource Definitions) |  
-\+------------------------+  
-|          BODY          |  
-|   (Content & Commands) |  
-\+------------------------+
+## **2.1 The Fixed Header**
 
-## **3\. The Header**
+Key | Bytes | Description
+---|---|---
+Version | 4 bits | Starts at zero
+Formatting | 4 bits | 0 = plain text
+Number of Key Pairs | 1 | Phase I will have zero and be a plain text document. 
 
-The header defines all the resources needed to render the document. It is composed of four optional tables, each preceded by a byte indicating the number of entries in that table. To begin with, there will only 
+## **2.2 The Fixed Header**
 
-
-
-| Field                     | Size (Bytes) | Description                                                                 |
-|---------------------------|--------------|-----------------------------------------------------------------------------|
-| Sender ID                   | 5            | Unique identifier for the user (binary-encoded, fixed length).              |
-| Number of Key-Value Pairs | 1            | Unsigned integer (0–255) indicating the number of key-value pairs that follow. |
-| Key-Value Pair(s)         | Variable     | Repeated for each pair (as specified by Number of Key-Value Pairs):         |
-| &nbsp;&nbsp;Key           | 1            | Unsigned integer (0–255) representing a predefined key (e.g., 0 = "name").  |
-| &nbsp;&nbsp;Value Length  | 1            | Unsigned integer (0–255) specifying the length of the value in bytes.       |
-| &nbsp;&nbsp;Value         | 0–255        | Binary data for the value (length as specified by Value Length).            |
+The Variable part defines all the resources needed to render the document. It is composed of four optional tables, each preceded by a byte indicating the number of entries in that table. To begin with, there will only 
 
 Key Table
 
 Key | Name
 ---|---
+0 | "plain text"
 1: |"template"
 2: |"recieved from"
 3: |"coin"
@@ -266,7 +256,7 @@ A simple document saying "**Hello** World" with "World" as a link might look lik
    * \[ApplyStyle: 0x01\] Hello \[ApplyStyle: 0x02\] \[StartLink: 0x01\]World\[EndLink\]
 
 This structure is highly efficient, defining resources once and using single-byte commands to apply them, resulting in a minimal file size.
-
+<!--
 # ASCII Character Frequency Analysis (With Realistic Capitalization)
 
 **Dataset:** Email corpus with 2,893 messages  
@@ -838,3 +828,4 @@ ASCII-code frequency table
 | 82   | $ | 36  | 0.01  | |
 | 83   | ` | 96  | 0.01  | |
 | 84   | _ | 95  | 0.01  | |
+-->
