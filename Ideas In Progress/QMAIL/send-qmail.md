@@ -1,37 +1,36 @@
 # Send Qmail
 Allows people to send and receive qmail including attachments, group and user data for mutual identification.
 
-
-
 $${\color{lightgreen}Light \space Green}$$
 
 ## File Transfer
-Send Qmail is a file transfer protocol that transfer files from the user's computer to the mail folder owned by the receiver that is located on the Qmail server. 
-The qmail files stored on the QMail servers named like "e85105d6-7972-4493-8e98.stripe005.type001.exp00d.gmail" and attachments with file names like "e85105d6-7972-4493-8e98.stripe005.type001.v001.bin" with the qmail id, stipe number, file type, days until deletion, and version depending on the file type.
-If the file is stored on the client computer, its stipe ID will be replaced with the word "whole" and will not be striped.
+Send Qmail is a file transfer protocol that transfer files from the user's computer to the mail folder owned by the receiver that is located on the Qmail servers. 
+
+The qmail files stored on the QMail servers are named like "e851-05d6-7972-4493.stripe00-5.type001.exp00d.gmail" and attachments with file names like "e851-05d6-45f6-d810.stripe005.type001.v001.bin" with the qmail id, stipe number, file type, days until deletion, and version depending on the file type.
+
+If the file is stored on the client computer, its stripe ID will be replaced with the word "whole" and will not be striped.
 Each file is sent seperatly. Therefor, there will need to be an extra call to the QMail server for every attachment that is included. 
-Each call to the send-qmail service that includes many files must use the same qmail ID (GUID), but with a unque file type. A QMail server can store more than one stipe if the user decides to do that (not recommended).
+Each call to the send-qmail service that includes many files must use the same qmail ID (Half GUID), but each with a unque file type. A QMail server can store more than one stripe if the user decides to do that (not recommended).
 
 ## Editing Sent Qmails
-If the user would like to edit the qmail after it was sent (or any file uploaded to the RAIDA), they can upload a file with the settings with a new version number and with the "Overwrite" command set. The RAIDA will set the version if versioning is supported by the QMail server. 
-If the overwrite is successful, and the email has not already been received by the sender, then the QMail server will respond with success (0xFA). However, if the file to be overwritten is no longer on the server, because it has been downloaded or does not exist, the response status will be an error. 
+If the user would like to edit the qmail after it was sent (or any file uploaded to the RAIDA), they can upload a file with the settings with a new version number and with the "Overwrite" command set. If the overwrite is successful, and the email has not already been received by the sender, then the QMail server will respond with success (0xFA). However, if the file to be overwritten is no longer on the server, because it has been downloaded or does not exist, the response status will be an error. 
 
 ## File Size
 The size of the total file sent that is allowed is determined by the QMail server and found in the DRD. QMail servers will charge differnt amounts of chips depending on the file size. The number of days the file is to be stored is encoded in the "Days to Store" table below. 
 
-## File Expiration
-Files will be kept on the QMail server until they are downloaded or expire. QMail servers will charge more for file storge the longer the user wants the files to be stored for. 
+## Automatic File Deletion
+Files will be kept on the QMail server until they are downloaded or expire. QMail servers will charge more for file storge the longer the user wants the files to be stored for. Information about charges for file storage should be posted in the DRD by the QMail servers.
 
 ## Account Creation on the QMail Server
-Before users can recieve email on a QMail server, they first must create an account on that server. Note that to take advantage of the distributed properties of QMail, the user needs to create accounts on many QMail servers to divide the load. This requires the user to first create a shared secret with the QMail server using QKE so that quantum safe communication is possible. Next, the client must call the QMail server's create account service. 
+Before users can recieve email on a QMail server, they first must create an account on that server. Note that to take advantage of the distributed properties of QMail, the user needs to create accounts on many QMail servers to divide the messages. This requires the user to first create a shared secret with the QMail server using QKE so that quantum safe communication is possible. Next, the client must call the QMail server's [Create Account Service](create-account.md). 
 
 The client may need to first query the DRD to find the QMail server's IP and Port as well as its fee to start an 
 account. The fee maybe paid with a chip like CloudCoin.
-    <code style="color : yellow;">This text is highlighted.</code>
+  
 ## Mutual Authenticating with the QMail Server
 A QMail server must authenticate the sender and the receiver and visa versa. This is done using RAIDA authentication. The clients
-and servers will authenticat with the RAIDA and receive a ticket proving they authenticated. QMail servers may require more than
-one RAIDA's ticket to ensure authentication. 13 of 25 RAIDA's tickets will show authentication. Once authenticated, the QMail server
+and servers will call the RAIDA's [Get Ticket Service](get-ticket.md) and authenticat with the RAIDAs to receive tickets proving they authentic. QMail servers may require more than
+one RAIDA's ticket to ensure authentication. 13 of 25 RAIDA's tickets will prove authenticity. Once authenticated, the QMail server
 may allow the same tickets to be used again and again as session tokens and then eventually timeout. This length of the timeout maybe 
 set by the user if the QMail server will allow it. 
 
@@ -42,21 +41,23 @@ Send Mail CBDF
 E3 E3 // end of body
 ```
 
-## Send Mail CBDF Format
-The request is formatted as a CBDF with a fixed part and a variable part. 
+## Send Mail CBDF
+The request is formatted as a CBDF (Compact Binary Document Format) with a fixed part and a variable part. 
 
 ### Fixed Part
 Name | Bytes | Description
 ---|---|---
-Email's GUID | 16 | A unique number randomly generated by the client and used for all raida mail servers for the same email. This number is put on the email file and all subsequent attachment files
+Email's Half GUID | 8 | A unique number randomly generated by the client and used for all raida mail servers for the same email. This number is put on the email file and all associated attachment files
 File Type/index | 1 | See file types below
-Primary Sender ID | 6 | 2 byte for coin ID, 1 Denomination, 4 Serial Number. Coin ID will be 0x0006 for Phase I. 
+Sender ID | 6 | 2 byte for coin ID, 1 Denomination, 4 Serial Number. Coin ID will be 0x0006 for Phase I. 
 Primary Receiver ID | 6 | 2 byte for coin ID, 1 Denomination, 4 Serial Number. Coin ID will be 0x0006 for Phase I. 
-RAID Type | 1 | 0 = Stripe, 1 = Mirror, 5 = Stripe with Parity, 6 = Stripe with Vertical Parity, Stripe with Horizontal Parity, 7 = Striped with Horizontal and Vertical Parity, 8 = Striped with Horizontal, Vertical and Diagnal Parity, 10 = Mirroed stripes
+RAID Type | 1 | 0 = Stripe, 1 = Mirror, 5 = Stripe with Parity, 6 = Stripe with Vertical Parity, 7 = Striped with Horizontal and Vertical Parity, 8 = Striped with Horizontal, Vertical and Diagnal Parity, 10 = Mirroed stripes (See [RAID Standards](raida-standard.md)
 Stripe Number | 1 | A number 0 to N (up to 32 servers)
 Of Number |1 | Such as "7" of "25" Where 25 is the Of Number
 
 ### Variable Part
+These fields are optional and they will have a default value if no inlcuded. 
+
 Send Mail Resource/Command Table
 ID | Field Name | Example | Description
 ---|---|---|---
@@ -65,16 +66,14 @@ ID | Field Name | Example | Description
 3 | BCCs Array | 00 06 12 09 73 A4  | Seven bytes each. Coin type 0x0006, Denomination, 4 byte serial number. 
 4 | Ticket Array* | 00 06 R1 00 01 02 03, 00 06 R2 00 01 02 03 04 | Tickets obtained through the RAIDA  
 5 | Session ID | GUID | Client received this from the QMail server after client's previous authenticated.  
-6 | Subject Stripe | 05 DE 23 | Raid type, Stripe Number, 'Of Number' all remaining bytes (253) can be used for the subject. 
-~~7 | Peer-to-peer Secret CBDF** | GUID | The user can pay the QMail server to store a file that is unavailable to the general public and is not 
-8 | Group ID*** | GUID | Reserved for future use
-9 | version number | for file types other than 0. Default is zero. Version must be included if the user wants to store versions without overwriting existing versions. Versions allow the user to roll back changes. 
-~~
-<!--
-6 | Shuffle Table Shard 1 | A square of the Of Number. If there are 16 servers, the shuffle table will be 16 x 16 or 256 bytes. This is the first 8 rows.  The numbers in each cell will be represented by five bits. See table below. | PHASE II
-7 | Shuffle Table Shard 2 | Like above. This is the Second 8 rows. | PHASE II
-8 | Shuffle Table Shard 3 | Like above. This is the Second 8 rows. | PHASE II
--->
+6 | Peer-to-peer Secret CBDF** | GUID | The user can pay the QMail server to store a file that is unavailable to the general public and is not 
+7 | Group ID*** | GUID | Reserved for future use
+8 | version number | for file types other than 0. Default is zero. Version must be included if the user wants to store versions without overwriting existing versions. Versions allow the user to roll back changes. 
+9 | Subject Stripe | 05 DE 23 | Raid type, Stripe Number, 'Of Number' all remaining bytes (253) can be used for the subject.
+10 | Shuffle Table Shard 1 | A square of the Of Number. If there are 16 servers, the shuffle table will be 16 x 16 or 256 bytes. This is the first 8 rows.  The numbers in each cell will be represented by five bits. See table below. | PHASE II
+11 | Shuffle Table Shard 2 | Like above. This is the Second 8 rows. | PHASE II
+12 | Shuffle Table Shard 3 | Like above. This is the Second 8 rows. | PHASE II
+
 * A Ticket Array Elements consists of: 2 bytes Chip type, 1 byte for the RAIDA's index that the ticket was received from, 1 byte for the Primay Sender's ID Denomination, and, 4 bytes for the Primary Sender's ID serial number.
 
 ** Users can identify each other by including secrets between them that are not published in the DRD and are unknowable by anyone else. These secrets are use the "User Secret CBDF" and are stored perminently for a fee on the QMail servers. These secrets may included advatars, background colors, border colors, secret aliases, secret descriptions and more. See the "Peer-to-peer Secret CBDC" 
@@ -96,7 +95,7 @@ Descriptor ID | Name | Description
 ---|---|---
 0 | QMAIL | The actual qmail file
 1 | QTEXT | Reserved for future use
-2 | QMESSAGE | Reserved for future use
+2 | QCHAT | Reserved for future use
 3 | PEER_TO_PEER_SECRET_CBDF | For identificaiton of users, a CBDF file containing avatars, code names, etc that are not available to the public. 
 4 | GROUPS_SECRETE_CBDF | For identificaiton of groups, a CBDF file like the PEER_TO_PEER_SECRET_CBDF.  
 5 | QPACKET | Reserved for future use
@@ -105,12 +104,28 @@ ment 0 | The first attachment
 11 | Attachment 1 | The second attachment
 255 | Attachment 255 | The 255th attachment // IDs 12 to 254 left out for brevity
 
-## File Expiration Encoding
+## Days to Store Code
+This code allows the requester to specify how many days they would like the message to be stored.
 Code | D = 1 Day | Exlanation
 ---|---
-0 | Code * 1 Day | Free: File will be stored until the QMail server decides to delete it (Free of charge). 
+0 | Code * 1 Day | Depends: File will be stored until the QMail server decides to delete it (Free of charge). 
 1-6 | Code * 7 Days | File will be stored for 1 day x the Code.
-7 -52 | Weeks: The number of weeks the email will be stored before deletion. 
+7 to 10 | (Code - 6) * 7   | Weeks: The number of weeks the email will be stored before deletion. 
+11 to 23 | (Code - 10) * 30   | Months: The number of months the email will be stored before deletion. 
+24 to 23 | (Code - 10) * 30   | Years: The number of months the email will be stored before deletion. 
+
+
+## Notes on the Differences between traditional Email, Chat and SMS
+
+Feature	|	Email	|	Chat/Instant Messaging	|	SMS Texting
+---|---|---|---
+Formality	|	Generally more formal, suitable for official and detailed communication.	|	Typically informal and conversational.	|	Highly informal and brief.
+Response Time	|	Asynchronous; immediate response not always expected.	|	Synchronous; real-time or near-real-time conversation is the norm.	|	Near-instantaneous; rapid responses are common.
+Message Length	|	No practical limit; ideal for long-form messages and attachments.	|	Varies by platform, but generally suited for shorter, quicker exchanges.	|	Traditionally limited to 160 characters, encouraging conciseness.
+Technology	|	Requires an internet connection and operates via SMTP (Simple Mail Transfer Protocol).	|	Requires an internet connection; various protocols (e.g., XMPP, WebSocket).	|	Sent over a cellular network; does not require internet access.
+Use Cases	|	Professional correspondence, sending documents, newsletters, formal announcements.	|	Real-time collaboration, quick questions, social conversations, customer support.	|	Urgent alerts, appointment reminders, two-factor authentication, personal quick notes.
+Attachments	|	Excellent for sending files of various types and sizes.	|	Can typically send images, videos, and small files.	|	Limited to multimedia messages (MMS) for photos and short videos.
+Security	|	Can be highly secure with encryption, but susceptible to phishing and spam.	|	Varies widely; some offer end-to-end encryption, others are less secure.	|	Generally not encrypted and can be vulnerable to interception.
 
 
 
