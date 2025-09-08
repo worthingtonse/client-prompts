@@ -189,26 +189,6 @@ Let's illustrate with a few scenarios.
 | 25 | Diagonal Parity 2 | 1 | 3 (11) | 0xCE6F |
 
 ## Seventeen Servers
-| Stripe Index (i) | Block Type | IsParity | ParityType | Final Hex Header |  
----|---|---|---|---
-| 0 | Data | 0 | 0 (00) | 0xC828 |  
-| 1 | Data | 0 | 0 (00) | 0xC868 |  
-| 2 | Data | 0 | 0 (00) | 0xC8A8 |  
-| 3 |  Horizontal Parity | 1 | 1 (01) | 0xC92D |  
-| 4 | Data | 0 | 0 (00) | 0xC968 |  
-| 5 | Data | 0 | 0 (00) | 0xC9A8 |  
-| 6 | Data | 0 | 0 (00) | 0xC9E8 |  
-| 7 | Horizontal Parity | 1 | 1 (01) | 0xCA6D |  
-| 8 | Data | 0 | 0 (00) | 0xCAA8 |  
-| 9 | Data | 0 | 0 (00) | 0xCAE8 |  
-| 10 | Data | 0 | 0 (00) | 0xCB28 |  
-| 11 | Horizontal Parity | 1 | 1 (01) | 0xCBAD |  
-| 12 | Vertical Parity | 1 | 2 (10) | 0xCD2E |  
-| 13 | Vertical Parity | 1 | 2 (10) | 0xCD6E |  
-| 14 | Vertical Parity | 1 | 2 (10) | 0xCDAE |  
-| 15 | Diagonal Parity 1 | 1 | 3 (11) | 0xCE2F |  
-| 16 | Diagonal Parity 2 | 1 | 3 (11) | 0xCE6F |
-
 
 ### **Scenario 5: Grid Parity (4x4 Grid \- 17 Servers)**
 
@@ -237,6 +217,7 @@ Let's illustrate with a few scenarios.
 | 15 | **Diagonal Parity 1** | 1 | 3 (11) | 0x83EF |
 | 16 | **Diagonal Parity 2** | 1 | 3 (11) | 0x842F |
 
+## Ten Servers
 ### **Scenario 6: Grid Parity (3x3 Grid \- 10 Servers)**
 
 * **Configuration:** Based on a 3x3 grid, using 4 data servers (2x2), 2 horizontal parity, 2 vertical parity, and 2 diagonal parity servers for a total of 10\.  
