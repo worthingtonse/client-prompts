@@ -36,7 +36,7 @@ Where:
 
 QMail supports multiple RAID types for data redundancy:
 
-See the [RAID Standard](send-mail.md) for figuring out these bytes.
+See the [RAID Standard](raid-codes.md) for figuring out these bytes.
 
 ## Authentication
 
@@ -82,7 +82,7 @@ The request uses Compact Binary Document Format (CBDF) with fixed and variable s
 | File Type/Index | 1 | File type identifier (see File Types table) |
 | Sender ID | 6 | 2-byte coin ID + 1-byte denomination + 4-byte serial |
 | Primary Receiver ID | 6 | 2-byte coin ID + 1-byte denomination + 4-byte serial |
-| RAID Type | 2 | How the data is spread out of the QMail servers including fault tolerance data. See [RAID Standard](send-mail.md) |
+| RAID Type | 2 | How the data is spread out of the QMail servers including fault tolerance data. See [RAID Standard](raid-codes.md) |
 | Stripe Number | 1 | Stripe index (0 to N, max 32 servers) |
 | Of Number | 1 | Total number of stripes |
 
