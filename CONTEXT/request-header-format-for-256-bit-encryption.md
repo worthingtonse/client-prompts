@@ -144,13 +144,13 @@ Encryption Type 6 defines the protocol for creating and using a secure, direct c
 
 The architecture separates the key exchange from the data transfer for maximum security and efficiency:
 
-**Key Exchange (RAIDA Network)**: The client interacts with the 25 RAIDA servers to fault-tolerantly derive a 256-bit AES session key. The RAIDA network's involvement ends here.
+**Key Exchange (RAIDA Network)**: The client interacts with the 25 RAIDA servers to fault-tolerantly derive a 256-bit AES encryption key. The RAIDA network's involvement ends here.
 
 **Secure Tunnel (Direct Connection)**: The client then establishes a direct TCP connection to the content server. All traffic over this connection is encrypted using the derived key and follows the Encryption Type 6 protocol specified below.
 
 ## 2.0 Header Structure
 
-Encryption Type 6 uses a streamlined 32-byte header format, optimized from the previous 48-byte RAIDA header by removing the first 15 bytes and combining the version and encryption type fields.
+Encryption Type 6 uses a streamlined 32-byte header format
 
 ### 2.1 Full Header Structure (32 Bytes Total)
 
@@ -233,11 +233,11 @@ It generates the RAIDA Bitmap (a 4-byte integer) indicating which servers respon
 
 It uses the 25-byte share array and a Timestamp to derive the final 256-bit Session Key.
 
-### Phase 2: Session Initiation (Client-Side)
+### Phase 2:  Initiation (Client-Side)
 
 The client generates a new, random 5-byte Key Identifier (KID).
 
-The client stores the Session Key and the KID together in memory 
+The client stores the encryption Key and the KID together in memory 
 
 The client constructs its first Encryption Type 6 packet to send to the content server:
 
@@ -246,9 +246,9 @@ The client constructs its first Encryption Type 6 packet to send to the content 
 - Key ID (bytes 3-7): The newly generated 5-byte KID
 - Nonce (bytes 8-31): The Structured Nonce containing the RAIDA Bitmap and the Timestamp
 
-**Body:** The first piece of application data (e.g., a VPN request), encrypted with the Session Key.
+**Body:** The first piece of application data (e.g., a VPN request), encrypted with the 256 bit encryption Key.
 
-The client sends this packet directly to the content server's IP address.
+The client sends this packet directly to the content server
 
 ### Phase 3: Key Reconstruction (Content Server-Side)
 
@@ -262,13 +262,13 @@ It parses the RAIDA Bitmap and Timestamp from the nonce field.
 
 **Security Check:** It counts the number of set bits in the RAIDA Bitmap. If the count is less than the required quorum (13), it immediately rejects the connection.
 
-It uses the same RKE logic as the client to reconstruct the identical 256-bit Session Key.
+It uses the same RKE logic as the client to reconstruct the identical 256-bit encryption Key.
 
-The content server stores the Session Key and the KID together in its persistent storage (e.g., a database or file).
+The content server stores the encryption Key and the KID together in its persistent storage (e.g., a database or file).
 
 It uses the newly reconstructed key to decrypt the body of the client's first packet.
 
-### Phase 4: Session Acknowledgment (Content Server-Side)
+### Phase 4: Acknowledgment (Content Server-Side)
 
 To confirm successful key reconstruction, the content server sends a response packet back to the client.
 
@@ -279,17 +279,17 @@ This response packet also uses the Encryption Type 6 format:
 - Key ID (bytes 3-7): It echoes back the same 5-byte KID it just received
 - Nonce (bytes 8-31): A new, fully random 24-byte nonce
 
-**Body:** A small payload (e.g., a single byte `0x01` for "Success"), encrypted with the Session Key.
+**Body:** A small payload (e.g., a single byte `0x01` for "Success"), encrypted with the 256 bit encryption key.
 
 ### Phase 5: Secure Tunnel Operation & Key Reuse
 
 The client receives the server's acknowledgment and decrypts it. The secure tunnel is now established.
 
-**Key Persistence:** After a successful acknowledgment, the client application saves the Session Key and its KID to a file in the `Client Server Keys/` directory.
+**Key Persistence:** After a successful acknowledgment, the client application saves the encryption Key and its KID to a file in the `Client Server Keys/` directory.
 
 **Session Resumption:** The next time the client application starts and wants to connect to this server:
 
-It loads the saved KID and Session Key from the file.
+It loads the saved KID and encryption Key from the file.
 
 It sends an Encryption Type 6 packet with the saved KID and a fully random nonce.
 
