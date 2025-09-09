@@ -18,6 +18,7 @@ Code | Type | Description | Bytes after EN
 1 | 128 bit AES CTR | Shared Secret |   Byte at index 17 in the request header is the Denomination (DN) and bytes 18,19,20 and 21 are the serial number (SN)
 2 | 128 bit AES CTR | Uses Locker Code for encryption | Byte 17 to 21 in the request header are the first five bytes in the locker code. Used mostly by the PEEK command that is in command group 8, command code 84.
 3 | 128 AES CTR | RAIDA Key Exchange | Allows RAIDA's to exchange keys. Bytes 17 through 21 of the header are the key ID shared between the RAIDA and other RAIDAs.
-4 | 256 bit AES CTR | Shared Secret | Just like Encryption type 2 except uses a 256 bit key. This changes the Request Header size from 32 bytes to 64 bytes fixed. Primarily used for client - server communication. 
+4 | 256 bit AES CTR | Shared Secret | Just like Encryption type 2 except uses a 256 bit key. This changes the Request Header size from 32 bytes to 48 bytes fixed. Primarily used for client - server communication. 
 5 | 256 bit AES CTR | Two Shared Secrets | Just like Encryption type 4 but bytes 22,23,24,25 and 26 are the denominations and serila numbers of a second key used for encryption. Primarily used to talk to raida servers. 
+6 | 256 bit AES CTR  | RAIDA Key Exchange + Session Keys. Uses 256-bit session keys from RAIDA Key Exchange. Header is 32 bytes. Bytes 1–2 = body length, 3–7 = session key ID, 8–31 = nonce. Designed for tunnels.| 32-byte header with session info               |
 
