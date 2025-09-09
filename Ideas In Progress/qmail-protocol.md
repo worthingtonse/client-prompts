@@ -218,6 +218,7 @@ Datatype | Name | Description
 ---|---|---
 int | ID | Primary Key. DN SN SN SN SN (Five bytes of the user's key that show the denomination and four byte serial number)
 int | Alias | The name that the person want's to be called by 
+int | mobile aliases | these associate other coins with this account to allow accounts to be syncronized. 
 string | description  | self discription 
 timestamp  | date created   | Set by system
 string | Key exchange servers  |  array of raida servers used to exchange keys (ip and port)
