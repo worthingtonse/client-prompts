@@ -5,6 +5,13 @@
 title: Order example
 ---
 erDiagram
+
+    KEYS {
+        int KeyID PK "Unique Key"
+        guid Key  "The 256 bit AES Key"
+        datetime ReceivedDate
+    }
+
     USER {
         int UserID PK "User's unique ID"
         string EmailAddress "Primary email for the account"
@@ -92,14 +99,6 @@ erDiagram
 
 ```
 
-
-Yes, you can absolutely implement a system that mimics the logic of that ERD using just a file system. This approach, often called "flat-file database," treats the directory structure as the database schema and files as records.
-
-However, be aware that while this avoids installing a database server, it shifts all the complexity of data integrity, searching, and performance onto your application code.
-
-Here’s how you could map the ERD concepts to a folder and file structure.
-
------
 
 ### File System Structure
 
