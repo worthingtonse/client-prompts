@@ -2,6 +2,18 @@
 
 QMail is developed by the **Perfect Money Foundation**, an organization dedicated to engineering distributed information systems that champion strong user privacy and a decentralized internet economy (Web 3.0). Our mission is to foster a more equitable and resilient digital ecosystem, not controlled by a few tech giants or surveillance organizations.
 
+Benefits of QMail
+1. Possible to edit send qmails if it has not been read yet.
+2. Quantum Safe Storage and Transmission
+3. No Tech Giants
+4. Better Naming Conventions
+5. No servailance
+6. Email files are 90% smaller.
+7. Images embedded in qmain can be downloaded without
+8. Terabytes attachments
+9. Get paid for your attention
+10. Messages are sent fastest
+
 ### Glossary of Terms
 
   * **[ACL](access-control-list.md) (Access Control List)**: A list stored in a user's DRD that the receiver uses to manage permissions by adding other users to built-in groups like a White List or Black List.
