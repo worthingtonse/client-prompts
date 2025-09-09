@@ -36,15 +36,7 @@ Where:
 
 QMail supports multiple RAID types for data redundancy:
 
-| RAID Type | ID | Description |
-|-----------|----| ------------|
-| Stripe | 0 | Data striped across multiple servers |
-| Mirror | 1 | Data mirrored across servers |
-| Stripe with Parity | 5 | Striped with single parity |
-| Stripe with Vertical Parity | 6 | Striped with vertical parity |
-| Stripe with H/V Parity | 7 | Horizontal and vertical parity |
-| Stripe with H/V/D Parity | 8 | Horizontal, vertical, and diagonal parity |
-| Mirrored Stripes | 10 | Combination of striping and mirroring |
+See the [RAID Standard](send-mail.md) for figuring out these bytes.
 
 ## Authentication
 
@@ -90,7 +82,7 @@ The request uses Compact Binary Document Format (CBDF) with fixed and variable s
 | File Type/Index | 1 | File type identifier (see File Types table) |
 | Sender ID | 6 | 2-byte coin ID + 1-byte denomination + 4-byte serial |
 | Primary Receiver ID | 6 | 2-byte coin ID + 1-byte denomination + 4-byte serial |
-| RAID Type | 1 | RAID configuration (0-10, see RAID table above) |
+| RAID Type | 2 | How the data is spread out of the QMail servers including fault tolerance data. See [RAID Standard](send-mail.md) |
 | Stripe Number | 1 | Stripe index (0 to N, max 32 servers) |
 | Of Number | 1 | Total number of stripes |
 
