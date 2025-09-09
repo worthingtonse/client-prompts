@@ -132,3 +132,174 @@ Index | Group | Code | Name | Notes
 45 | Nonce | NO |  Nonce 21 | 
 46 | Nonce | NO |  Nonce 22 | The raida echo the last two bytes of the nonce in the Return Header. 
 47 | Nonce | NO |  Nonce 23 | The echo is to allow Clients to track which request the response was for. 
+
+
+# Encryption Type 6 
+
+## 1.0 Purpose & Architecture
+
+Encryption Type 6 defines the protocol for creating and using a secure, direct communication tunnel between a client and a content server. This protocol is used after the client has successfully derived a 256-bit shared secret using the Raida Key Exchange (RKE) protocol.
+
+### 1.1 Architectural Overview
+
+The architecture separates the key exchange from the data transfer for maximum security and efficiency:
+
+**Key Exchange (RAIDA Network)**: The client interacts with the 25 RAIDA servers to fault-tolerantly derive a 256-bit AES session key. The RAIDA network's involvement ends here.
+
+**Secure Tunnel (Direct Connection)**: The client then establishes a direct TCP connection to the content server. All traffic over this connection is encrypted using the derived key and follows the Encryption Type 6 protocol specified below.
+
+## 2.0 Header Structure
+
+Encryption Type 6 uses a streamlined 32-byte header format, optimized from the previous 48-byte RAIDA header by removing the first 15 bytes and combining the version and encryption type fields.
+
+### 2.1 Full Header Structure (32 Bytes Total)
+
+| Byte Index | Group      | Code       | Field Name             | Value/Notes                                        |
+|------------|------------|------------|------------------------|---------------------------------------------------|
+| 0          | Header     | VE         | Version/Encryption Type| `0x06` – Combined version and encryption type      |
+| 1          | Encryption | BL `u16`   | Body Length (High Byte)| High-order byte (HOB) of body length in bytes      |
+| 2          | Encryption | BL `u16`   | Body Length (Low Byte) | Low-order byte (LOB) of body length in bytes       |
+| 3          | Encryption | KI         | Key ID Byte 0          | First byte of 5-byte session key identifier        |
+| 4          | Encryption | KI         | Key ID Byte 1          | Second byte of session key identifier              |
+| 5          | Encryption | KI         | Key ID Byte 2          | Third byte of session key identifier               |
+| 6          | Encryption | KI         | Key ID Byte 3          | Fourth byte of session key identifier              |
+| 7          | Encryption | KI         | Key ID Byte 4          | Fifth byte of session key identifier               |
+| 8          | Nonce      | NO         | Nonce 0                |                                                   |
+| 9          | Nonce      | NO         | Nonce 1                |                                                   |
+| 10         | Nonce      | NO         | Nonce 2                |                                                   |
+| 11         | Nonce      | NO         | Nonce 3                |                                                   |
+| 12         | Nonce      | NO         | Nonce 4                |                                                   |
+| 13         | Nonce      | NO         | Nonce 5                |                                                   |
+| 14         | Nonce      | NO         | Nonce 6                |                                                   |
+| 15         | Nonce      | NO         | Nonce 7                |                                                   |
+| 16         | Nonce      | NO         | Nonce 8                |                                                   |
+| 17         | Nonce      | NO         | Nonce 9                |                                                   |
+| 18         | Nonce      | NO         | Nonce 10               |                                                   |
+| 19         | Nonce      | NO         | Nonce 11               |                                                   |
+| 20         | Nonce      | NO         | Nonce 12               |                                                   |
+| 21         | Nonce      | NO         | Nonce 13               |                                                   |
+| 22         | Nonce      | NO         | Nonce 14               |                                                   |
+| 23         | Nonce      | NO         | Nonce 15               |                                                   |
+| 24         | Nonce      | NO         | Nonce 16               |                                                   |
+| 25         | Nonce      | NO         | Nonce 17               |                                                   |
+| 26         | Nonce      | NO         | Nonce 18               |                                                   |
+| 27         | Nonce      | NO         | Nonce 19               |                                                   |
+| 28         | Nonce      | NO         | Nonce 20               |                                                   |
+| 29         | Nonce      | NO         | Nonce 21               |                                                   |
+| 30         | Nonce      | NO         | Nonce 22               |                                                   |
+| 31         | Nonce      | NO         | Nonce 23               |                                                   |
+
+
+### 2.2 Field Descriptions
+
+- **Version/Encryption Type (Byte 0)**: Combined field set to `0x06`, identifying both the protocol version and encryption type
+- **Body Length (Bytes 1-2)**: 16-bit unsigned integer indicating the length of the encrypted payload following the header
+- **Key ID (Bytes 3-7)**: 5-byte unique identifier for the session key
+- **Nonce Field (Bytes 8-31)**: 24-byte field used for encryption and uniqueness, with structure depending on packet type
+
+## 3.0 The Nonce Field Explained
+
+The 24-byte Nonce field has a dual purpose, critical for establishing the session securely.
+
+### 3.1 First Packet Nonce (Key Setup)
+
+For the very first packet sent with a new Key ID, the nonce is structured to carry the key derivation information.
+
+| Byte Range | Field Name     | Size     | Description |
+|------------|----------------|----------|-------------|
+| 8–11       | RAIDA Bitmap   | 4 bytes  | 32-bit bitmap indicating which RAIDA servers responded successfully |
+| 12–19      | Timestamp      | 8 bytes  | 64-bit timestamp from the key derivation process |
+| 20–31      | Random Padding | 12 bytes | Random bytes to ensure the full nonce is unique and unpredictable |
+
+### 3.2 Subsequent Packet Nonce (Data Transfer)
+
+For all other packets sent using an established Key ID, the entire 24-byte nonce field must be filled with completely random, unpredictable data.
+
+| Byte Range | Field Name | Size | Description |
+|------------|------------|------|-------------|
+| 8-31 | Random Nonce | 24 bytes | Completely random, unpredictable data for all 24 bytes<br>• Each byte: Random value (0x00-0xFF) |
+
+## 4.0 Communication Flow & Key Management
+
+### Phase 1: Key Derivation (Client-Side)
+
+The client executes the RKE protocol with the 25 RAIDA servers.
+
+It receives key shares from a quorum of servers (e.g., 13 or more).
+
+It constructs a 25-byte array, filling in the successful shares and leaving the rest as zeros.
+
+It generates the RAIDA Bitmap (a 4-byte integer) indicating which servers responded.
+
+It uses the 25-byte share array and a Timestamp to derive the final 256-bit Session Key.
+
+### Phase 2: Session Initiation (Client-Side)
+
+The client generates a new, random 5-byte Key Identifier (KID).
+
+The client stores the Session Key and the KID together in memory 
+
+The client constructs its first Encryption Type 6 packet to send to the content server:
+
+**Header:**
+- Version/Encryption Type: `0x06`
+- Key ID (bytes 3-7): The newly generated 5-byte KID
+- Nonce (bytes 8-31): The Structured Nonce containing the RAIDA Bitmap and the Timestamp
+
+**Body:** The first piece of application data (e.g., a VPN request), encrypted with the Session Key.
+
+The client sends this packet directly to the content server's IP address.
+
+### Phase 3: Key Reconstruction (Content Server-Side)
+
+The content server receives the packet and checks the Version/Encryption Type (`0x06`).
+
+It parses the KID from bytes 3-7.
+
+It looks up the KID in its persistent key storage. It does not find it. This is how it knows this is a key setup request.
+
+It parses the RAIDA Bitmap and Timestamp from the nonce field.
+
+**Security Check:** It counts the number of set bits in the RAIDA Bitmap. If the count is less than the required quorum (13), it immediately rejects the connection.
+
+It uses the same RKE logic as the client to reconstruct the identical 256-bit Session Key.
+
+The content server stores the Session Key and the KID together in its persistent storage (e.g., a database or file).
+
+It uses the newly reconstructed key to decrypt the body of the client's first packet.
+
+### Phase 4: Session Acknowledgment (Content Server-Side)
+
+To confirm successful key reconstruction, the content server sends a response packet back to the client.
+
+This response packet also uses the Encryption Type 6 format:
+
+**Header:**
+- Version/Encryption Type: `0x06`
+- Key ID (bytes 3-7): It echoes back the same 5-byte KID it just received
+- Nonce (bytes 8-31): A new, fully random 24-byte nonce
+
+**Body:** A small payload (e.g., a single byte `0x01` for "Success"), encrypted with the Session Key.
+
+### Phase 5: Secure Tunnel Operation & Key Reuse
+
+The client receives the server's acknowledgment and decrypts it. The secure tunnel is now established.
+
+**Key Persistence:** After a successful acknowledgment, the client application saves the Session Key and its KID to a file in the `Client Server Keys/` directory.
+
+**Session Resumption:** The next time the client application starts and wants to connect to this server:
+
+It loads the saved KID and Session Key from the file.
+
+It sends an Encryption Type 6 packet with the saved KID and a fully random nonce.
+
+The content server receives this packet, looks up the KID in its storage, finds the key, and immediately decrypts the message. The RKE process is skipped entirely.
+
+## 5.0 Security Considerations
+
+- RAIDA Bitmap validation ensures minimum quorum requirements are met
+- Timestamp inclusion prevents replay attacks during key establishment
+- Random nonce generation for data packets ensures unique encryption for each transmission
+- Key persistence allows for efficient session resumption without repeated RKE processes
+
+
