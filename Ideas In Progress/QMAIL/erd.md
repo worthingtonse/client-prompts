@@ -23,7 +23,7 @@ erDiagram
     }
 
 
-    USER_OPTIONS {
+    USER_OPTION {
         int UserID PK "User's unique ID including coin ID, denomination and serial number"
 
     }
@@ -33,7 +33,7 @@ erDiagram
         int QMailID FK "Denomination and Serial Number"
     }
 
-    MAIL_SERVER {
+    MAILSERVER {
         int QMailID PK "Denomination and Serial Number"
         string PublicAlias "Name of QMail server"
         string PublicDescription "Description of server"
