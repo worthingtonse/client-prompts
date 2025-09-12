@@ -8,8 +8,8 @@ erDiagram
     KEYS {
         int KeyID PK "Unique Key ID specified by the client"
         guid Key  "The 256 bit AES Key that was created by the client to share with the qmail server"
-        int MinUntilTimeout "If we are not to have a timeout"
-        datetime StartDate "The Date the key was created so we know when it timeout"
+        int MinuntesUntilTimeout "If we are not to have a timeout"
+        datetime StartDateTime "The Date the key was created so we know when it timeout"
     }
 
     USER {
@@ -17,6 +17,9 @@ erDiagram
         string PublicAlias "The client determines what they will be called"
         string PublicDescription "The client determines what is their description"
         int SendingPrice "The price the sender must pay to send"
+        int SessionKey "The session key"
+        int MinuntesUntilTimeout "How many minutes before the session key timesout."
+        datetime StartDateTime "The time the session started"
     }
 
 
@@ -91,8 +94,9 @@ erDiagram
 
     USER ||--o{ DEVICE : "has one or more"
     USER ||--o{ FOLDER : "owns one or more"
+    USER ||--o{ USER_OPTION : "has zero or more"
     USER ||--o{ USER_MAILSERVER : "owns one or more"
-    MAILSERVER ||--o{ MAILSERVER : "owns one or more"
+    MAILSERVER ||--o{ MAILSERVER : "uses two or more"
     DEVICE ||--|{ POLICY : "is governed by"
     FOLDER ||--o{ ITEM : "contains zero or more"
     ITEM }o--|| QEMAIL : "is an (inheritance)"
@@ -104,110 +108,6 @@ erDiagram
 
 ```
 
-1
-User
-Three byte integer PK serial number
-
-
-
-```mermaid
----
-title: Order example
----
-erDiagram
-
-    KEYS {
-        int KeyID PK "Unique Key"
-        guid Key  "The 256 bit AES Key"
-        datetime ReceivedDate
-    }
-
-    USER {
-        int UserID PK "User's unique ID"
-        string EmailAddress "Primary email for the account"
-    }
-
-    DEVICE {
-        int DeviceID PK "Unique ID for each device"
-        string DeviceType "e.g., 'iPhone', 'Android'"
-        string DeviceModel "e.g., 'Pixel 8', 'Galaxy S24'"
-        string UserAgent "Client software identifier"
-        int UserID FK
-    }
-
-    POLICY {
-        int PolicyID PK "Unique ID for the security policy"
-        string PolicyName "Name of the policy"
-        bool RequirePIN
-        int MinPINLength
-        bool AllowRemoteWipe
-    }
-
-    FOLDER {
-        int FolderID PK "Unique ID for the folder/collection"
-        string FolderName "e.g., 'Inbox', 'Calendar'"
-        enum FolderType "Mail, Calendar, Contacts, Tasks"
-        int UserID FK
-    }
-
-    ITEM {
-        int ItemID PK "Unique ID for any single item"
-        string SyncKey "Unique key for sync state"
-        string ItemType "Sub-type: Email, Event, Contact, Task"
-        int FolderID FK
-    }
-
-    EMAIL {
-        int ItemID PK, FK "Inherits from ITEM"
-        string Subject
-        string Sender
-        string Body
-        datetime ReceivedDate
-    }
-
-    CALENDAR_EVENT {
-        int ItemID PK, FK "Inherits from ITEM"
-        string Title
-        string Location
-        datetime StartTime
-        datetime EndTime
-    }
-
-    CONTACT {
-        int ItemID PK, FK "Inherits from ITEM"
-        string FirstName
-        string LastName
-        string PhoneNumber
-        string ContactEmail
-    }
-
-    TASK {
-        int ItemID PK, FK "Inherits from ITEM"
-        string Title
-        enum Status "'Not Started', 'In Progress', 'Completed'"
-        date DueDate
-    }
-
-    ATTACHMENT {
-        int AttachmentID PK "Unique ID for the attachment"
-        string FileName
-        string FileType
-        binary FileContent
-        int ItemID FK
-    }
-
-    USER ||--o{ DEVICE : "has one or more"
-    USER ||--o{ FOLDER : "owns one or more"
-    DEVICE ||--|{ POLICY : "is governed by"
-    FOLDER ||--o{ ITEM : "contains zero or more"
-    ITEM }o--|| EMAIL : "is an (inheritance)"
-    ITEM }o--|| CALENDAR_EVENT : "is a (inheritance)"
-    ITEM }o--|| CONTACT : "is a (inheritance)"
-    ITEM }o--|| TASK : "is a (inheritance)"
-    EMAIL ||--o{ ATTACHMENT : "has zero or more"
-
-
-```
 
 
 ### File System Structure
