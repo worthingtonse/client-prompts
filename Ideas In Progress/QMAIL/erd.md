@@ -6,26 +6,31 @@ title: Order example
 erDiagram
 
     KEYS {
-        int KeyID PK "Unique Key"
-        guid Key  "The 256 bit AES Key"
-        datetime ReceivedDate
+        int KeyID PK "Unique Key ID specified by the client"
+        guid Key  "The 256 bit AES Key that was created by the client to share with the qmail server"
+        int MinUntilTimeout "If we are not to have a timeout"
+        datetime StartDate "The Date the key was created so we know when it timeout"
     }
 
     USER {
-        int UserID PK "User's unique ID"
-        string PublicAlias "Primary email for the account"
-        string PublicDescription "Primary email for the account"
+        int UserID PK "User's unique ID including coin ID, denomination and serial number"
+        string PublicAlias "The client determines what they will be called"
+        string PublicDescription "The client determines what is their description"
         int SendingPrice "The price the sender must pay to send"
     }
 
+
+    USER_OPTIONS {
+        int UserID PK "User's unique ID including coin ID, denomination and serial number"
+
+    }
 
     USER_MAILSERVER {
         int UserID FK "Denomination and Serial Number"
         int QMailID FK "Denomination and Serial Number"
     }
 
-
-    MAILSERVER {
+    MAIL_SERVER {
         int QMailID PK "Denomination and Serial Number"
         string PublicAlias "Name of QMail server"
         string PublicDescription "Description of server"
@@ -45,7 +50,7 @@ erDiagram
         int FolderID FK
     }
 
-    EMAIL {
+    QEMAIL {
         int ItemID PK, FK "Inherits from ITEM"
         string Subject
         string Sender
@@ -86,13 +91,15 @@ erDiagram
 
     USER ||--o{ DEVICE : "has one or more"
     USER ||--o{ FOLDER : "owns one or more"
+    USER ||--o{ USER_MAILSERVER : "owns one or more"
+    MAILSERVER ||--o{ MAILSERVER : "owns one or more"
     DEVICE ||--|{ POLICY : "is governed by"
     FOLDER ||--o{ ITEM : "contains zero or more"
-    ITEM }o--|| EMAIL : "is an (inheritance)"
+    ITEM }o--|| QEMAIL : "is an (inheritance)"
     ITEM }o--|| CALENDAR_EVENT : "is a (inheritance)"
     ITEM }o--|| CONTACT : "is a (inheritance)"
     ITEM }o--|| TASK : "is a (inheritance)"
-    EMAIL ||--o{ ATTACHMENT : "has zero or more"
+    QEMAIL ||--o{ ATTACHMENT : "has zero or more"
 
 
 ```
