@@ -40,7 +40,7 @@ erDiagram
     }
 
 
-    QEMAIL {
+    QMAIL {
         int ItemID PK, FK "Inherits from ITEM"
         string Subject
         string Sender
@@ -85,17 +85,16 @@ erDiagram
     }
 
     USER ||--o{ DEVICE : "has one or more"
-    USER ||--o{ FOLDER : "owns one or more"
     USER ||--o{ USER_OPTION : "has zero or more"
     USER ||--o{ USER_MAILSERVER : "has"
     USER_MAILSERVER ||--o{ MAILSERVER : "contains"
     DEVICE ||--|{ POLICY : "is governed by"
     FOLDER ||--o{ ITEM : "contains zero or more"
-    ITEM }o--|| QEMAIL : "is an (inheritance)"
-    ITEM }o--|| CALENDAR_EVENT : "is a (inheritance)"
-    ITEM }o--|| CONTACT : "is a (inheritance)"
-    ITEM }o--|| TASK : "is a (inheritance)"
-    QEMAIL ||--o{ ATTACHMENT : "has zero or more"
+    USER }o--|| QEMAIL : "is an (inheritance)"
+    USER }o--|| CALENDAR_EVENT : "is a (inheritance)"
+    USER }o--|| CONTACT : "is a (inheritance)"
+    USER }o--|| TASK : "is a (inheritance)"
+    QMAIL ||--o{ ATTACHMENT : "has zero or more"
 
 
 ```
