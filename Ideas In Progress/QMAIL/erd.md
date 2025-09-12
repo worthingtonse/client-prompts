@@ -39,19 +39,6 @@ erDiagram
         string PublicDescription "Description of server"
     }
 
-    FOLDER {
-        int FolderID PK "Unique ID for the folder/collection"
-        string FolderName "e.g., 'Inbox', 'Calendar'"
-        enum FolderType "Mail, Calendar, Contacts, Tasks"
-        int UserID FK
-    }
-
-    ITEM {
-        int ItemID PK "Unique ID for any single item"
-        string SyncKey "Unique key for sync state"
-        string ItemType "Sub-type: Email, Event, Contact, Task"
-        int FolderID FK
-    }
 
     QEMAIL {
         int ItemID PK, FK "Inherits from ITEM"
@@ -59,6 +46,7 @@ erDiagram
         string Sender
         string Body
         datetime ReceivedDate
+        string SyncKey "Unique key for sync state"
     }
 
     CALENDAR_EVENT {
@@ -67,6 +55,7 @@ erDiagram
         string Location
         datetime StartTime
         datetime EndTime
+        string SyncKey "Unique key for sync state"
     }
 
     CONTACT {
@@ -75,6 +64,7 @@ erDiagram
         string LastName
         string PhoneNumber
         string ContactEmail
+        string SyncKey "Unique key for sync state"
     }
 
     TASK {
@@ -82,6 +72,7 @@ erDiagram
         string Title
         enum Status "'Not Started', 'In Progress', 'Completed'"
         date DueDate
+        string SyncKey "Unique key for sync state"
     }
 
     ATTACHMENT {
@@ -90,6 +81,7 @@ erDiagram
         string FileType
         binary FileContent
         int ItemID FK
+        string SyncKey "Unique key for sync state"
     }
 
     USER ||--o{ DEVICE : "has one or more"
