@@ -63,11 +63,7 @@ erDiagram
     USER ||--o{ USER_MAILSERVER : "has"
     USER_MAILSERVER ||--o{ MAILSERVER : "contains"
     DEVICE ||--|{ POLICY : "is governed by"
-    FOLDER ||--o{ ITEM : "contains zero or more"
     USER }o--|| QMAIL : "is an (inheritance)"
-    USER }o--|| CALENDAR_EVENT : "is a (inheritance)"
-    USER }o--|| CONTACT : "is a (inheritance)"
-    USER }o--|| TASK : "is a (inheritance)"
     QMAIL ||--o{ ATTACHMENT : "has zero or more"
 
 
