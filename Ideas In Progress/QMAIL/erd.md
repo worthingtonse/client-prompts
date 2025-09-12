@@ -5,13 +5,6 @@ title: Order example
 ---
 erDiagram
 
-    KEYS {
-        int KeyID PK "Unique Key ID specified by the client"
-        guid Key  "The 256 bit AES Key that was created by the client to share with the qmail server"
-        int MinuntesUntilTimeout "If we are not to have a timeout"
-        datetime StartDateTime "The Date the key was created so we know when it timeout"
-    }
-
     USER {
         int UserID PK "User's unique ID including coin ID, denomination and serial number"
         string PublicAlias "The client determines what they will be called"
@@ -62,8 +55,7 @@ erDiagram
     USER ||--o{ USER_OPTION : "has zero or more"
     USER ||--o{ USER_MAILSERVER : "has"
     USER_MAILSERVER ||--o{ MAILSERVER : "contains"
-    DEVICE ||--|{ POLICY : "is governed by"
-    USER }o--|| QMAIL : "is an (inheritance)"
+    USER }o--|| QMAIL : "has zero or more"
     QMAIL ||--o{ ATTACHMENT : "has zero or more"
 
 
