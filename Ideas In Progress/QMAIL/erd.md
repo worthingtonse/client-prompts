@@ -49,6 +49,53 @@ erDiagram
         string SyncKey "Unique key for sync state"
     }
 
+    ATTACHMENT {
+        int AttachmentID PK "Unique ID for the attachment"
+        string FileName
+        string FileType
+        binary FileContent
+        int ItemID FK
+        string SyncKey "Unique key for sync state"
+    }
+
+    USER ||--o{ DEVICE : "has one or more"
+    USER ||--o{ USER_OPTION : "has zero or more"
+    USER ||--o{ USER_MAILSERVER : "has"
+    USER_MAILSERVER ||--o{ MAILSERVER : "contains"
+    DEVICE ||--|{ POLICY : "is governed by"
+    FOLDER ||--o{ ITEM : "contains zero or more"
+    USER }o--|| QMAIL : "is an (inheritance)"
+    USER }o--|| CALENDAR_EVENT : "is a (inheritance)"
+    USER }o--|| CONTACT : "is a (inheritance)"
+    USER }o--|| TASK : "is a (inheritance)"
+    QMAIL ||--o{ ATTACHMENT : "has zero or more"
+
+
+```
+
+```mermaid
+---
+title: Order example
+---
+erDiagram
+
+    KEYS {
+        int KeyID PK "Unique Key ID specified by the client"
+        guid Key  "The 256 bit AES Key that was created by the client to share with the qmail server"
+        int MinuntesUntilTimeout "If we are not to have a timeout"
+        datetime StartDateTime "The Date the key was created so we know when it timeout"
+    }
+
+    USER {
+        int UserID PK "User's unique ID including coin ID, denomination and serial number"
+        string PublicAlias "The client determines what they will be called"
+        string PublicDescription "The client determines what is their description"
+        int SendingPrice "The price the sender must pay to send"
+        int SessionKey "The session key"
+        int MinuntesUntilTimeout "How many minutes before the session key timesout."
+        datetime StartDateTime "The time the session started"
+    }
+
     CALENDAR_EVENT {
         int ItemID PK, FK "Inherits from ITEM"
         string Title
@@ -75,27 +122,9 @@ erDiagram
         string SyncKey "Unique key for sync state"
     }
 
-    ATTACHMENT {
-        int AttachmentID PK "Unique ID for the attachment"
-        string FileName
-        string FileType
-        binary FileContent
-        int ItemID FK
-        string SyncKey "Unique key for sync state"
-    }
-
-    USER ||--o{ DEVICE : "has one or more"
-    USER ||--o{ USER_OPTION : "has zero or more"
-    USER ||--o{ USER_MAILSERVER : "has"
-    USER_MAILSERVER ||--o{ MAILSERVER : "contains"
-    DEVICE ||--|{ POLICY : "is governed by"
-    FOLDER ||--o{ ITEM : "contains zero or more"
-    USER }o--|| QEMAIL : "is an (inheritance)"
     USER }o--|| CALENDAR_EVENT : "is a (inheritance)"
     USER }o--|| CONTACT : "is a (inheritance)"
     USER }o--|| TASK : "is a (inheritance)"
-    QMAIL ||--o{ ATTACHMENT : "has zero or more"
-
 
 ```
 
