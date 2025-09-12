@@ -1,7 +1,7 @@
 # Server ERD
 ```mermaid
 ---
-title: Order example
+title: PHASE I
 ---
 erDiagram
 
@@ -15,11 +15,13 @@ erDiagram
         datetime StartDateTime "The time the session started"
     }
 
-
-    USER_OPTION {
-        int UserID PK "User's unique ID including coin ID, denomination and serial number"
+    GROUPS {
+        int GroupID PK "Group of people"
+        string GroupName "Name of group"
 
     }
+
+
 
     USER_MAILSERVER {
         int UserID FK "Denomination and Serial Number"
@@ -63,7 +65,7 @@ erDiagram
 
 ```mermaid
 ---
-title: Order example
+title: PHASE II
 ---
 erDiagram
 
@@ -82,6 +84,12 @@ erDiagram
         int SessionKey "The session key"
         int MinuntesUntilTimeout "How many minutes before the session key timesout."
         datetime StartDateTime "The time the session started"
+    }
+
+
+    USER_OPTION {
+        int UserID PK "User's ID: coin ID, denom and SN"
+
     }
 
     CALENDAR_EVENT {
