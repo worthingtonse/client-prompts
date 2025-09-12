@@ -15,6 +15,12 @@ erDiagram
         datetime StartDateTime "The time the session started"
     }
 
+    USER_ALTERNATIVE_AUTHENTICATION {
+        int ID PK "Primay Key"
+        int UserID FK ""
+
+    }
+
     GROUPS {
         int GroupID PK "Group of people"
         string GroupName "Name of group"
@@ -54,7 +60,6 @@ erDiagram
     }
 
     USER ||--o{ DEVICE : "has one or more"
-    USER ||--o{ USER_OPTION : "has zero or more"
     USER ||--o{ USER_MAILSERVER : "has"
     USER_MAILSERVER ||--o{ MAILSERVER : "contains"
     USER }o--|| QMAIL : "has zero or more"
