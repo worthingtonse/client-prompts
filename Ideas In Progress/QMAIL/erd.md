@@ -25,7 +25,7 @@ erDiagram
         int ID PK "Primay Key"
         string AutenticationType "Like a computer or phone"
         string PasswordHash "Hash of the password. This could be a phone number or phone number or Discored User account"
-        int UserID FK "User's unique ID including coin ID, denomination and serial number
+        int UserID FK "User's unique ID including coin ID, denomination and serial number"
     }
 
 
@@ -54,31 +54,31 @@ erDiagram
     }
 
     FILES {
-        int AttachmentID PK "Unique ID for the attachment"
+        int FileID PK "Unique ID for the attachment"
         int QMailID PK, FK "8 byte hald GUID"
         string Path "Path to the file and file name"
         enum FileType 
         string SyncKey "Unique key for sync state"
     }
 
-    USER_FILES {
-        int UserID PK "User's unique ID including coin ID, denomination and serial number"
+    QMAIL_FILE_RECEIVERS {
+        int UserID PK "Reciever's unique ID"
         int FileID PK "Unique ID for each file"
+        int status "Unseen, Seen, Deleted"
     }
 
-    FILE_TYPES {
+    FILE_TYPE {
         int ID PK "Used as a enum for file types"
-        string FileType "The name of the file type"
+        string FileType "The name of the file type, Subject (Meta),Email, Attachment,Group Avitar"
     }
 
     USER ||--o{ USER_ALTERNATIVE_AUTHENTICATION : "has one or more"
     USER ||--o{ USER_MAILSERVER : "has"
-    USER ||--o{ USER_FILES : "has"
-    USER_FILES ||--o{ FILES : "has"
-    USER ||--o{ USER_FILES : "has"
+    FILES ||--o{ FILE_TYPE : "has"
     USER_MAILSERVER ||--o{ MAILSERVER : "contains"
     USER }o--|| QMAIL : "has zero or more"
-    QMAIL ||--o{ ATTACHMENT : "has zero or more"
+    QMAIL ||--o{ QMAIL_FILE_RECEIVERS  : "has one or more"
+    FILES ||--o{ QMAIL_FILE_RECEIVERS  : "has one or more"
 
 
 ```
