@@ -6,7 +6,7 @@ title: PHASE I
 erDiagram
 
     USER {
-        int UserID PK "User's unique ID including coin ID, denomination and serial number"
+        int UserID PK "Coin ID, denomination and serial number"
         string PublicAlias "The client determines what they will be called"
         string PublicDescription "The client determines what is their description"
         int SendingPrice "The price the sender must pay for this user to receive"
@@ -24,10 +24,9 @@ erDiagram
     USER_ALTERNATIVE_AUTHENTICATION {
         int ID PK "Primay Key"
         string AutenticationType "Like a computer or phone"
-        string PasswordHash "Hash of the password. This could be a phone number or phone number or Discored User account"
+        string PasswordHash "Hash of the device identifier (phone number, Discored User, etc)"
         int UserID FK "User's unique ID including coin ID, denomination and serial number"
     }
-
 
 
     USER_MAILSERVER {
@@ -40,24 +39,27 @@ erDiagram
         string PublicAlias "Name of QMail server"
         string PublicDescription "Description of server"
         string FQDN "DNS domain name"
-        double flatFee "The denomination the MailServer charges to recieve an email from a sender if a fee is required"
+        double flatFee "The denomination the MailServer charges to recieve an email from a sender"
         datetime FirstRegistrationDate "The day the record was created"
         datetime LastUpdateData "The datetime the records information was updated"
     }
 
 
     QMAIL {
-        int QMailID PK, FK "8 byte half GUID"
-        string Sender
+        int QMailID PK, "8 byte half GUID"
+        int SenderID PK "Coin ID, denomination and serial number"
         datetime ReceivedDate
+        int TimeoutMinutes "Minutes until the email will be automatically deleted"
         string SyncKey "Unique key for sync state"
     }
 
     FILES {
         int FileID PK "Unique ID for the attachment"
-        int QMailID PK, FK "8 byte hald GUID"
+        int OwnerID "UserID of the owner"
         string Path "Path to the file and file name"
-        enum FileType 
+        enum FileType
+        datetime ReceivedDate
+        int TimeoutMinutes "Minutes until the email will be automatically deleted"
         string SyncKey "Unique key for sync state"
     }
 
@@ -65,6 +67,7 @@ erDiagram
         int UserID PK "Reciever's unique ID"
         int FileID PK "Unique ID for each file"
         int status "Unseen, Seen, Deleted"
+        string SyncKey "Unique key for sync state"
     }
 
     FILE_TYPE {
@@ -72,7 +75,7 @@ erDiagram
         string FileType "The name of the file type, Subject (Meta),Email, Attachment,Group Avitar"
     }
 
-    USER ||--o{ USER_ALTERNATIVE_AUTHENTICATION : "has one or more"
+    USER }o--|| USER_ALTERNATIVE_AUTHENTICATION : "has zero or more"
     USER ||--o{ USER_MAILSERVER : "has"
     FILES ||--o{ FILE_TYPE : "has"
     USER_MAILSERVER ||--o{ MAILSERVER : "contains"
