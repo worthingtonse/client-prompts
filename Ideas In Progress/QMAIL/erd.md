@@ -9,22 +9,23 @@ erDiagram
         int UserID PK "User's unique ID including coin ID, denomination and serial number"
         string PublicAlias "The client determines what they will be called"
         string PublicDescription "The client determines what is their description"
-        int SendingPrice "The price the sender must pay to send"
-        int SessionKey "The session key"
-        int MinuntesUntilTimeout "How many minutes before the session key timesout."
+        int SendingPrice "The price the sender must pay for this user to receive"
         datetime StartDateTime "The time the session started"
     }
 
-    USER_ALTERNATIVE_AUTHENTICATION {
-        int ID PK "Primay Key"
-        int UserID FK ""
-
+    USER_SESSION {
+        int SessionKey "The session key"
+        int UserID PK "The expected UserID of the session"
+        int MinuntesUntilTimeout "How many minutes before the session key timesout"
+        datetime StartDateTime "The time the session started"
     }
 
-    GROUPS {
-        int GroupID PK "Group of people"
-        string GroupName "Name of group"
 
+    USER_ALTERNATIVE_AUTHENTICATION {
+        int ID PK "Primay Key"
+        string AutenticationType "Like a computer or phone"
+        string PasswordHash "Hash of the password. This could be a phone number or phone number or Discored User account"
+        int UserID FK "User's unique ID including coin ID, denomination and serial number
     }
 
 
@@ -38,29 +39,43 @@ erDiagram
         int QMailID PK "Denomination and Serial Number"
         string PublicAlias "Name of QMail server"
         string PublicDescription "Description of server"
+        string FQDN "DNS domain name"
+        double flatFee "The denomination the MailServer charges to recieve an email from a sender if a fee is required"
+        datetime FirstRegistrationDate "The day the record was created"
+        datetime LastUpdateData "The datetime the records information was updated"
     }
 
 
     QMAIL {
-        int ItemID PK, FK "Inherits from ITEM"
-        string Subject
+        int QMailID PK, FK "8 byte half GUID"
         string Sender
-        string Body
         datetime ReceivedDate
         string SyncKey "Unique key for sync state"
     }
 
-    ATTACHMENT {
+    FILES {
         int AttachmentID PK "Unique ID for the attachment"
-        string FileName
-        string FileType
-        binary FileContent
-        int ItemID FK
+        int QMailID PK, FK "8 byte hald GUID"
+        string Path "Path to the file and file name"
+        enum FileType 
         string SyncKey "Unique key for sync state"
     }
 
-    USER ||--o{ DEVICE : "has one or more"
+    USER_FILES {
+        int UserID PK "User's unique ID including coin ID, denomination and serial number"
+        int FileID PK "Unique ID for each file"
+    }
+
+    FILE_TYPES {
+        int ID PK "Used as a enum for file types"
+        string FileType "The name of the file type"
+    }
+
+    USER ||--o{ USER_ALTERNATIVE_AUTHENTICATION : "has one or more"
     USER ||--o{ USER_MAILSERVER : "has"
+    USER ||--o{ USER_FILES : "has"
+    USER_FILES ||--o{ FILES : "has"
+    USER ||--o{ USER_FILES : "has"
     USER_MAILSERVER ||--o{ MAILSERVER : "contains"
     USER }o--|| QMAIL : "has zero or more"
     QMAIL ||--o{ ATTACHMENT : "has zero or more"
