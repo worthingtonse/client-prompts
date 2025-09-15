@@ -13,7 +13,7 @@ Code | Name | Description
 3 | Administration | Services that add or subtrack tokens from the raida.
 4 | Key Exchange | Service that exchange cryptographic keys with other machines
 5 | Banking | Services that store money for people
-6 | Chat | Services that send commands through the raida
+6 | Messaging | QMail, QTXT, QChat, QCalendar, QTasks, etc
 7 | Blockchain | Services that allow people to make changes to the raida blockchain
 8 | Locker Services | Services that place and retrieve tokens from "RAIDA Lockers."
 9 | Money Changing | Breaks 100s into 10s or joins 10s to make 100s. Works with all monetary denominations.
@@ -21,6 +21,8 @@ Code | Name | Description
 11 | Swap | Services that allow people to change CloudCoin to Bitcoin or another currency
 12 | RPC | Allows people to send command to other servers. 
 13 | File System | Allows people to store files on the raida. 
+13 | File System | Allows people to store files on the raida. 
+18 | DRD |Distributed Resource Director
 
 
 
@@ -58,7 +60,10 @@ Group ID | Group Name | Command Code (Decimal) | Command | Description
 4 | Key Exchange | 43 | get | downloads a key from the raida. 
 4 | Key Exchange |44 | Encrypt Ticket | Returns an encrypted key part that can be used as a shared secret. 
 4 | Key Exchange |45 | Fix Encryption | Accepts tickets from many RAIDA to created a shared secret from many "key parts". 
-6 | Chat | ? | Not sure if any of these are implemented
+6 | Chat | 60 | Send Mail
+6 | Chat | 61 | PING (Used so the client can receive push requests from the QMail servers)
+6 | Chat | 62 | Get Meta
+6 | Chat | 63 | Get File
 8 | Locker | 81 | peek-for-sale | Shows what coins are for sale in a sales locker
 8 | Locker | 82 | put | Puts token in a locker that can be opened by a key.
 8 | Locker | 83 | peek | See what coins are in a locker
@@ -89,6 +94,13 @@ Group ID | Group Name | Command Code (Decimal) | Command | Description
 13 | Files | 136 | Remove Object | Deletes a file
 🟥13 | Files | 107 | Show Any Folder Contents | Used by KYC officers to see list of files
 🟥13 | Files | 108 | Get Any Object | Used by KYC officers to see files
+18 | DRD | 180 | Create, Update and Delete Directory User Listing
+18 | DRD | 181 | Search Directory
+18 | DRD | 182 | List User's Mail Servers
+18 | DRD | 182 | Read User's Avatar
+18 | DRD | 183 | Create, Update and Delete Directory QMail server Listing
+18 | DRD | 184 | Create, Update and Delete Directory RAIDA server Listing
+18 | DRD | 185 | Create, Update and Delete Directory DLD server Listing
 
 
 
