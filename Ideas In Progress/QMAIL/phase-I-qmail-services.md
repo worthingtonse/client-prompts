@@ -64,4 +64,4 @@ STATUS_YOU_GOT_MAIL = 11
 With this response, the client should call the PEEK Mail service. 
 
 ## PEEK Mail
-Downloads meta data about the email. 
+Downloads meta data about the email. See the [Meta Data CBD File Format](meta-file-format.md )
