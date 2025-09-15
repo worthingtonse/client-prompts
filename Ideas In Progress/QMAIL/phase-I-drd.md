@@ -198,7 +198,7 @@ ID | Field Name | Example | Description
 7 | Thumbnail Stripe| 00 00 18 77 Data  | Data Type (0 for thumbnaile) RAID type, Stripe number, Total Stripes, Data rounded to 100. Up to 
 10 |"Email Server 0" | 00 00 8E 82 89 mail.server.com | Raida ID (0-255) First 2 Byte: Coin type, Three Bytes: Port Number, Variable Bytes: Server Name or IP max 250 bytes.
 11 |"Email Server 11" | - - -  | There is a different ID for each raida that the receiver uses to receive.  
-- - -  | - - - | - - -  | - - - 
+12 to 34| "Email server N" | - - -  | - - - 
 35 |"Email Server 35" | 00 00 8E 82 89 mail2.server.com | First Byte: Coin type, Three Bytes: Port Number, Variable Bytes: Server Name or IP max 250 bytes
 
 
