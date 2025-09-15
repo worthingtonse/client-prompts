@@ -27,43 +27,58 @@ A CBDF file consists of two main sections: a **Fixed Header** followed by a **Va
 
 Key | Bytes | Description
 ---|---|---
-Version | 4 bits | Starts at zero
-Formatting | 4 bits | 0 = plain text
-Number of Key Pairs | 1 | Phase I will have zero and be a plain text document. 
+Number of Key Pairs | 1 | Phase I will have just a few. Some are mandatory
 
-## **2.2 The Variable Header**
-The Variable part defines all the resources needed to render the document. 
-It is composed of four optional tables, each preceded by a byte indicating the number of entries in that table. To begin with, there will only 
 
-Option Table
+### Meta Option Table
 
-Key | Name
----|---
-0 | "plain text"
-1: |"template"
-2: |"recieved from"
-3: |"coin"
-4: |"Acknowledgment Number"
-5:| "email guid"
-6:| "version"
-7:| "styles"
-8: |"Embedded Object Table"
-9: |"Attachment GUIDs"
-10: |"time stamp"
-11:| "Text Direction"
+| Key ID | Name | Size | Description | (Required) Δ(Added by Raida) Σ(Added by user) | Phase |
+|---|---|---|---|---|---|
+| 0 | Version | 1 | Starts at zero | * | 1 |
+| 1 | Qmail ID | 16 | The number the sender assigned to it | * | 1 |
+| 2 | Subject | Varies| The subject line that may include formatting | | 1 |
+| 3 | Subject Formatting | 2 | 1 byte (style ID), 1 byte (Font), 1 byte (Decoration), 3 bytes(Color) 1 byte (Formatting seperator) | | 1 |
+| 4 | "Sub-subject" | Varies| The subject line that may include formatting | | 1 |
+| 5 | "Sub-subject Formatting" | 16 | Description to come | | 1 |
+| 6 | "grouped" | 16 | Description to come | | 1 |
+| 7 | "Payment Coin" | 16 | Description to come | Δ | 1 |
+| 8 | "Payed Amount" | 16 | Description to come | Δ | 1 |
+| 9 | "Acknowledgment Number" | 16 | Description to come | | 1 |
+| 10| "Please Acknowledge" // No code | 16 | Description to come | | 1 |
+| 11| "Embedded Object Table" | 16 | Description to come | | 1 |
+| 12| "Attachment GUIDs" | 16 | Description to come | Δ | 1 |
+| 13| "Subjects" | 16 | Description to come | | 1 |
+| 14| "Checksum" | 16 | Description to come | | 1 |
+| 15| "Sender's Avatar" | 16 | Description to come | Δ | 1 |
+| 16| "Senders signature" | 16 | Description to come | | 1 |
+| 250 | "Timestamp" | 4 | Description to come | * | 1 |
+| 251 | "read" | 16 | Description to come | Σ | 1 |
+| 252 | "stared" | 16 | Description to come | Σ | 1 |
+| 253 | "grouped" | 16 | Description to come | Σ | 1 |
+| 254 | "Responded to" | 16 | Description to come | | 1 |
+| 255 | "trashed" | 16 | Description to come | Σ | 1 |
+
+
+
 12:| "Encryption Key ID"
-13:| "Subjects"
-128-143:| "Checksum"
-144-159:| "Sender's Avatar"
-160-191: |"Senders signature"
-192-255:| "CCs"
-256-264:| "Receiving Raidas"
-265: |"read"
-266: |"stared"
-267: |"grouped"
-268: |"Responded to"
-269: |"trashed"
+10: |"time stamp"
+Coin Locker Key
+Tos, From, CCs BCCs
+From
 
+### Subject Formatting Table
+Total bytes: 8
+Code |Name  | bytes/bits | Meaning
+---|---
+0 | Style Start Code    | 1      | (ASCII Non-printable characters are allowed) When this code is encoutered in the subject line, the following style will kick in. 
+1 | font-family         | 1      | 0-255. See font table. 0 means download font from raida. Only one allowed
+3 | color               | 2      | 65K different colors
+3 | background-color    | 2      | 65K different colors
+2 | font-weight         | 2 bits | 0=normal, 1=light, 2= bold, 3 = ?
+3 | font-style          | 2 bits | 0=normal, 1=italic, 2=oblique
+3 | text-decoration-line| 2 bits | 0=none, 1=underline, 2=overline, 3=line-through
+3 | direction           | 2 bits | 0= Left Right, 1=Right Left, 2=Top Bottom, 3=Bottom Top
+0 | Style End Code      | 1      | (ASCII Non-printable characters are allowed) Puts the Style back into the last style. 
 
 ```mermaid
 ---
