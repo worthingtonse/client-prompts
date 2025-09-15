@@ -10,6 +10,15 @@
    
 # Server ERD
 ## Distributed Resource Directory
+The DRD allows users to post information about themselves to others can find them. 
+
+Users can get a user ID by obtaining a certicate that has their user id on it. 
+
+Users can associate their user ID with data that they put into the DRD. 
+
+Users can delete their entire record in the DRD or update it. 
+
+There should be no empty fields in the user's DRD record. 
 ```mermaid
 ---
 title: PHASE I DLD (Distributed Resource Directory)
