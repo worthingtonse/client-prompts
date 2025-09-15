@@ -69,4 +69,22 @@ STATUS_SESSION_TIMEOUT = 12
 With this response, the client should call the PEEK Mail service. 
 
 ## PEEK Mail
-Downloads meta data about the email. See the [Meta Data CBD File Format](meta-file-format.md )
+Command Group: 6
+
+Command Code: 62
+
+The user must first log in to get a session key. 
+
+After getting a session key, the user can download all the meta data up to a certain amount of data. See the [Meta Data CBD File Format](meta-file-format.md )
+
+Sample Request:
+```
+CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH // Challenge
+SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE // Session key
+PD PD PD ... ? // Padding to make all body bytes (except for the E3 E3 ) divisable by 32.
+E3 E3 //Not encrypted
+```
+
+
+
+
