@@ -1,7 +1,18 @@
+# Goals of the QMail system
+1. The system provides security and quantum safety by taking emails and deviding them bit by bit into stripes. These stripes are uploaded to an array of QMail servers with each server getting a different stripe.
+2. The QMail servers should not be able to read any meta date about an qmail except the IP address of the sender and the time an email was received.
+3. Users can publish themselves in the Distributed Resource Directory so people can find them or they can refrane from doing so. 
+4. The emails are distributed in stripes over many servers. This is why hidden data such as the subject are kept in files that the user can download and put togetgher on their client machines.
+5. Users need to be able to check their email on different devices such as desktops and phones. These devices should be able to sync up.
+6. A Qmail consists of many files including the meta file (subject, time, receipients), the qmail file (text that is marked up), attachment files and special peer-to-peer secrets such as avatar images not published in the Distributed Resource Directory. 
+7. The sender should be able to update (overwrite)the qmail they send and even delete the email and all of its attachments.
+8. 
+   
 # Server ERD
+## Distributed Resource Directory
 ```mermaid
 ---
-title: PHASE I
+title: PHASE I DLD (Distributed Resource Directory)
 ---
 erDiagram
 
@@ -9,25 +20,10 @@ erDiagram
         int UserID PK "Coin ID, denomination and serial number"
         string PublicAlias "The client determines what they will be called"
         string PublicDescription "The client determines what is their description"
+        string PathToAvatarFile "The public image file used by the user"
         int SendingPrice "The price the sender must pay for this user to receive"
-        datetime StartDateTime "The time the session started"
+        datetime StartDateTime "The time the user account was created"
     }
-
-    USER_SESSION {
-        int SessionKey "The session key"
-        int UserID PK "The expected UserID of the session"
-        int MinuntesUntilTimeout "How many minutes before the session key timesout"
-        datetime StartDateTime "The time the session started"
-    }
-
-
-    USER_ALTERNATIVE_AUTHENTICATION {
-        int ID PK "Primay Key"
-        string AutenticationType "Like a computer or phone"
-        string PasswordHash "Hash of the device identifier (phone number, Discored User, etc)"
-        int UserID FK "User's unique ID including coin ID, denomination and serial number"
-    }
-
 
     USER_MAILSERVER {
         int UserID FK "Denomination and Serial Number"
@@ -44,48 +40,80 @@ erDiagram
         datetime LastUpdateData "The datetime the records information was updated"
     }
 
+    USER ||--o{ USER_MAILSERVER : "has"
+    USER_MAILSERVER ||--o{ MAILSERVER : "contains"
+
+```
+## QMail
+```mermaid
+---
+title: PHASE I QMail ERD
+---
+erDiagram
 
     QMAIL {
-        int QMailID PK, "8 byte half GUID"
+        int QMailID PK "8 byte half GUID"
         int SenderID PK "Coin ID, denomination and serial number"
-        datetime ReceivedDate
-        int TimeoutMinutes "Minutes until the email will be automatically deleted"
+        datetime ReceivedDate "Date the qmail was sent"
+        int TimeoutMinutes "Minutes until all qmail files will be deleted"
         string SyncKey "Unique key for sync state"
     }
 
-    FILES {
+    FILE {
         int FileID PK "Unique ID for the attachment"
         int OwnerID "UserID of the owner"
         string Path "Path to the file and file name"
         enum FileType
-        datetime ReceivedDate
+        datetime ReceivedDate "Date file was created"
+        datetime UpdatedDate "Date file was edited"
         int TimeoutMinutes "Minutes until the email will be automatically deleted"
         string SyncKey "Unique key for sync state"
     }
 
-    QMAIL_FILE_RECEIVERS {
+    QMAIL_RECEIVER {
         int UserID PK "Reciever's unique ID"
-        int FileID PK "Unique ID for each file"
+        int FileID PK "File's unique ID"
         int status "Unseen, Seen, Deleted"
         string SyncKey "Unique key for sync state"
     }
 
     FILE_TYPE {
-        int ID PK "Used as a enum for file types"
+        int ID PK "Used as an enum for file types"
         string FileType "The name of the file type, Subject (Meta),Email, Attachment,Group Avitar"
     }
 
-    USER }o--|| USER_ALTERNATIVE_AUTHENTICATION : "has zero or more"
-    USER ||--o{ USER_MAILSERVER : "has"
-    FILES ||--o{ FILE_TYPE : "has"
-    USER_MAILSERVER ||--o{ MAILSERVER : "contains"
-    USER }o--|| QMAIL : "has zero or more"
-    QMAIL ||--o{ QMAIL_FILE_RECEIVERS  : "has one or more"
-    FILES ||--o{ QMAIL_FILE_RECEIVERS  : "has one or more"
+    FILE ||--o{ FILE_TYPE : "has"
+    QMAIL ||--o{ QMAIL_RECEIVER  : "has one or more"
+    FILE ||--o{ QMAIL_RECEIVER : "has one or more"
+
+```
+## Utility Tables
+```mermaid
+---
+title: PHASE I QMail ERD
+---
+erDiagram
+
+    SESSION {
+        int SessionKey "The session key"
+        int UserID PK "The expected UserID of the session"
+        int MinuntesUntilTimeout "How many minutes before the session key timesout"
+        datetime StartDateTime "The time the session started"
+    }
+
+    USER_ALTERNATIVE_AUTHENTICATION {
+        int ID PK "Primay Key"
+        string AutenticationType "Like a computer or phone"
+        string PasswordHash "Hash of the device identifier (phone number, Discored User, etc)"
+        int UserID FK "User's unique ID including coin ID, denomination and serial number"
+    }
 
 
 ```
 
+
+
+## Phase II (Work in progress so ignore this)
 ```mermaid
 ---
 title: PHASE II
