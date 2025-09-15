@@ -10,12 +10,15 @@ Encryption Types 4 and 5 us 256 bit AES CTR encryption.
 
 [Encryption Type 5](#encryption-type-5)
 
-## Differences between 4 and 5
-* Type 4 is used to allow two computers (such as a client and a server) to communciate using one 256 bit key.
-* Type 5 allows the client to talk to the raida by using two cloudcoins by combining each's 128 bit Authenticity Numbers into one 256 bit key. 
+[Encryption Type 6](#encryption-type-6)
+
+## Differences between 4, 5 and 6
+* Type 4 is used to allow two computers (such as a client and a RAIDA) to communciate using one 256 bit key.
+* Type 5 allows the client to talk to the raida by using two cloudcoins by combining each's 128 bit Authenticity Numbers into one 256 bit key.
+* Type 6 is used to allow two computers (such as a client and a content server) to communciate using one 256 bit key that they have previously exchanged using the Distributed Key Exchange Protocol (DKE) AKA RKE or QKey.
 
 ## Encryption Type 4
-The purpose of the Type 4 encryption is to allow computers to message each other using only one 256 bit AES CTR key that was exchanged using the DKE (Distributed Key Exchange) protocol. Encryption type 5 is used to combine two 128 bit keys that are dervived from the coin/key that the computer already has. 
+The purpose of the Type 4 encryption is to allow raida to message each other using only one 256 bit AES CTR key that was exchanged using the DKE (Distributed Key Exchange) protocol. Encryption type 5 is used to combine two 128 bit keys that are dervived from the coin/key that the computer already has. 
 
 RAIDA Protocol Header Encryption Type 4 has 48 bytes fixed.
 
@@ -138,7 +141,7 @@ Index | Group | Code | Name | Notes
 
 ## 1.0 Purpose & Architecture
 
-Encryption Type 6 defines the protocol for creating and using a secure, direct communication tunnel between a client and a content server. This protocol is used after the client has successfully derived a 256-bit shared secret using the Raida Key Exchange (RKE) protocol.
+Encryption Type 6 defines the protocol for creating and using a secure, direct communication tunnel between a client and a content server. Examples of content servers include QMail, DRD, Webservers, VPN endpoints. This protocol is used after the client has successfully derived a 256-bit shared secret using the Raida Key Exchange (RKE) protocol.
 
 ### 1.1 Architectural Overview
 
