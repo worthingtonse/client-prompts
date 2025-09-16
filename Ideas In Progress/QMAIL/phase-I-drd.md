@@ -122,24 +122,24 @@ E3 E3
 This allows the user to search for a person in the directory. It will only warn people if they are blacklisted. 
 
 ```C
-CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH 
+CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH
+SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE
 Search Directory CBDF
 E3 E3
 ```
 Directory Search CBDF
-Fixed Key | Bytes | Description
+Directory Update CBDF Fixed Fields: Note: All data is in binary. Strings are UTC-8 Encoded.
+Key Code | Value Bytes | Name & Description
 ---|---|---
-Payment Coin Code | 2 | What coin is being used for payment? Default is 0x0006 for CloudCoin and only CloudCoin is used for Phase I. 
-Payment Locker Code | 16 | | Locker code that will include the payment for the search like: ca8d0787f2a84b4babf1ef9f3d118b16 
-
-ID | Field Name | Example | Description
----|---|---|---
-1 | Return Key IDs | 05 DE 23 | One byte per resource in the Resource Table CDFD Key Table above in the Update Directory Service above. 
-2 | Limit | 0xA5 | 25.6KB max Kilibytes. Maximum number of killbytes of data to return. 
-3 | Page | 3 bytes | 25.6KB per page. Default is 0
-4 | Where Clause | 3 bytes | Directory Key, Comparison Operator ( 0= Not Equal To, 1= Equal To, 2 = Greater than, 3 = Less Than, 4 = Contains, 5 = Does Not Contain), Number (0) or Text (1) field, Number or Text (length varies)
-5 | AND Where Clause | 3 bytes | Directory Key, Comparison Operator ( 0= Not Equal To, 1= Equal To, 2 = Greater than, 3 = Less Than, 4 = Contains, 5 = Does Not Contain), Number (0) or Text (1) field, Number or Text (length varies)
-6 | OR Where Clause | 3 bytes | Directory Key, Comparison Operator ( 0= Not Equal To, 1= Equal To, 2 = Greater than, 3 = Less Than, 4 = Contains, 5 = Does Not Contain), Number (0) or Text (1) field, Number or Text (length varies)
+0 | 1 | Number of Key-value pairs
+1 | 2 | Payment Coin Code. 0006 for Cloudcoin.
+2 | 16 | Payment Locker Code
+3 | Varies | Return Key IDs (columns) One byte per resource in the Resource Table CDFD Key Table above in the Update Directory Service above. 
+4 | 1 | Limit in KB.  
+5 | 1 | Page. Default is 0
+6 | 3 | Where Clause. Directory Key, Comparison Operator ( 0= Not Equal To, 1= Equal To, 2 = Greater than, 3 = Less Than, 4 = Contains, 5 = Does Not Contain), Number (0) or Text (1) field, Number or Text (length varies)
+7 | 3 | AND Where Clause. Directory Key, Comparison Operator ( 0= Not Equal To, 1= Equal To, 2 = Greater than, 3 = Less Than, 4 = Contains, 5 = Does Not Contain), Number (0) or Text (1) field, Number or Text (length varies)
+8 | 3 | OR Where Clause. Directory Key, Comparison Operator ( 0= Not Equal To, 1= Equal To, 2 = Greater than, 3 = Less Than, 4 = Contains, 5 = Does Not Contain), Number (0) or Text (1) field, Number or Text (length varies)
 
 Response Status Codes
 ```C
