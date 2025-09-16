@@ -38,8 +38,8 @@ erDiagram
     }
 
     SESSION {
-        int SessionKey "The session key"
-        int UserID PK "The expected UserID of the session"
+        int SessionKey PK "The session key"
+        int UserID "The expected UserID of the session"
         int MinuntesUntilTimeout "How many minutes before the session key timesout"
         datetime StartDateTime "The time the session started"
     }
@@ -116,8 +116,6 @@ ERROR_FEW_COINS_IN_LOCKER = 153,
 ERROR_LOCKER_EMPTY_OR_NOT_EXISTS = 179,
 ERROR_INVALID_PARAMETER = 198,
 ```
-
-
 
 ## Insert Update Delete 
 This service is usesd to Update Directory, create a new record and delete existing ones. When this is called, if there is no existing record, it will be created. If this is called and the information is left blank, the Raida server will delete the record. 
