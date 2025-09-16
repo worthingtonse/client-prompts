@@ -37,12 +37,12 @@ erDiagram
         datetime StartDateTime "The time the user account was created"
     }
 
-
-   VALIDATION_SERVER {
-
-       int validationServerID "The ID of the validation server"
-       string name "Name of the validation server"
-  }
+    SESSION {
+        int SessionKey "The session key"
+        int UserID PK "The expected UserID of the session"
+        int MinuntesUntilTimeout "How many minutes before the session key timesout"
+        datetime StartDateTime "The time the session started"
+    }
 
     USER_MAILSERVER {
         int UserID FK "Denomination and Serial Number"
