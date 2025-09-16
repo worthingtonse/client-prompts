@@ -160,8 +160,13 @@ E3 E3
 Directory Search Results CBDF
 Fixed Key | Bytes | Description
 ---|---|---
-Number of rows returned| 2 | How many rows where returned up to 65,535.
-Columns Per Row | 1 |  Up to 255|
+
+Key Code | Value Bytes | Name & Description
+---|---|---
+0 | 1 | Number of Key-value pairs
+1 | 2 | How many rows where returned up to 65,535.
+2 | 1 | Columns Per Row, Up to 255
+3 | 1 | The return rows. The byte does not really matter. The size of the response can be chained. 
 
 Variable Fields. Note that in the case of it returning more than one row, we will see the IDs repeat.
 The following shows three rows being returned: 
@@ -176,16 +181,3 @@ The following shows three rows being returned:
 02 0F 4b4babfca8d0787f2a81ef9f3d118b
 06 03 1ef9f3
 ```
-
-ID | Field Name | Example | Description
----|---|---|---
-1 |"Display Name/Alias" | Varies |"TechWizard" | Primary display name or chosen alias for the user encoded in UTF-8
-2 |"Self Description" | Varies |"I'm a nice guy" | Public info about self
-6 | Amount that senders must pay reciever | 0x0000v 08 | 3 bytes. Coin type (2 bytes) and Denomination ( 0x0000  Cloudcoin by default) Phase I will just use 0x00 which means 1. 
-7 | Thumbnail Stripe| 00 00 18 77 Data  | Data Type (0 for thumbnaile) RAID type, Stripe number, Total Stripes, Data rounded to 100. Up to 
-10 |"Email Server 0" | 00 00 8E 82 89 mail.server.com | Raida ID (0-255) First 2 Byte: Coin type, Three Bytes: Port Number, Variable Bytes: Server Name or IP max 250 bytes.
-11 |"Email Server 11" | - - -  | There is a different ID for each raida that the receiver uses to receive.  
-12 to 34| "Email server N" | - - -  | - - - 
-35 |"Email Server 35" | 00 00 8E 82 89 mail2.server.com | First Byte: Coin type, Three Bytes: Port Number, Variable Bytes: Server Name or IP max 250 bytes
-
-
