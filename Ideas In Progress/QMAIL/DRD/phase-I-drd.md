@@ -11,14 +11,17 @@
 8. The DRD servers also contain files such as the user's avatar.
 9. Everything in the DRD is public information except the user's comment on why they made the last update.
 10. The client may register the same information with multiple DRD servers for redundancy.
-11. DRD servers may syncronize themselves.
 
 ## DRD workflow. 
 1. The DRD server must go through the DKE [Distributed key Exchange Process](https://github.com/worthingtonse/WEST-Protocol/blob/main/Q.%20Distributed%20Key%20Exchange.md)
 2. The DRD client must find the DRD's DKE servers and get a shared AES 256 bit CTR key with the DRD server.
 3. The DRD client must choose a CloudCoin that they will use as a Mail Box Address .
-4. The DRD client will get tickets from the RAIDA by calling the [get_ticket](https://github.com/worthingtonse/WEST-Protocol/blob/main/F.%20Healing%20Services.md#get-ticket) service. 
-5. DRD client will use the key created in the DKE exchange process to connect to the DRD server's [Create Session Service](https://github.com/worthingtonse/client-prompts/blob/main/Ideas%20In%20Progress/QMAIL/start-session.md#start-session-api---simplified-guide) and send it its tickets. Clients use encryption type 6.
+4. The DRD client will get tickets from the RAIDA by calling the [get_ticket](https://github.com/worthingtonse/WEST-Protocol/blob/main/F.%20Healing%20Services.md#get-ticket) service.
+5. The DRD client may need to put CloudCoin into a locker and have get a 16 byte locker code. (More for Phase II)
+6. DRD client will use the key created in the DKE exchange process to connect to the DRD server's [Create Session Service](https://github.com/worthingtonse/client-prompts/blob/main/Ideas%20In%20Progress/QMAIL/start-session.md#start-session-api---simplified-guide) and send it its tickets. Clients use encryption type 6.
+7. The DRD Server will call the RAIDA's [Validate Ticket](https://github.com/worthingtonse/WEST-Protocol/blob/main/F.%20Healing%20Services.md#validate-ticket) service.
+8. The DRD Server will create the session using the Client's session code. 
+9. The DRD Client will make requests to the DRD services such as INSERT UPDATE DELETE, and SEARCH DIRECTORY. 
 
 ## DRD Services
    
@@ -98,32 +101,48 @@ mailbox | start_date_time | 16
 mailbox_mailserver | mailbox_id | 251
 mailbox_mailserver | qmail_server_id | 200
 
+## CBDF Files
+The Compact Binary Document Format is composed of a triad of key code, value length and Big-endian values. It always starts with
+the key value of '0' which means the number of key-pairs the file contains. The second byte is length of the value which is one byte (0-255) and the last is the actual value. Each CBDF file needs to have a key code table that shows the values of the keys. This table, however, is not part of the file. Codes that are not used can be skipped. Skipped values may be given a default value. Suppose we had a table that set 0 to the number of key pairs, 1 as the coin code and 5 as an RGB color. Here is the CBDF file using that. 
+
+Sample CBDF File
+```
+0x00 0x01 0x03  // First line says that there are 3 key-value pairs (including the this one) so there are two more following.
+0x01 0x02 0x0006  // Suppose key code '1' is the Coin ID. Here the coin ID is two bytes and is set to 6.
+0x05 0x03 0xFFFFFF  //Here key codes for 2,3 and 4 are left out. Suppose 5 means a color. The color uses three bytes and they are #FFFFFF (White). 
+```
+As Table: 
+Key Code | Value Length in Bytes | Value (Big-endian)
+---|---|---
+0x00| 0x01|0x03
+0x01| 0x02| 0x0006
+0x05| 0x03| 0xFFFFFF
 
 ## Insert Update Delete DRD
 
 Sample Request:
 ```c
 CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH
-SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE
+SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE  //session ID
 Update CBD file
 E3 E3
 ```
 
 Directory Update CBDF Fixed Fields: Note: All data is in binary. Strings are UTC-8 Encoded.
-Key Code | Value Bytes | Name & Description
----|---|---
-0 | 1 | Number of Key-value pairs
-1 | 2 | Payment Coin Code. 0006 for Cloudcoin.
-2 | 16 | Payment Locker Code
-11 | varies (max 255)| "Display Name/Alias". Primary display name or chosen alias for the user encoded in UTF-8
-12 | varies (max 255) | "Self Description" Public info about self
-13 | varies | Avatar file name
-14 | varies (255x100)| Avatar file
-15 | 3 | Amount that senders must pay reciever. Coin type (2 bytes) and Denomination ( 0x0000  Cloudcoin by default)
-200 | 8 | QMail[0] CT CT IP IP IP IP PT PT  // coin id, ip address, port
-201 | 8 | QMail[1] CT CT IP IP IP IP PT PT  // coin id, ip address, port
-202-230 | 8 | QMail[2-40] CT CT IP IP IP IP PT PT  // coin id, ip address, port
-231 | 8 | QMail[31] CT CT IP IP IP IP PT PT  // coin id, ip address, port
+Key Code | Value Bytes | Name & Description | Validation
+---|---|---|---
+0 | 1 | Number of Key-value pairs | 0x00 0x01 should be the first two bytes. 
+1 | 2 | Payment Coin Code. 0006 for Cloudcoin. (Phase II) | Must be 0x0006
+2 | 16 | Payment Locker Code (Phase II) | Should be random
+11 | varies (max 255)| "Display Name/Alias". Primary display name or chosen alias for the user encoded in UTF-8 | Should be understanblable and Searchable. 
+12 | varies (max 255) | "Self Description" Public info about self | Should be understanblable and Searchable. 
+13 | varies | Avatar file name | Can be validated to just .png, .jpg or .WebP
+14 | varies (255x100)| Avatar file | Can be validated by file validators. 
+15 | 3 | Amount that senders must pay reciever. Coin type (2 bytes) and Denomination | Coin type must be 0x0006. Denomination must in the [Denomination Table](https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/denominations.md)
+200 | 8 | QMail[0] CT CT IP IP IP IP PT PT  | coin id (Must be 0x0006, ip address, port
+201 | 8 | QMail[1] CT CT IP IP IP IP PT PT  | coin id (Must be 0x0006, ip address, port
+202-230 | 8 | QMail[2-40] CT CT IP IP IP IP PT PT  | coin id (Must be 0x0006, ip address, port
+231 | 8 | QMail[31] CT CT IP IP IP IP PT PT | coin id (Must be 0x0006, ip address, port
 
 
 Return Status Codes
@@ -143,8 +162,8 @@ E3 E3
 This allows the user to search for a person in the directory. It will only warn people if they are blacklisted. 
 
 ```C
-CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH
-SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE
+CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH  // Challenge
+SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE  // Session key
 Search Directory CBDF
 E3 E3
 ```
@@ -218,44 +237,47 @@ The following shows three rows being returned:
 
 **Ticket System:**
 - What's the format and structure of tickets from RAIDA servers?
+   - Tickets are four bytes each    
 - How long are tickets valid?
-- What specific validation does the DRD server perform with RAIDA?
+   - Maybe a minute
+- What specific validation does the DRD server perform with RAIDA
+   - The DRD Server must send the tickets to the RAIDA who created them's "Validate Ticket" service. 
 
 ## Technical Implementation Gaps
 
-**Synchronization:**
-- How do DRD servers discover each other for synchronization?
-- What conflict resolution strategy is used when servers have different data?
-- How often does synchronization occur?
-
 **File Storage:**
 - What are the size limits for avatar files beyond the "255x100" mention?
+  - the limits are 25.5 KB for now
 - Are there format restrictions for avatar files?
+   - .png, .jpg, .webp, .gif 
 - How are the blacklist.bin and whiteList.bin files structured and used?
-
+   - These are for future use and maybe but in the database instead
+     
 **Database Operations:**
 - What happens during partial failures when updating multiple related tables?
+   - The operation must be repeated       
 - Are there any indexing strategies mentioned for search performance?
+   - Aliase must be indexed. Description must be text indexed    
 - How are database migrations handled?
-
+   - That is to be determined in Phase II
+     
 ## Protocol Specification Issues
-
-**Binary Format Clarity:**
-- The CBDF format structure isn't fully defined
-- Variable-length field encoding rules need clarification
-- Endianness for multi-byte values isn't specified
 
 **Error Handling:**
 - What happens if a user tries to register with an already-used mailbox ID?
-- How are network failures during operations handled?
+   - The records are overwritten
 - What's the retry strategy for failed RAIDA validations?
+   - If the tickes fail. The client is told they have failed and the client must deal with the situation.     
 
 ## Business Logic Questions
 
 **Pricing Model:**
 - How is the "SendingPrice" enforced and collected?
+  - The DRD Server will register its price in its own and other DRD Server. 
 - What prevents users from setting prices to zero?
+   - The user can set their own price to receive qmail to zero. 
 - How do payments flow between users and servers?
+   - The payments travel in the form of locker codes. The DRD server will have a "CloudCoin Pro Wallet" client wallet to handle its coins.  
 
 **Data Validation:**
 - What constitutes valid data for each field?
