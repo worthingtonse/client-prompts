@@ -1,21 +1,26 @@
 ## Distributed Resource Directory
-1. The DRD allows users to post information about themselves so that others can find them. 
-2. Users can get a user ID by obtaining a certicate that has their user id on it.
-3. Users can get tickets by authenticating with RAIDA servers.
-4. Users can give their tickets to a DRD server who will confirm that they are authentic with the RAIDA servers.
-5. Authenticated Users can associate their user ID with data that they put into the DRD. 
-6. Users can delete their entire record in the DRD or update it. 
-7. DRD records are kept in a SQLight Databased on the DRD server
+1. The DRD allows users to post information about themselves so that others can find them.
+2. A Mail Box Number is a seven byte number than includes a two byte coin ID, 1 byte Denomination and a 4 byte serial number. 
+3. Users can get a Mailbox Number by obtaining a certicate (CloudCoin). The coin ID for  CloudCoin is 0x0006.
+4. Users can get tickets by authenticating their CloudCoin certificate with RAIDA servers.
+5. Users can give their tickets to a DRD server who will confirm that they are authentic with the RAIDA servers.
+6. Authenticated Users can associate their Mailbox ID with data that they put into the DRD. 
+7. Users can delete their entire record in the DRD or update it. 
+8. DRD records are kept in a SQLight Databased on the DRD server
 7. There should be no empty fields in the user's DRD records.
 8. The DRD servers also contain files such as the user's avatar.
-9. Everything in the DRD is public information.
+9. Everything in the DRD is public information except the user's comment on why they made the last update.
 10. The client may register the same information with multiple DRD servers for redundancy.
-11. DRD servers may syncronize themselves. 
-12. DRD Servers use the same request and response format as the raida.
-13. DRD servers must exchange AES keys with the client computers using the Distributed Key Exchange protocol.
-14. DRD servers communicate with clients using encryption type 6.
-15. DRD servers use session keys.
-16. DRD servers provide the following DRD Services:
+11. DRD servers may syncronize themselves.
+
+## DRD workflow. 
+1. The DRD server must go through the DKE [Distributed key Exchange Process](https://github.com/worthingtonse/WEST-Protocol/blob/main/Q.%20Distributed%20Key%20Exchange.md)
+2. The DRD client must find the DRD's DKE servers and get a shared AES 256 bit CTR key with the DRD server.
+3. The DRD client must choose a CloudCoin that they will use as a Mail Box Address .
+4. The DRD client will get tickets from the RAIDA by calling the [get_ticket](https://github.com/worthingtonse/WEST-Protocol/blob/main/F.%20Healing%20Services.md#get-ticket) service. 
+5. DRD client will use the key created in the DKE exchange process to connect to the DRD server's [Create Session Service](https://github.com/worthingtonse/client-prompts/blob/main/Ideas%20In%20Progress/QMAIL/start-session.md#start-session-api---simplified-guide) and send it its tickets. Clients use encryption type 6.
+
+## DRD Services
    
 [INSERT UPDATE DELETE DRD](#insert-update-delete-drd)
 
