@@ -79,7 +79,8 @@ erDiagram
         │   ├── D_A1B2C3D4.json
         │   └── D_E5F6G7H8.json
         └── policies/
-            └── P_Default.json
+            ├── blacklist.bin
+            └── whiteList.bin
 ```
 
 
