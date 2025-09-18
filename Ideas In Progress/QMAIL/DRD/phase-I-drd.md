@@ -33,8 +33,8 @@ title: PHASE I DLD (Distributed Resource Directory)
 ---
 erDiagram
 
-    USER {
-        int UserID PK "Coin ID, denomination and serial number"
+    MAILBOX {
+        int MailboxID PK "Coin ID, denomination and serial number"
         string PublicAlias "The client determines what they will be called"
         string PublicDescription "The client determines what is their description"
         string PathToAvatarFile "The public image file used by the user"
@@ -44,12 +44,12 @@ erDiagram
 
     SESSION {
         int SessionKey PK "The session key"
-        int UserID "The expected UserID of the session"
+        int MailBoxID "The expected MailBoxID of the session"
         int MinuntesUntilTimeout "How many minutes before the session key timesout"
         datetime StartDateTime "The time the session started"
     }
 
-    USER_MAILSERVER {
+    MAILBOX_MAILSERVER {
         int UserID FK "Denomination and Serial Number"
         int QMailID FK "Denomination and Serial Number"
     }
@@ -64,15 +64,15 @@ erDiagram
         datetime LastUpdateData "The datetime the records information was updated"
     }
 
-    USER ||--o{ USER_MAILSERVER : "has"
-    USER_MAILSERVER ||--o{ MAILSERVER : "contains"
+    MAILBOX ||--o{ MAILBOX_MAILSERVER : "has"
+    MAILBOX_MAILSERVER ||--o{ MAILSERVER : "contains"
 
 ```
 
 ##
 ```
 /directory_root/
-└── users/
+└── mailboxes/
     └── 000634FC89A4E6/
         ├── .avatar.png
         ├── devices/
