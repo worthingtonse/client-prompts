@@ -13,10 +13,10 @@
 10. The client may register the same information with multiple DRD servers for redundancy.
 
 ## DRD workflow. 
-1. The DRD server must go through the DKE [Distributed key Exchange Process](https://github.com/worthingtonse/WEST-Protocol/blob/main/Q.%20Distributed%20Key%20Exchange.md)
+1. The DRD server must go through the DKE [Distributed key Exchange Process](https://github.com/worthingtonse/WEST-Protocol/blob/main/Q.%20Distributed%20Key%20Exchange.md) so that the client can create a key based on the DRD's Master Key stored on the DKE servers. 
 2. The DRD client must find the DRD's DKE servers and get a shared AES 256 bit CTR key with the DRD server.
-3. The DRD client must choose a CloudCoin that they will use as a Mail Box Address .
-4. The DRD client will get tickets from the RAIDA by calling the [get_ticket](https://github.com/worthingtonse/WEST-Protocol/blob/main/F.%20Healing%20Services.md#get-ticket) service.
+3. The DRD client must choose a CloudCoin that they will use as a Mail Box Address and then stake that CloudCoin by keeping it in a folder in the Client software. 
+4. The DRD client will get tickets from the RAIDA by calling the [get_ticket](https://github.com/worthingtonse/WEST-Protocol/blob/main/F.%20Healing%20Services.md#get-ticket) service so that it can authenticate with the DRD server and get a session key.
 5. The DRD client may need to put CloudCoin into a locker and have get a 16 byte locker code. (More for Phase II)
 6. DRD client will use the key created in the DKE exchange process to connect to the DRD server's [Create Session Service](https://github.com/worthingtonse/client-prompts/blob/main/Ideas%20In%20Progress/QMAIL/start-session.md#start-session-api---simplified-guide) and send it its tickets. Clients use encryption type 6.
 7. The DRD Server will call the RAIDA's [Validate Ticket](https://github.com/worthingtonse/WEST-Protocol/blob/main/F.%20Healing%20Services.md#validate-ticket) service.
