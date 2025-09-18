@@ -83,6 +83,21 @@ erDiagram
             └── whiteList.bin
 ```
 
+## Column Codes
+Many DLD Services deal with data. Data Columns are encoded for the binary calls using Key IDs.  
+
+Table | Column | Column Code 
+---|---|---
+mailbox | mailbox_id | 10
+mailbox | public_alias | 11
+mailbox | public_description | 12
+mailbox | avatar_file_name | 13
+mailbox | avatar_data | 14
+mailbox | send_price | 15
+mailbox | start_date_time | 16
+mailbox_mailserver | mailbox_id | 251
+mailbox_mailserver | qmail_server_id | 200
+
 
 ## Insert Update Delete DRD
 
@@ -100,15 +115,15 @@ Key Code | Value Bytes | Name & Description
 0 | 1 | Number of Key-value pairs
 1 | 2 | Payment Coin Code. 0006 for Cloudcoin.
 2 | 16 | Payment Locker Code
-3 | varies (max 255)| "Display Name/Alias". Primary display name or chosen alias for the user encoded in UTF-8
-4 | varies (max 255) | "Self Description" Public info about self
-5 | 3 | Amount that senders must pay reciever. Coin type (2 bytes) and Denomination ( 0x0000  Cloudcoin by default)
-6 | varies | Avatar file name
-7 | varies (255x100)| Avatar file
-10 | 8 | QMail[0] CT CT IP IP IP IP PT PT  // coin id, ip address, port
-11 | 8 | QMail[1] CT CT IP IP IP IP PT PT  // coin id, ip address, port
-12-40 | 8 | QMail[2-40] CT CT IP IP IP IP PT PT  // coin id, ip address, port
-41 | 8 | QMail[31] CT CT IP IP IP IP PT PT  // coin id, ip address, port
+11 | varies (max 255)| "Display Name/Alias". Primary display name or chosen alias for the user encoded in UTF-8
+12 | varies (max 255) | "Self Description" Public info about self
+13 | varies | Avatar file name
+14 | varies (255x100)| Avatar file
+15 | 3 | Amount that senders must pay reciever. Coin type (2 bytes) and Denomination ( 0x0000  Cloudcoin by default)
+200 | 8 | QMail[0] CT CT IP IP IP IP PT PT  // coin id, ip address, port
+201 | 8 | QMail[1] CT CT IP IP IP IP PT PT  // coin id, ip address, port
+202-230 | 8 | QMail[2-40] CT CT IP IP IP IP PT PT  // coin id, ip address, port
+231 | 8 | QMail[31] CT CT IP IP IP IP PT PT  // coin id, ip address, port
 
 
 Return Status Codes
@@ -140,7 +155,7 @@ Key Code | Value Bytes | Name & Description
 0 | 1 | Number of Key-value pairs
 1 | 2 | Payment Coin Code. 0006 for Cloudcoin.
 2 | 16 | Payment Locker Code
-3 | Varies | Return Key IDs (columns) One byte per resource in the Resource Table CDFD Key Table above in the Update Directory Service above. 
+3 | Varies | Select Column Codes. One byte per Column in the Column Code table above. 
 4 | 1 | Limit in KB.  
 5 | 1 | Page. Default is 0
 6 | 3 | Where Clause. Directory Key, Comparison Operator ( 0= Not Equal To, 1= Equal To, 2 = Greater than, 3 = Less Than, 4 = Contains, 5 = Does Not Contain), Number (0) or Text (1) field, Number or Text (length varies)
@@ -177,13 +192,13 @@ Key Code | Value Bytes | Name & Description
 Variable Fields. Note that in the case of it returning more than one row, we will see the IDs repeat.
 The following shows three rows being returned: 
 ```
-01 10 ca8d0787f2a84b4babf1ef9f3d118b16
+0A 10 ca8d0787f2a84b4babf1ef9f3d118b16 // Column Code (key), Length of value, Value )These are ficticious)
 02 0F 4b4babfca8d0787f2a81ef9f3d118b
 06 03 1ef9f3
-01 0E 4babf1ef9f3d11ca8d0787f2a84b
+0A 0E 4babf1ef9f3d11ca8d0787f2a84b
 02 0E 81ef9f3d114b4babfca8d0787f2a
 06 02 1ef9
-01 10 ca8d0787f2a84b4babf1ef9f3d118b16
+0A 10 ca8d0787f2a84b4babf1ef9f3d118b16
 02 0F 4b4babfca8d0787f2a81ef9f3d118b
 06 03 1ef9f3
 ```
