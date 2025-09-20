@@ -4,6 +4,16 @@ This is the actual qmail file. It uses the CBD (Compace Binary Document) format.
 
 # Fixed part of file (Phase I)
 
+```c
+Sample file
+
+Meta Data File 
+FS VS // Start of Lookup Table, Version
+  Will use the client's default five styles
+FS VS TC // Start of marked up text, VS Template code
+  STX // STX means Start of text
+```
+
 Code | Bytes | Name & Description | Required?
 ---|---|---|---
 0 | 1 | Number of Key Pairs | Required 
@@ -70,6 +80,59 @@ To mark up the the text and create the lookup tables, the first 32 ASCII charact
 | 31 | 1F | US | Unit Separator |
 
 
+## Layout of a Qmail File
+This shows how an entire Qmail file will be laid out. 
+It uses control characters to lay things out so that byte heavy html is not needed.
+```c
+Meta Data
+ 
+FS VS // Start of Lookup Table, Version
+	GS 01 // Container Background Formats 
+		RS 01 ##### // Format ID number 1 and then five bytes 
+		RS 02 #####
+		RS 03 #####
+	GS 02 // Container Spacing Formats 
+		RS 01 ###### // Format ID number 1 and then five bytes 
+		RS 02 ######
+		RS 03 ######
+	GS 03 // Container Border Formats 
+		RS 01 ######## // Format ID number 1 and then five bytes 
+		RS 02 ########
+		RS 03 ########
+	GS 04 // Container Shadow Formats 
+		RS 01 ##### // Format ID number 1 and then five bytes 
+		RS 02 #####
+		RS 03 #####
+  GS 05 // Container Advanced Background Image Format
+		RS 01 ##### // Format ID number 1 and then five bytes 
+		RS 02 #####
+	GS 06 // Text Formats 
+		RS 01 ######## // Format ID number 1 and then five bytes 
+		RS 02 ########
+		RS 03 ########
+	GS 07 // Table Formats
+	GS 08 // Image Formats
+	GS 09 // List Formats
+
+FS VS TC // Start of marked up text, VS Template code
+	GS 01 CT MR MC NS W% H% TXT // Main Container, Container Type, Max Rows, Max Columns, Number of Spaces, Width, Height, Include if Text file only. 
+		RS 01 TL BR  // Space 1, Top Left Grid, Bottom Right Grid
+			I'm a bunch of BDtextBD that can be marked up. 
+		RS 02 TL BR  // Space 1, Top Left Grid, Bottom Right Grid
+		RS 03 TL BR  // Space 1, Top Left Grid, Bottom Right Grid
+		RS 04 TL BR  // Space 1, Top Left Grid, Bottom Right Grid
+	GS 02 Header
+	GS 03 Footer
+	GS 05 Left Align
+	GS 06 Right Align
+	GS 07 Popup
+
+
+
+
+
+
+```
 
 
 
@@ -136,8 +199,17 @@ are both set to zero, the background will be transparent.
 Name | Bytes | Notes
 ---|---|---
 BG-Color |  2 | R5B5G5 (Default 1 white) Zero is translusent.
-Image-byte | 1 | Used to chose one of the 255 built-in background images unless overwrite is specified.(Default 0 translucent) 
+Image-byte | 2 | Used to chose one of the 65K built-in background images unless overwrite is specified.(Default 0 translucent) 
+Image-Flags | 1 | Repeat, 
 Background Color Opacness | 1 | 0-100%. This goes over the Image. If 100% then the imgae will not show. (Default 100%. Covers all)
+
+### Advanced Background Image Format
+People can load images, position them, repeat them,etc. 
+Name | Bytes | Notes
+---|---|---
+Image-Flags | 1 | Repeat, Repeat x, repeat y, fixed, Position Top, Position Left, Position Center, Position Middle
+Image-Position | 1| 4 bits X position % , 4 bits Y position %, Zero is auto. 1,1 is upport corner.
+background-size: | 2 | 250*.4% Wide, 250*.4% Tall, Zero means keep the ratio with the other measure.   
 
 ### Container Spacing Format
 The vertical, horizontal and egg measurments must add up to 100%. The border is not part of this equation.The Egg is calculated automatically based on the size of the
