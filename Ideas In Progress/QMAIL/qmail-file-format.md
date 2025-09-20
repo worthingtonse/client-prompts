@@ -35,57 +35,29 @@ Code | Bytes | Name & Description | Required?
 1 | 1 | version / formatting type | 0=plain text, 1 = Formatted Qmail CBD file (0 for Phase I| Required 
 2 | varies | Plain Text Message. Only used if version = 0. The actuall text of the message UTF-8 | Required 
 3 | 1 | Template (4 bits) and Corner Modifier (4 bits). See graphics table. 
+4 | 1 | Container Formats
 100 | Varies but divisable by 4 | Panels ID, Panel Type, Panel Texture, Panel Color, Panel Corners, Boarder, Boarder Color, Padding, Margin, 4 bits (Sub Box Identifier 0-3), 
 100 | Main Panel Formatting | Max Rows, Max Columns, Number of Containers used, Header 100, 8, 8, 64 (8 bits, 3 bits, 3 bits, 6 bits) 22 bits for spaces. 
 101 | Header Panel Formatting
 102 | Left Aside Panel Formatting
 103 | Right Aside Panel Formatting
 104 | Footer Panel Formatting
-
-Panel IDs
-
-ID in Hex| Name
----|---
-Header, c    
-  Space 0001 Rows Occupied 0000 0000 Columns Occumpied 0000 0000 ( 6 bits, 8 bits, 8 bits) Format Type, Format
-Header, Sub Panel Layout 0000  Row 0000, Col 0000 
-
-Header, Sub Panel Layout 0001  Row 0000, Col 0000 
-Header, Sub Panel Layout 0001  Row 0001, Col 0000
-
-Header, Sub Panel Layout 0010  Row 0000, Col 0000 
-Header, Sub Panel Layout 0010  Row 0001, Col 0000 
-Header, Sub Panel Layout 0010  Row 0010, Col 0000 
-
-Header, Sub Panel Layout 0011  Row 0000, Col 0000 
-Header, Sub Panel Layout 0011  Row 0000, Col 0001 
-
-Header, Sub Panel Layout 0100  Row 0000, Col 0000 
-Header, Sub Panel Layout 0100  Row 0000, Col 0001 
-Header, Sub Panel Layout 0100  Row 0001, Col 0000 
-Header, Sub Panel Layout 0100  Row 0001, Col 0001 
-
-Header, Sub Panel Layout 0101  Row 0000, Col 0000 
-Header, Sub Panel Layout 0101  Row 0000, Col 0001 
-Header, Sub Panel Layout 0101  Row 0001, Col 0000 
-Header, Sub Panel Layout 0101  Row 0001, Col 0001 
-Header, Sub Panel Layout 0101  Row 0010, Col 0000 
-Header, Sub Panel Layout 0101  Row 0010, Col 0001 
-
-Header, Sub Panel Layout 0110  Row 0000, Col 0000 
-Header, Sub Panel Layout 0110  Row 0000, Col 0001 
-Header, Sub Panel Layout 0110  Row 0000, Col 0010
-
-Header, Sub Panel Layout 0111  Row 0000, Col 0000 
-Header, Sub Panel Layout 0111  Row 0000, Col 0001 
-Header, Sub Panel Layout 0111  Row 0000, Col 0010
-Header, Sub Panel Layout 0111  Row 0001, Col 0000 
-Header, Sub Panel Layout 0111  Row 0001, Col 0001 
-Header, Sub Panel Layout 0111  Row 0001, Col 0010
+110 | 5 | [Container Background Format](#container-background-format) | Format ID, BG-Color, Image, Opacity 
+111 | 6 | [Container Spacing Format](#container-spacing-format) | Format ID, Margin Top,Right,Bottom,Left,Padding Top,Right,Bottom,Left,egg
+112 | 8 | [Container Border Format](#container-border-format) | Format ID, Color, Thickness, Corner Rounding Size for TL, TR, BR, BL 
+113 | 5 | [Container Shadow Format](#container-shadow-format) | Format ID, Color, Diffusion, Corner Delta X, Delta Y
+114 |  | Reserved for Future Use | 
+115 | 2 | Event: On Hover Change Style | Event Code, Change to Command Code, Change to Format ID.  
+120 | 4 | Main Container Format | Container Background Format ID,  Container Spacing Format ID, Container Border Format ID, Container Shadow Format ID 
+121 | 4 | Header Container Format | Container Background Format ID,  Container Spacing Format ID, Container Border Format ID, Container Shadow Format ID 
+122 | 4 | Footer Container Format | Container Background Format ID,  Container Spacing Format ID, Container Border Format ID, Container Shadow Format ID 
+123 | 4 | Left Aside Container Format | Container Background Format ID,  Container Spacing Format ID, Container Border Format ID, Container Shadow Format ID 
+124 | 4 | Right Aside Container Format | Container Background Format ID,  Container Spacing Format ID, Container Border Format ID, Container Shadow Format ID 
 
 
 Panel Types: 
 Code | Type
+---|---
 0 | Plain
 1 | Tabs
 2 | Accordian
@@ -100,28 +72,48 @@ Code | Name | Bits | Notes
 
 
 
-Sub-Container Formatting
-Group | Name | Bytes | Notes
----|---|---|---
-fixed | Groups Included | 1 | 16 types
-0 | BG-Color |  2 | R5B5G5 (Default 1 white) Zero is translusent.
-0 | Image-byte | 1 | Used to chose one of the 255 built-in background images unless overwrite is specified.(Default 0 translucent) 
-0 | Background Color Opacness | 1 | 0-100%. This goes over the Image. If 100% then the imgae will not show. (Default 100%. Covers all)
-1 | Margin Top,Right,Bottom,Left | 2 | In percentages 0 to 16%. Margin,Border,Padding, Egg must all add up to 100%. (default 5%)
-1 | Padding Top,Right,Bottom,Left | 2 | In percentages 0 to 16%. Hese four must all add up to 100% (Margin + Border + Padding + Egg = 100%) (default 5%)
-1 | Egg | 1 | In percentages 1 to 100 (default 89%)
-2 | Border Color | 2 | R5B5G5 (default middle gray #808080) 
-2 | Border Thickness, Top,Right,Bottom,Left | 2 | In .5 % 0 to 8% (reduces the padding and margin by half the percentage. ( default 0% )
-2 | Corner roundness, UL,UR,LL,LR | 3 (6 bits each | 0% to 50%. 50% is a circle. (Default 0%)
-3 | Shaddow color | 2 | R5B5G5 (Default #808080)
-3 | Shaddow X, Y, Diffusion | 2 | 6 + 6 + 4 bits. -32*.5% to +32*.5%, -32*.5% to +32*.5%, 0-15% 
+## Sub-Container Formatting
+### Container Background Format
+There are 255 predefined images but there could be as many as 65K. Image 0 is no image. The image is the furthest back. 
+On top of the image is the background color. This color has an opacity that will tint the background image. If the opacity is set to 100%,
+the image will not be shown but just the solid color. If the opacity is set to zero, then the opacity is transparent. If the imaage and opacity is 
+are both set to zero, the background will be transparent. 
+Name | Bytes | Notes
+---|---|---
+BG-Color |  2 | R5B5G5 (Default 1 white) Zero is translusent.
+Image-byte | 1 | Used to chose one of the 255 built-in background images unless overwrite is specified.(Default 0 translucent) 
+Background Color Opacness | 1 | 0-100%. This goes over the Image. If 100% then the imgae will not show. (Default 100%. Covers all)
 
+### Container Spacing Format
+The vertical, horizontal and egg measurments must add up to 100%. The border is not part of this equation.The Egg is calculated automatically based on the size of the
+padding and margin added together times two. 
+If the Top Margin is equal to zero, the Top Margin's pixel length will be the same as the Left Margin's pixel length and the percentage will be ignored. 
+If the Bottom Margin is equal to zero, the Bottom Margin's pixels lengthwill be the same as the Left Margin pixel length and the percentage will be ignored. 
+Name | Bytes | Notes
+---|---|---
+Margin Top, Right, Bottom & Left | 2 | In percentages 1 to 15% for each. Margin, Border, Padding & Egg must all add up to 100%. The Egg size is calculated automatically based on percentages of the outer margins. (default= 0,5,0,5)
+Padding Top, Right, Bottom & Left | 2 | In percentages 1 to 15% for each. Margin, Border, Padding & Egg must all add up to 100%. The Egg's height is calculated automatically based on size of the outer margins. 
 
-Egg 7
-type 4
-shad x 6
-Shad y 6
-Shad dff 4
+### Container Border Format
+The border is drawn last after all the other formats over the margin and padding except for shadows. Half of the border will be over the margin and half the boarder will be over the padding. If there is no Margin, the border will be over the padding. If there is no padding, the border will be the inside of the margin on the margin. If neither the margin or the padding are used, the border will be drawn over the outside of the egg.  
+
+Rounded corners are written the very last over the square boarders. To calculate the raidus of the corner, measure the total height of the square border (from the middle of the border) and multiply it by the percentage provided. Then multiply that height by the percentage the user specifies. Then find the center by measuring from the middle of the top border down and from the middle of the side border and that will find the center of the circle. Then create an ark. Make everthing outside of the middle the "Outside of Border Color". 
+
+Then draw the border at the thickness specified. Half of the boarder will go on the padding side and half on the margin side. If the thickness of the boarder is 1, then there will be 1 pixel on the padding and one on the margin. If the thickens of the border is 16, then there will be sixteen pixels on the margin and 16 on the padding. 
+Name | Bytes | Notes
+---|---|---
+Border Color | 2 | R5B5G5 (default middle gray #808080) 
+Outside of Border Color | 2 | R5B5G5 
+Border Thickness, Top,Right,Bottom,Left | 2 | 1 to 16 pixels times 2. 
+Corner roundness, UL,UR,LL,LR | 3 (6 bits each | 0% to 50%. 50% is a circle. (Default 0%)
+
+### Container Shadow Format
+Then draw the border at the thickness specified. Half of the boarder will go on the padding side and half on the margin side. If the thickness of the boarder is 1, then there will be 1 pixel on the padding and one on the margin. If the thickens of the border is 16, then there will be sixteen pixels on the margin and 16 on the padding. 
+Name | Bytes | Notes
+---|---|---
+Shadow color | 2 | R5B5G5 (Default #808080)
+Shadow X, Y, Diffusion | 2 | 6 + 6 + 4 bits. -32 to +32 pixels, -32 to +32 pixels, 0-15% 
+
 
 Formatting Groups Included
 Groups Included Code | 3 (4 Bytes) | 2(7 Bytes) | 1 (5 Bytes) | 0 (4 Bytes)
