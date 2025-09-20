@@ -33,27 +33,37 @@ Code | Bytes | Name & Description | Required?
 ---|---|---|---
 0 | 1 | Number of Key Pairs | Required 
 1 | 1 | version / formatting type | 0=plain text, 1 = Formatted Qmail CBD file (0 for Phase I| Required 
-2 | varies | Plain Text Message. Only used if version = 0. The actuall text of the message UTF-8 | Required 
+2 | 1 | Start of Text
 3 | 1 | Template (4 bits) and Corner Modifier (4 bits). See graphics table. 
-4 | 1 | Container Formats
-100 | Varies but divisable by 4 | Panels ID, Panel Type, Panel Texture, Panel Color, Panel Corners, Boarder, Boarder Color, Padding, Margin, 4 bits (Sub Box Identifier 0-3), 
-100 | Main Panel Formatting | Max Rows, Max Columns, Number of Containers used, Header 100, 8, 8, 64 (8 bits, 3 bits, 3 bits, 6 bits) 22 bits for spaces. 
-101 | Header Panel Formatting
-102 | Left Aside Panel Formatting
-103 | Right Aside Panel Formatting
-104 | Footer Panel Formatting
-110 | 5 | [Container Background Format](#container-background-format) | Format ID, BG-Color, Image, Opacity 
-111 | 6 | [Container Spacing Format](#container-spacing-format) | Format ID, Margin Top,Right,Bottom,Left,Padding Top,Right,Bottom,Left,egg
-112 | 8 | [Container Border Format](#container-border-format) | Format ID, Color, Thickness, Corner Rounding Size for TL, TR, BR, BL 
-113 | 5 | [Container Shadow Format](#container-shadow-format) | Format ID, Color, Diffusion, Corner Delta X, Delta Y
-114 |  | Reserved for Future Use | 
-115 | 2 | Event: On Hover Change Style | Event Code, Change to Command Code, Change to Format ID.  
-120 | 4 | Main Container Format | Container Background Format ID,  Container Spacing Format ID, Container Border Format ID, Container Shadow Format ID 
-121 | 4 | Header Container Format | Container Background Format ID,  Container Spacing Format ID, Container Border Format ID, Container Shadow Format ID 
-122 | 4 | Footer Container Format | Container Background Format ID,  Container Spacing Format ID, Container Border Format ID, Container Shadow Format ID 
-123 | 4 | Left Aside Container Format | Container Background Format ID,  Container Spacing Format ID, Container Border Format ID, Container Shadow Format ID 
-124 | 4 | Right Aside Container Format | Container Background Format ID,  Container Spacing Format ID, Container Border Format ID, Container Shadow Format ID 
-
+4 | 1 | 
+5 | 1 | Bold
+6 | 1 | Italic
+7 | 1 | Underline
+8 | 1 | Strike-Though
+9 | 1 | Tab
+10 | 1 | Highlighted
+11 | 1 | Sub
+12 | 1 | Super
+13 | 1 | Carriage Return
+14 | 11 | [Text Format](#text-format) | Format ID, Color, Diffusion, Corner Delta X, Delta Y
+15 | 5 | [Container Background Format](#container-background-format) | Format ID, BG-Color, Image, Opacity 
+16 | 6 | [Container Spacing Format](#container-spacing-format) | Format ID, Margin Top,Right,Bottom,Left,Padding Top,Right,Bottom,Left,egg
+17 | 8 | [Container Border Format](#container-border-format) | Format ID, Color, Thickness, Corner Rounding Size for TL, TR, BR, BL  
+18 | 5 | [Container Shadow Format](#container-shadow-format) | Format ID, Color, Diffusion, Corner Delta X, Delta Y 
+19 | 2 | Event: On Hover Change Style | Event Code, Change to Command Code, Change to Format ID.   
+20 | 11 | Background Containter Format
+21 | 4 | Main Container Format | Container Background Format ID,  Container Spacing Format ID, Container Border Format ID, Container Shadow Format ID 
+22 | 4 | Header Container Format | Container Background Format ID,  Container Spacing Format ID, Container Border Format ID, Container Shadow Format ID 
+23 | 4 | Footer Container Format | Container Background Format ID,  Container Spacing Format ID, Container Border Format ID, Container Shadow Format ID 
+24 | 4 | Left Aside Container Format | Container Background Format ID,  Container Spacing Format ID, Container Border Format ID, Container Shadow Format ID 
+25 | 4 | Right Aside Container Format | Container Background Format ID,  Container Spacing Format ID, Container Border Format ID, Container Shadow Format ID 
+26 | 2 | Event: On Hover Change Style | Event Code, Change to Command Code, Change to Format ID.  
+27 | 1 | Links
+28 | 1 | File Seperator (Between Meta Data and Format)
+29 | 1 | Group Seperator 
+30 | 1 | Record Seperator
+31 | 1 | Unit Seperator
+127 | 1 | Images
 
 Panel Types: 
 Code | Type
@@ -113,6 +123,25 @@ Name | Bytes | Notes
 ---|---|---
 Shadow color | 2 | R5B5G5 (Default #808080)
 Shadow X, Y, Diffusion | 2 | 6 + 6 + 4 bits. -32 to +32 pixels, -32 to +32 pixels, 0-15% 
+
+
+
+
+### Text Format
+There needs to be a list of fonts. 
+Name | Bytes | Notes
+---|---|---
+Font | 2 | 65K built in fonts
+Size | 1 | Size in points (1-256pt).
+flags | 1 | Bitmask for Bold, Italic, Underline, Strike-though, Inline, Highlighted,Sub, Super,Top-to-Bottom.
+flags 2 | 1 | Bitmask for Align Right, Align Center, Justified, Align middle, Align top, Align bottom, 
+Color | 2 | 16-bit "HighColor" (R5G6B5).
+Size | 1 | Size in points (1-256pt).
+Shadow X, Y, Diffusion | 2 | 6 + 6 + 4 bits. -32 to +32 pixels, -32 to +32 pixels, 0-15% 
+
+### Text Rules
+Unlike HTML, white spaces are included. Spaces, Tabs, carriage returns, 
+
 
 
 Formatting Groups Included
