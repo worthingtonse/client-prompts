@@ -28,6 +28,51 @@ Key | Length of Value | Value
 
 
 # Fixed part of file (Phase II)
+The Phase II version of the file includes formatting options. This is achieved by adding lookup tables and then a marked up text file. 
+
+To mark up the the text and create the lookup tables, the first 32 ASCII characters (Control Characters) are used. Here are these characters:
+
+# First 32 ASCII Characters (Control Characters)
+
+| Index | Hex | Symbol | Description |
+|-------|-----|---------|-------------|
+| 0 | 00 | NUL | *Null character |
+| 1 | 01 | SOH | Start of Heading |
+| 2 | 02 | STX | Start of Text |
+| 3 | 03 | ETX | End of Text |
+| 4 | 04 | EOT | End of Transmission |
+| 5 | 05 | ENQ | Enquiry |
+| 6 | 06 | ACK | Acknowledgment |
+| 7 | 07 | BEL | Bell (Alert) |
+| 8 | 08 | BS | Backspace |
+| 9 | 09 | HT | *Horizontal Tab |
+| 10 | 0A | LF | *Line Feed |
+| 11 | 0B | VT | Vertical Tab |
+| 12 | 0C | FF | Form Feed |
+| 13 | 0D | CR | *Carriage Return |
+| 14 | 0E | SO | Shift Out |
+| 15 | 0F | SI | Shift In |
+| 16 | 10 | DLE | Data Link Escape |
+| 17 | 11 | DC1 | Device Control 1 (XON) |
+| 18 | 12 | DC2 | Device Control 2 |
+| 19 | 13 | DC3 | Device Control 3 (XOFF) |
+| 20 | 14 | DC4 | Device Control 4 |
+| 21 | 15 | NAK | Negative Acknowledgment |
+| 22 | 16 | SYN | Synchronous Idle |
+| 23 | 17 | ETB | End of Transmission Block |
+| 24 | 18 | CAN | Cancel |
+| 25 | 19 | EM | End of Medium |
+| 26 | 1A | SUB | Substitute |
+| 27 | 1B | ESC | *Escape |
+| 28 | 1C | FS | File Separator |
+| 29 | 1D | GS | Group Separator |
+| 30 | 1E | RS | Record Separator |
+| 31 | 1F | US | Unit Separator |
+
+
+
+
+
 
 Code | Bytes | Name & Description | Required?
 ---|---|---|---
@@ -124,20 +169,15 @@ Name | Bytes | Notes
 Shadow color | 2 | R5B5G5 (Default #808080)
 Shadow X, Y, Diffusion | 2 | 6 + 6 + 4 bits. -32 to +32 pixels, -32 to +32 pixels, 0-15% 
 
-
-
-
 ### Text Format
 There needs to be a list of fonts. 
 Name | Bytes | Notes
 ---|---|---
-Font | 2 | 65K built in fonts
-Size | 1 | Size in points (1-256pt).
-flags | 1 | Bitmask for Bold, Italic, Underline, Strike-though, Inline, Highlighted,Sub, Super,Top-to-Bottom.
-flags 2 | 1 | Bitmask for Align Right, Align Center, Justified, Align middle, Align top, Align bottom, 
-Color | 2 | 16-bit "HighColor" (R5G6B5).
-Size | 1 | Size in points (1-256pt).
-Shadow X, Y, Diffusion | 2 | 6 + 6 + 4 bits. -32 to +32 pixels, -32 to +32 pixels, 0-15% 
+Font   | 2 | 65K built in fonts. First 2000 from [CoolText.com](https://cooltext.com/Fonts)
+Size   | 1 | Size in points (1-256pt).
+flags  | 1 | Bitmask for Align Right, Align Center, Justified, Align middle, Align top, Align bottom, Text Direction, Unused
+Color  | 2 | 16-bit "HighColor" (R5G6B5).
+Shadow | 2 | X, Y, Diffusion. 6 + 6 + 4 bits. -32 to +32 pixels, -32 to +32 pixels, 0-15% 
 
 ### Text Rules
 Unlike HTML, white spaces are included. Spaces, Tabs, carriage returns, 
