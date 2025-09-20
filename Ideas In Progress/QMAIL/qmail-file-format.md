@@ -101,22 +101,26 @@ Code | Name | Bits | Notes
 
 
 Sub-Container Formatting
-Type Included | Name | Bits | Notes
+Type Included | Name | Bytes | Notes
 ---|---|---|---
-0 | Format Type | 4 | 16 types
-1 | BG-Color | 16 bits | R5B5G5 (Default 1 white) Zero is translusent.
-1 | Margin | 5 bits | In percentages 0 to 31 (31 means center text) THese four must all add up to 100% (Margin + Border + Padding + Egg = 100%) (default 5%)
-1 | Border Thickness | 3 bits | In percentages 0 to 8 (reduces the padding and margin by half the percentage. ( default 1% )
-1 | Padding | 5 bits| In percentages 0 to 31 (31 means center text) (default 5%)
-1 | Border Color | 16 bits | R5B5G5 (default middle gray #808080) 
-1 | Egg | 7 bits| In percentages 1 to 100 (31 means center text) (default 89%)
-2 | Corner roundness | 6 | 0 to 100. 100 is a circle. The corner is 10% the width of the unit (Default 10%)
-3 | Shadow difusion | 3 bits| In percentages 0-8 (Default 10%)
-3 | Shaddow color | 16 bits | R5B5G5 (Default #808080)
-3 | Shaddow X adjust | 5 bits | -16 to +16 In percentages (Default 2)
-3 | Shaddow Y adjust | 5 bits | 0 to 8 In percentages (Default 2)
-4 | Image-byte | 8 bit | uses the built in background images unless overwrite is specified.(default 0 translusent) 
-4 | Background Color Opacness | 8 bits | 0-100%. This goes over the Image. If 100% then the imgae will not show.
+0 | Format Type | 1 | 16 types
+1 | BG-Color |  2 | R5B5G5 (Default 1 white) Zero is translusent.
+2 | Margin Top,Right,Bottom,Left | 2 | In percentages 0 to 16%. Margin,Border,Padding, Egg must all add up to 100%. (default 5%)
+3 | Padding Top,Right,Bottom,Left | 2 | In percentages 0 to 16%. Hese four must all add up to 100% (Margin + Border + Padding + Egg = 100%) (default 5%)
+4 | Egg | 1 | In percentages 1 to 100 (default 89%)
+5 | Border Color | 2 | R5B5G5 (default middle gray #808080) 
+6 | Border Thickness, Top,Right,Bottom,Left | 2 | In .5 % 0 to 8% (reduces the padding and margin by half the percentage. ( default 0% )
+7 | Corner roundness, UL,UR,LL,LR | 3 (6 bits each | 0% to 50%. 50% is a circle. (Default 0%)
+9 | Shaddow color | 2 | R5B5G5 (Default #808080)
+10 | Shaddow X, Y, Diffusion | 2 | 6 + 6 + 4 bits. -32*.5% to +32*.5%, -32*.5% to +32*.5%, 0-15% 
+12 | Image-byte | 1 | Used to chose one of the 255 built-in background images unless overwrite is specified.(Default 0 translucent) 
+13 | Background Color Opacness | 1 | 0-100%. This goes over the Image. If 100% then the imgae will not show. (Default 100%. Covers all)
+
+Egg 7
+type 4
+shad x 6
+Shad y 6
+Shad dff 4
 
 Panel Format Types
 
