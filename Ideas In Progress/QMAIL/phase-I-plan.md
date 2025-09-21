@@ -4,10 +4,13 @@
 In this initial phase, the core messaging functionality is established with a simple DRD (Distributed Resource Directory).
 
 Goal of this Phase: 
-1. Implement a Simple DRD Server/service
-2. Implement a QMail Server
-3. Integrate with the existing QKey, DKE, RKE (Code written by Mohsin and implemented in his RAIDAX repo on GitLab 
-4. Create some services on the client to test the functionality of QMail.
+1. Install Distributed Key Exchange RAIDA Server and Content Server on all RAIDA.
+2. Build the Phase I Distributed Resource Directory Services (start session, Update DRD and Search DRD)
+3. Install Distributed Resource Directory on all RAIDA.
+4. Build the Phase I QMail services (Send, PING, PEEK, Download Meta, Download File), 
+5. Get servers that are out the up and running again,
+6. Implement a QMail Server on these servers.
+8. Get it working on the Client and test everything.
 
 ## Server Discovery: 
   1. DRD Documentation: Ideas In [Phase I DRD Documentation](https://github.com/worthingtonse/client-prompts/blob/main/Ideas%20In%20Progress/QMAIL/phase-I-drd.md)
