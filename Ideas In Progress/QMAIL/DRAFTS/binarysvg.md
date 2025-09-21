@@ -7,7 +7,7 @@ Replaces all control characters with 6 bit characters and all number values to 1
 Note that the quality of the images is identical. 
 ## The original image required 16,618 bytes. 
 100% of the original size
-![before](text.png "Text")
+![before](text2.png "Text")
 
 ## The binary version required 1,468 byte and just around 720 after ZIP
 96% compression rate.
