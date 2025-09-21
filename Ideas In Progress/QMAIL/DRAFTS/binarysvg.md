@@ -16,8 +16,13 @@ Note that the quality of the images is identical.
 ## **Key Changes for 12-bit Encoding:**
 
 ✅ **Precision**: 0.2 instead of 0.1 (values like 1.6, 1.8, 2.0, 2.2, etc.)  
+
 ✅ **Range**: Covers 0 to 819.2 possible values. Only one digit of precision
+
+✅ **Precision Adjustments**: Range can be 1638.4 with 0.4 or 16384.0 if fraction removed
+
 ✅ **Bits needed**: Exactly 12 bits (2¹² = 4,096 values)  
+
 ✅ **Quality**: Minimal impact - maximum error is only ±0.1 from original
 
 ## **Conversion Examples:**
