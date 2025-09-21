@@ -4,12 +4,13 @@ For example, a file that requires 16,686 bytes with the standard SVG would only 
 
 Replaces all control characters with 6 bit characters and all number values to 12 bits.  
 
+Note that the quality of the images is identical. 
 ## The original image required 16,618 bytes. 
 100% of the original size
 ![before](text.png "Text")
 
-## The binary version required 1,863 bytes.
-11% of the original size
+## The binary version required 1,468 byte and just around 720 after ZIP
+96% compression rate.
 ![after](binary.png "Binary")
 
 ## **Key Changes for 12-bit Encoding:**
