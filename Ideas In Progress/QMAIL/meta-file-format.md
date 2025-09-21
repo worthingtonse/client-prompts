@@ -48,6 +48,8 @@ Number of Key Pairs | 1 | Phase I will have just a few. Some are mandatory
 | 14| "CC Array" | 7xN | An array of CC addresses | Δ| 1 |
 | 15| "Sender's Avatar" | 16 | Description to come | Δ | 1 |
 | 16| "Senders signature" | 16 | Description to come | | 2 |
+| 17| "Senders signature WebP" | 700+ | [Binary SVG Format](binary-svg.md) | | 2 |
+| 17| "Senders Avatar Prompt" | 4K| [Avatar Prompt](#avatar-prompt) | | 2 |
 | 24 | "Sub-subject" | Varies| The subject line that may include formatting | | 2 |
 | 25 | "Sub-subject Formatting" | 16 | Description to come | | 2|
 | 26 | "grouped" | 16 | Description to come | | 2 |
