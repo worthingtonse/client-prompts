@@ -256,7 +256,7 @@ A simple document saying "**Hello** World" with "World" as a link might look lik
    * \[ApplyStyle: 0x01\] Hello \[ApplyStyle: 0x02\] \[StartLink: 0x01\]World\[EndLink\]
 
 This structure is highly efficient, defining resources once and using single-byte commands to apply them, resulting in a minimal file size.
-<!--
+
 # ASCII Character Frequency Analysis (With Realistic Capitalization)
 
 **Dataset:** Email corpus with 2,893 messages  
@@ -828,4 +828,4 @@ ASCII-code frequency table
 | 82   | $ | 36  | 0.01  | |
 | 83   | ` | 96  | 0.01  | |
 | 84   | _ | 95  | 0.01  | |
--->
+
