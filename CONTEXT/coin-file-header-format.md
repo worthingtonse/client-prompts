@@ -20,7 +20,7 @@ Byte Position | Field Name | Size | Description | Values
 5            | Encryption Type | 1  | Encryption method used | 0, 1, 4
 6-7          | Token Count | 2      | Number of coins in file | 0-65535
 8-14         | Password Hash | 7    | First 7 bytes of SHA-256 hash | Any
-15           | State Flag | 1       | Coin state tracking | 0, 1, 2
+15           | State Flag | 1       | Coin state tracking | 0, 1, 2 1=Has PANs
 16-31        | POWN/Task Data | 16  | Variable based on coin count | Various
 
 
