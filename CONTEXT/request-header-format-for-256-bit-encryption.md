@@ -1,5 +1,5 @@
 # Header Requests 256 bit
-When the client makes requests using 256 bit encryption, the total request header size goes from 32 to 48 bytes. The first 16 bytes are the exact same as all other headers.
+When the client makes requests using 256 bit encryption, the total request header size goes from 32 to 48 bytes. The first 16 bytes are the exact same as all other headers except for Encryption Type 6 which does not have 16 bytes infront of it.
 
 You can see the first 16 bytes used for all headers here: https://github.com/worthingtonse/client-prompts/blob/main/CONTEXT/request-header-format.md
 Encryption Types 4 and 5 us 256 bit AES CTR encryption.
