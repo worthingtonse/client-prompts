@@ -197,7 +197,7 @@ Encryption Type 6 uses a streamlined 32-byte header format
 
 - **Version/Encryption Type (Byte 0)**: Combined field set to `0x06`, identifying both the protocol version and encryption type
 - **Body Length (Bytes 1-2)**: 16-bit unsigned integer indicating the length of the encrypted payload following the header
-- **Key ID (Bytes 3-7)**: 5-byte unique identifier for the session key
+- **Key ID (Bytes 3-7)**: 5-byte unique identifier for the encryption key
 - **Nonce Field (Bytes 8-31)**: 24-byte field used for encryption and uniqueness, with structure depending on packet type
 
 ## 3.0 The Nonce Field Explained
@@ -208,11 +208,14 @@ The 24-byte Nonce field has a dual purpose, critical for establishing the sessio
 
 For the very first packet sent with a new Key ID, the nonce is structured to carry the key derivation information.
 
-| Byte Range | Field Name     | Size     | Description |
-|------------|----------------|----------|-------------|
-| 8–11       | RAIDA Bitmap   | 4 bytes  | 32-bit bitmap indicating which RAIDA servers responded successfully |
-| 12–19      | Timestamp      | 8 bytes  | 64-bit timestamp from the key derivation process |
-| 20–31      | Random Padding | 12 bytes | Random bytes to ensure the full nonce is unique and unpredictable |
+| Byte Range | Field Name        | Size    | Description                                                             |
+|------------|-------------------|---------|-------------------------------------------------------------------------|
+| 8–11       | RAIDA Bitmap      | 4 bytes | **32-bit bitmap** indicating which RAIDA servers responded successfully |
+| 12–19      | Timestamp         | 8 bytes | **64-bit timestamp** from the key derivation process                    |
+| 20–24      | Client_SN         | 5 bytes | **5-byte client identifier** that uniquely identifies the client        |
+| 25         | Key_ID            | 1 byte  | **1-byte key set identifier** for the key exchange process              |
+| 26–31      | CS_ID (Truncated) | 6 bytes | **First 6 bytes of CS_ID**, used to identify the content server         |
+
 
 ### 3.2 Subsequent Packet Nonce (Data Transfer)
 
