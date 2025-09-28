@@ -25,7 +25,7 @@ CloudCoin Pro uses multiple files to track and manage data locations within the 
 - **Explanation Note**: Starts with a # sign. Says that the first line is the default
 - **Header row**: Must contain column names as specified above
 - **Path column**: First column must be the absolute file system path
-- **Type column**: Optional, for future use
+- **Type column**: Ether local, removable or remote. (for future use)
 - **Order matters**: First location in file is the default/primary location
 
 #### Sample locations.csv file
