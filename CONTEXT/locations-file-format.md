@@ -6,18 +6,6 @@ This document defines the format and structure of location configuration files u
 
 CloudCoin Pro uses multiple files to track and manage data locations within the installation directory:
 
-```python
-D:/CloudCoin/Pro/
-├── locations.csv               # Primary location configuration
-├── last-export-folder-locations-dropdown.txt  # Recent export folders
-├── Wallets/                    # Wallet storage locations
-├── program-config.txt          # Main program configuration
-├── guardians.csv               # Guardian server list
-├── root-hints.csv              # DNS root hint servers
-├── raidas-ips.csv              # RAIDA server IP configuration
-└── [other configuration files...]
-```
-
 ## Primary Location File
 
 ### locations.csv (Simplified Format)
@@ -26,49 +14,29 @@ D:/CloudCoin/Pro/
 **Encoding**: UTF-8  
 **Purpose**: Simple location configuration with only essential, non-calculated data
 
-```python
-path,type
-D:\CloudCoin\Pro\Wallets,local
-C:\Users\User\Documents\CloudCoin\Backup,local
-E:\USB_Backup\CloudCoin\Data,usb
-\\NetworkDrive\CloudCoin\Shared,network
-```
-
 #### CSV Column Definitions
 
 | Column | Type | Required | Description |
 |--------|------|----------|-------------|
 | path | string | Yes | Absolute file system path |
-| type | enum | No | Location type for future use (optional) |
+| type | enum | No | Location type for future use |
 
 #### Required CSV Structure
+- **Explanation Note**: Starts with a # sign. Says that the first line is the default
 - **Header row**: Must contain column names as specified above
 - **Path column**: First column must be the absolute file system path
 - **Type column**: Optional, for future use
 - **Order matters**: First location in file is the default/primary location
 
-#### Cross-Platform Path Examples
-```python
+#### Sample locations.csv file
+```csv
+# The first path is the default location
 path,type
-# Windows paths
 D:\CloudCoin\Pro\Wallets,local
-C:\Users\%USERNAME%\Documents\CloudCoin\Backup,local
-\\server\share\CloudCoin\Data,network
+E:\CloudCoin\Pro\Wallets,remote
 
-# Linux paths  
-/home/$USER/cloudcoin/wallets,local
-/mnt/usb/cloudcoin/backup,usb
-/media/external/cloudcoin,usb
-
-# Mac paths
-/Users/$USER/CloudCoin/Wallets,local
-/Volumes/USB/CloudCoin/Data,usb
-/Volumes/NetworkDrive/CloudCoin,network
-
-# Universal paths (using environment variables)
-%USERPROFILE%\Documents\CloudCoin\Wallets,local
-$HOME/cloudcoin/wallets,local
 ```
+
 
 ### last-export-folder-locations-dropdown.txt
 
