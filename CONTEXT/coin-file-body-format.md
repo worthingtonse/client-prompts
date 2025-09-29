@@ -7,7 +7,7 @@ Index | Name | Allowable Values | Description
 ---|---|---|---
 0 | Split | 0 | For future use if splits are implemented
 1 |Shard | 0 | For future use if shards are implemented
-2 | Denomination | -8 to +11 inclusive | The binary version of the denominations. See [Denominations](denominations.md)
+2 | Denomination | -7 to +11 inclusive | The binary version of the denominations. See [Denominations](denominations.md)
 3-6 | Serial Number | Any four bytes | Used together with the denomination to identify the coin. 
 
 ## Coin Body
