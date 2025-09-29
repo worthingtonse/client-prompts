@@ -97,10 +97,11 @@ Group ID | Group Name | Command Code (Decimal) | Command | Description
 18 | DRD | 180 | Create, Update and Delete Directory User Listing
 18 | DRD | 181 | Search Directory
 18 | DRD | 182 | List User's Mail Servers
-18 | DRD | 182 | Read User's Avatar
-18 | DRD | 183 | Create, Update and Delete Directory QMail server Listing
-18 | DRD | 184 | Create, Update and Delete Directory RAIDA server Listing
-18 | DRD | 185 | Create, Update and Delete Directory DLD server Listing
+18 | DRD | 183 | Read User's Avatar
+18 | DRD | 184 | Create, Update and Delete Directory QMail server Listing
+18 | DRD | 185 | Create, Update and Delete Directory RAIDA server Listing
+18 | DRD | 186 | Create, Update and Delete Directory DLD server Listing
+18 | DRD | 187 | Create, Update and Delete Directory DKE server Listing
 
 
 
