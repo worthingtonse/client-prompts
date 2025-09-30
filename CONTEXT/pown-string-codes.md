@@ -19,11 +19,12 @@ If a coin file only has one coin in it, it is probably because the coin file is 
 
 Character Code | Hex Code | Name | Meaning 
 ---|---|---|---
-u |0x0 | Untried   | The raida failed to return an echo request so the client did not send that raida a pown request.
+u |0x0 | Untried/Unknown   | The raida failed to return an echo request so the client did not send that raida a pown request.
 p | 0xA | Pass/Authentic | The raida responded that the coin was authentic. 
 b | 0xB | Broke Encryption Key | The raida could not decrypt the request because the encryption key was not authentic.  
 n | 0xC | No Reply/Clock Timeout | The raida did not respond in the expected timeframe. This is usally caused by lost packets while using the UPD protocol.
-e | 0xE | Error |The raida responded with an error. Could be an issue with the RAIDA software. 
+d | 0xD | Dropped |There was a network error that had nothing to do with the RAIDA
+e | 0xE | Error |The raida responded with an error or the RAIDA refused the connection showing that the raida was there. 
 f | 0xF | Failed/Counterfiet |The raida responded that the coin was counterfeit. 
 
 
