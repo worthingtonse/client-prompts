@@ -160,7 +160,7 @@ So Coin Files have two parts, the File Header and the coin array. Each coin in t
 
 Coin files have a naming convention that makes it easier for software to use them.
 
-## File Header For All Tokens (16 Bytes Fixed)
+## File Header For All Tokens (32 Bytes Fixed)
 
 The coin file header is exactly 32 bytes and contains metadata about the entire file:
 
