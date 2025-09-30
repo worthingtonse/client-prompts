@@ -167,14 +167,14 @@ The coin file header is exactly 32 bytes and contains metadata about the entire 
 
 Byte Position | Field Name | Byte Size | Description | Values
 -------------|------------|------|-------------|--------
-0            | File Version | 1    | Coin file format version | 9 (current)
-1            | Cloud ID | 1        | Cloud identification | 1 (default)
-2-3          | Coin ID | 2         | Coin type identifier | 0-255
+0            | File Format ID | 1    | The format of the coin file | Format ID 9 is this one
+1            | Reserved | 1        | For future use | 1 is the default. Can be ignored
+2-3          | Coin ID | 2         | There can be lots of coins besides CloudCoin | CloudCoin is 0x0006 Others should be rejected. 
 4            | Experimental | 1     | Reserved for app use | Any
 5            | Encryption Type | 1  | File Encryption method | 0,1 or 4
 6-7          | Token Count | 2      | Number of coins in file | 0-65535
 8-14         | Password Hash | 7    | First 7 bytes of SHA-256 hash | Any
-15           | State Flag | 1       | Coin state tracking | b00000000 = No Pans, b00000001 = Has an extra 400 bytes of PANs
+15           | Bit Field | 1       | Only first bit is used | b00000000 = No PANs, b00000001 = Has an extra 400 bytes of PANs
 16-31        | POWN/Task Data | 16  | Variable based on coin count | Various
 
 
@@ -186,11 +186,12 @@ Byte Position | Field Name | Byte Size | Description | Values
 | 01 | CL | 1 | Cloud ID | 1 | If creating a new standalone cloud, choose an unused number |
 | 02,03 | ID | 2 | Coin ID | 0-255 | This is if there are more than one coin on your cloud. Useful for NFTs, Stable Tokens, etc. |
 | 04 | SP | 1 | Experimental | Any | App programmer can use this as they like |
-| 05 | EN | 1 | Encryption Type | 0, 1, 4 | The type of encryption to be used (See Encryption Types table) |
+| 05 | EN | 1 | Encryption Type | 0, 1, 4 | Shows how the array of coins in the file are encrypted. (See Encryption Types table) |
 | 06,07 | CC | 2 | Token Count | 0-65535 | How many notes are in the file. Not the total value but total count |
-| 08-14 | HS | 7 | Password Hash | Any | First 7 bytes of the encryption key's SHA-256 Hash |
-| 15 | FL | 1 | State Flag | 0, 1, 2 | Optional: Used as a way to track state if needed. See table below for meanings |
+| 08-14 | HS | 7 | Password Hash | Any |  First 7 bytes of the encryption key's SHA-256 Hash. This allows us to know if the user entered the wrong password to decrypt the coin array |
+| 15 | FL | 1 | Bit Field | 0, 1 | Used to know if there are PANs in the coins.  |
 
+<!--
 ## State Table (Optional and for internal use)
 
 | Value Dec | State | Value Binary | Description |
@@ -208,7 +209,7 @@ wallet-name/
 └── Pending/ (This is a copy of the coin with just the proposed authenticity numbers) 
     └── coinname.bin
 ```
-
+-->
 ## Last 16 bytes of the header if the Coin File has many coins in it
 
 | Index | Code | Bytes | Name | Possible Values | Description |
