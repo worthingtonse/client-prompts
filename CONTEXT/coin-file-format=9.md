@@ -167,29 +167,15 @@ The coin file header is exactly 32 bytes and contains metadata about the entire 
 
 Byte Position | Field Name | Byte Size | Description | Values
 -------------|------------|------|-------------|--------
-0            | File Format ID | 1    | The format of the coin file | Format ID 9 is this one
+0            | File Format | 1    | The format of the coin file | Format ID 9 (We are only using one file format now)
 1            | Reserved | 1        | For future use | 1 is the default. Can be ignored
 2-3          | Coin ID | 2         | There can be lots of coins besides CloudCoin | CloudCoin is 0x0006 Others should be rejected. 
 4            | Experimental | 1     | Reserved for app use | Any
 5            | Encryption Type | 1  | File Encryption method | 0,1 or 4
 6-7          | Token Count | 2      | Number of coins in file | 0-65535
-8-14         | Password Hash | 7    | First 7 bytes of SHA-256 hash | Any
-15           | Bit Field | 1       | Only first bit is used | b00000000 = No PANs, b00000001 = Has an extra 400 bytes of PANs
-16-31        | POWN/Task Data | 16  | Variable based on coin count | Various
-
-
-## File Header Byte Explanation
-
-| Index | Code | Bytes | Name | Possible Values | Description |
-|-------|------|-------|------|-----------------|-------------|
-| 00 | FT | 1 | File Version | 9 | We are on file version 9 now |
-| 01 | CL | 1 | Cloud ID | 1 | If creating a new standalone cloud, choose an unused number |
-| 02,03 | ID | 2 | Coin ID | 0-255 | This is if there are more than one coin on your cloud. Useful for NFTs, Stable Tokens, etc. |
-| 04 | SP | 1 | Experimental | Any | App programmer can use this as they like |
-| 05 | EN | 1 | Encryption Type | 0, 1, 4 | Shows how the array of coins in the file are encrypted. (See Encryption Types table) |
-| 06,07 | CC | 2 | Token Count | 0-65535 | How many notes are in the file. Not the total value but total count |
-| 08-14 | HS | 7 | Password Hash | Any |  First 7 bytes of the encryption key's SHA-256 Hash. This allows us to know if the user entered the wrong password to decrypt the coin array |
-| 15 | FL | 1 | Bit Field | 0, 1 | Used to know if there are PANs in the coins.  |
+8-14         | Password Hash | 7    | First 7 bytes of the encryption key's SHA-256 Hash. This allows us to know if the user entered the wrong password to decrypt the coin array | 
+15           | Future Use | 1       | For future use
+16-31        | Depends if there is just one coin or many coins | 16  | See how these bytes behave in the paragraphs below| Depends
 
 <!--
 ## State Table (Optional and for internal use)
@@ -210,20 +196,18 @@ wallet-name/
     └── coinname.bin
 ```
 -->
-## Last 16 bytes of the header if the Coin File has many coins in it
-
+## Many Coins: Last 16 bytes of the header if the Coin File has many coins in it
+We fill this space with a motto if there are more than one coin
 | Index | Code | Bytes | Name | Possible Values | Description |
 |-------|------|-------|------|-----------------|-------------|
-| 17-31 | PS | 16 | Motto | "4C 69 76 65 20 46 72 65 65 20 4F 72 20 44 69 65" | This translates to "Live Free or Die" in ASCII. See [POWN String Codes](pown-string-codes.md) |
+| 16-31 | PS | 16 | Motto | "4C 69 76 65 20 46 72 65 65 20 4F 72 20 44 69 65" | This translates to "Live Free or Die" in ASCII. See [POWN String Codes](pown-string-codes.md) |
 
-## Last 16 bytes of the header if the Coin File has only one coin in it
-
+## One Coin: Last 16 bytes of the header if the Coin File has only one coin in it
+We put the pown string here to tell us the results of the last authentication
 | Index | Code | Bytes | Name | Possible Values | Description |
 |-------|------|-------|------|-----------------|-------------|
-| 17-28.5 | PS | 12.5 | Pown String | 0x0,0xA,0xB,0xC,0xE,0xF | [POWN String Codes](pown-string-codes.md) |
-| 29.5-30 | EX | 0.5 | Experimental | Any | App programmer can use this as they like |
-| 30-31 | TI | 2 | Task ID | Any | Allows program to give coin a tracking number for accounting purposes |
-| 32 | EX | 1 | Experimental | Any | App programmer can use this as they like |
+| 16-28 | PS | 13 | Pown String 4 bits x 25 | 0x0,0xA,0xB,0xC,0xE,0xF | Last 4 bits are empty [POWN String Codes](pown-string-codes.md) |
+| 28-31 | TI | 3| Task ID | Any | Program's tracking number. Number of .25 minutes (15 seconds) since start of year. |
 
 ## File Encryption Types
 
