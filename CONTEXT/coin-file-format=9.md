@@ -175,7 +175,6 @@ Byte Position | Field Name | Byte Size | Description | Values
 6-7          | Token Count | 2      | Number of coins in file | 0-65535
 8-14         | Password Hash | 7    | First 7 bytes of the encryption key's SHA-256 Hash. This allows us to know if the user entered the wrong password to decrypt the coin array | 
 15           | Future Use | 1       | For future use
-16-31        | Depends if there is just one coin or many coins | 16  | See how these bytes behave in the paragraphs below| Depends
 
 <!--
 ## State Table (Optional and for internal use)
