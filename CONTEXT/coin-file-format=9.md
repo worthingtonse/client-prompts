@@ -156,7 +156,7 @@ This naming convention ensures that CloudCoin files are self-describing, easily 
 
 Coin files hold the data about coins and coin files will have a coin file header and then many coin chunks (one chunk per coin). Each coin has a coin header.
 
-So there are Coin files. Coin Files have File Headers and an array of coins. Each coin has a coin header and a coin body.
+So Coin Files have two parts, the File Header and the coin array. Each coin in the coin array has a Coin header and a Coin body.
 
 Coin files have a naming convention that makes it easier for software to use them.
 
