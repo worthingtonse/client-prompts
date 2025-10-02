@@ -73,3 +73,21 @@ If the user wanted to create a new wallet, the new wallet would be created in th
 The Default Wallet in the Default location cannot be deleted.
 wallets cannot be deletet unless they are empty. 
 The Default wallet in other locations can be deleted. If all the wallets in a location are deleted, the location will be deleted too. 
+
+2. ✅ Default wallet creation on first run
+
+  - Added automatic detection of missing wallet-locations.csv
+  - Creates default wallet structure at program initialization
+  - Default wallet path: {exe_dir}/CloudCoin/Pro/Data/Wallets/Default
+  - Includes all 19 required folders + transactions.csv
+  - Automatically adds to wallet-locations.csv
+
+  3. ✅ Error handling for missing wallets
+
+  - cmd_show_wallet_balance() now validates:
+    - Active wallet exists
+    - Wallet directory path exists
+    - Bank directory exists
+    - Fracked directory exists
+  - Returns CC_ERROR_INVALID_PATH instead of displaying zeros when wallet doesn't exist
+  - Shows clear error messages indicating which path is missing
