@@ -79,13 +79,22 @@ The following helper functions should be available for use within the Unpack fun
    8. **Process Coins in Body:** Loop through the decrypted body to extract each coin:  
       * The size of each coin is determined by its FL flag byte: 407 bytes if FL is 0, or 807 bytes if FL is 1\.  
       * For each coin found:
-        i. **Validate Coin Header:** Validate the coin's internal header based on the specifications in File\_Body\_Format.md. If any part is invalid, log the specific error and skip to the next coin in the body. However, if the file type is not 9, report that the file type is not supported and upgrade their software. 
+        
+        i. **Validate Coin Header:** Validate the coin's internal header based on the specifications in File\_Body\_Format.md. If any part is invalid, log the specific error and skip to the next coin in the body. However, if the file type is not 9, report that the file type is not supported and upgrade their software.
+     
+      
         ii. **Generate Filename:** Create a filename for the coin using the convention from File\_Naming\_Format.md.
-        iii. **Check for Duplicates:** If a file with this name already exists in path\_to\_suspect\_folder, modify the "tag" portion of the new filename (e.g., by appending a random number) and log ERROR:COIN-ALREADY-IN-SUSPECT-FOLDER and move the coin to the path\_to\_duplicates\_folder folder. 
+        
+        iii. **Check for Duplicates:** If a file with this name already exists in path\_to\_suspect\_folder, modify the "tag" portion of the new filename (e.g., by appending a random number) and log ERROR:COIN-ALREADY-IN-SUSPECT-FOLDER and move the coin to the path\_to\_duplicates\_folder folder.
+        
         iv. **Write Coin File:** Create a new file in "Suspect" subfolder with the generated name.
+        
         v. **Write Another Coin File:** Create a new file in "Pending" subfolder with the same generated name.
+        
         vi. **Write Coin Data:** Write the coin's full byte sequence (407 bytes) into the new file. The file's header should be generated according to Headers.md, be unencrypted, include the current timestamp, and contain the tracking\_id passed into the function.
-        vii. **Generate Random Bytes:** Generate 400 random bytes for the new passwords.  
+        
+        vii. **Generate Random Bytes:** Generate 400 random bytes for the new passwords.
+        
         viii. **Write Pending Coin Data:** Write the coin's full byte sequence (407 bytes) into the new file except change the last 400 bytes to be the bytes generated. The file's header should be generated according to Headers.md, be unencrypted, include the current timestamp, and contain the tracking\_id passed into the function.
         
 #### **Finalization**
