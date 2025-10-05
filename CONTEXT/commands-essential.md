@@ -1,7 +1,7 @@
 # Command Groups and Commands
 Each request to the raida will cointain a command group code and a command code. The purpose of these is to tell the raida how to treat the request. 
 
-## COMMAND GROUPS
+## ESSENTIAL COMMAND GROUPS
 The Command Group is a way of grouping commands that are simular in nature. This gives us the ability to have large amounts of commands. 
 The Command Groups are numbered 0 to 255 and taken from byte 9 of the request header. 
 
@@ -14,10 +14,10 @@ Code | Name | Description
 8 | Locker Services | Services that place and retrieve tokens from "RAIDA Lockers."
 9 | Money Changing | Breaks 100s into 10s or joins 10s to make 100s. Works with all monetary denominations.
 
-## COMMAND CODES
+## ESSENTIAL COMMAND CODES
 Each Command Group has its own command code. However, in an attempt to make things less confusing, each command has a seperate command number. This will work
-until we have more than 255 commands. 
-
+until we have more than 255 commands.  `
+                                   
 Group ID | Group Name | Command Code (Decimal) | Command | Description
 ---|--- | --- | --- |---
 0 | Status |00 |  echo | Sends a request for a response.
