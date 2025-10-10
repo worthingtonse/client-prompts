@@ -71,4 +71,3 @@ In Phase I, we only use six of them:
 | 10 | 0A | LF | Line Feed | Line Break (Unix) is used (unlike HTML which uses <br>)
 | 13 | 0D | CR | Carriage Return | Line Break (Windows) is used (unlike HTML  which uses <br>)
 | 28 | 1C | FS | File Separator | Seperates parts of the document
-
