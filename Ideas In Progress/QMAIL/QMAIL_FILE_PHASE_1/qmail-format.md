@@ -21,18 +21,53 @@ The following is an actual qmail file used in Phase I. The message is simply "He
 All the values are shown in hex. This email is 86 bytes in length. 
 
 ```c
-06    // The number of key/value pairs in the meta file. Here there are 6 key/value pairs
-01 ▪ 10 ▪ BF 7B 94 B3 91 A2 46 B5 8E 48 54 5D D8 F1 31 01     // Key 1(Email GUID) Value Length: 16. Value: GUID)
-02 ▪ 0B ▪ 49 20 6C 6F 76 65 20 79 6F 75 21    // KeyID: 2(Subject Text) Value Length: 11. Value: "I love you!"
-0B ▪ 01 ▪ 04    // KeyID: 12( Number of Attachments) Value Length: 1. Value: 4 attachments
-FB 0D ▪ 00 02 ▪ 07 ▪ {{ 00 06, 02, 00 02 3F 98 },{ 00 06, 02, 00 04 67 2E }}    // KeyID: 251 13(To: Array) Element Count: 2.  Element Length: 7. Value: Two mailbox IDs {{6,2,147352},{6,2,288558}} 
-19 ▪ 04 ▪ 68 CF B6 AD  // KeyID: 25(Timestamp) Value Length: 4. Value: 1758443181 = "Sunday, September 21, 2025 8:26:21 AM"
-13 ▪ 07 ▪ 00 06  02  03 E8 78 A0    // KeyID: 19(From Mailbox) Value Length: 7. Coin Code 00 06: CloudCoin, Denomination 02: 100cc, Serial Number 03 E8 78 A0: 65566880
-1C    // End of Meta Data. Start of Styles Tables 
-      // No Style Tables for Phase I. Client will use its default style. No characters between the two FSs.  
-1C    // Start of Markup. End of the Styles Tables
-02    // Start of text
-48 65 6C 6C 6F 20 57 6F 72 6C 64 21    // These 12 bytes encode "Hello World!"
++// METADATA
++//-----------------------------------------------------------------------------
++// Number of key/value pairs
++06
++
++// Pair 1: QMail ID (GUID)
++01                                      // Key ID: 1
++10                                      // Value Length: 16 bytes
++bf7b94b391a246b58e48545dd8f13101        // Value: The GUID
++
++// Pair 2: Subject
++02                                      // Key ID: 2
++0c                                      // Value Length: 12 bytes
++48656c6c6f20576f726c6421                // Value: "Hello World!"
++
++// Pair 3: Number of Attachments
++0c                                      // Key ID: 12
++01                                      // Value Length: 1 byte
++04                                      // Value: 4
++
++// Pair 4: To Array
++fb0d                                    // Key ID: 251, 13 (Array of To:)
++0200                                    // Element Count: 2 (little-endian)
++07                                      // Element Length: 7 bytes
++060002983f0200                          // Element 1: Mailbox {6, 2, 147352}
++0600022e670400                          // Element 2: Mailbox {6, 2, 288558}
++
++// Pair 5: Timestamp
++19                                      // Key ID: 25
++04                                      // Value Length: 4 bytes
++68cfb6ad                                // Value: 1758443181 (little-endian)
++
++// Pair 6: From Mailbox
++13                                      // Key ID: 19
++07                                      // Value Length: 7 bytes
++060002a078e803                          // Value: Mailbox {6, 2, 65566880}
++
++// SEPARATORS
++//-----------------------------------------------------------------------------
++1c                                      // FS: End of Metadata, Start of Styles
++1c                                      // FS: End of Styles, Start of Markup
++
++// BODY
++//-----------------------------------------------------------------------------
++02                                      // STX: Start of Text
++48656c6c6f20576f726c6421                // Body: "Hello World!"
+
 ```
 
 ## Overall Structure
