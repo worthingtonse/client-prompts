@@ -11,8 +11,6 @@ Here is a general look at the file structure.
 FS (File Seperator)
     STYLES (empty in phase I)
 FS (File Seperator)
-    SOH (Start of Header)
-        Shows a message here based on 1 byte status code.
     STX (Start of Text)
         The text starts here and keeps going until there are is no more writing.
 ```
@@ -33,8 +31,6 @@ FB 0D ▪ 00 02 ▪ 07 ▪ {{ 00 06, 02, 00 02 3F 98 },{ 00 06, 02, 00 04 67 2E 
 1C    // End of Meta Data. Start of Styles Tables 
       // No Style Tables for Phase I. Client will use its default style. No characters between the two FSs.  
 1C    // Start of Markup. End of the Styles Tables
-01    // Next byte will be the status code. Defaults to zero. See Status Code Table below 
-00    // Print status message 0 that says "Program: Waiting for your command to download this qmail's content"
 02    // Start of text
 48 65 6C 6C 6F 20 57 6F 72 6C 64 21    // These 12 bytes encode "Hello World!"
 ```
@@ -48,7 +44,6 @@ This is the structure of a QMail file for Phase I that is just for sending a tex
 | Meta Key/Value Pairs | Key, Value Length, Value| [Meta Data Key Table](#meta-data-key-table)| There are up to 255 keys each with its own code.| 
 | 0x1C| FS (File Seperator) |Seperates the Meta Part and the Styles Part| The first 0x1C ends the meta and begins the styles tables |
 | 0x1C| FS (File Seperator) |Seperates the Styles Part and the Markup Part| The Second FS begins the formatted text of the qmail and ends the styles |
-| 0x01 |SOH (Start of Header) |Shows the status of the email while it is loading | See [Status Table](#status-table)|
 | 0x02 |STX| Start of Text |  This text is marked up with control characters | We will not start marking this up until Phase II |
 
 ## Meta Data Key Table
@@ -69,11 +64,10 @@ These are the ones available for Phase I but many optional
 ## Markup Contol Characters
 In Phase I, we only use six of them:
 
-| Index | Hex | Symbol | Description | New Use |
+| ASCII Index Decimal | Hex | Symbol | Description | Used For |
 |-------|-----|---------|-------------|------------|
-| 1 | 01 | SOH | Start of Heading | Status Code Follows |
-| 2 | 02 | STX | Start of Text | Markup Text Follows
-| 9 | 09 | HT | Horizontal Tab | Tab is used (unlike HTML)
+| 2 | 02 | STX | Start of Text | Indicator that Markup Text Follows
+| 9 | 09 | HT | Horizontal Tab | Tab is used (unlike HTML). Adds a Tab character
 | 10 | 0A | LF | Line Feed | Line Break (Unix) is used (unlike HTML which uses <br>)
 | 13 | 0D | CR | Carriage Return | Line Break (Windows) is used (unlike HTML  which uses <br>)
 | 28 | 1C | FS | File Separator | Seperates parts of the document
