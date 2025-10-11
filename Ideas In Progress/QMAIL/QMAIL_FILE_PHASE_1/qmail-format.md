@@ -23,6 +23,79 @@ All the values are shown in hex. This email is 86 bytes in length.
 ```c
 +// METADATA
 +//-----------------------------------------------------------------------------
++// FIXED PART
++// Coin Group
++00                                    
++
++// Coin ID
++06                            
++
++// From Denomination
++04                       
++
++// From Addres 1st Octet
++00                                    
++
++// From Addres 2nd Octet
++5C                                   
++
++// From Addres 3rd Octet
++14                                 
++
++// From Addres 4th Octet
++B8                                   
++                       
++// Year -2000  UTC 
++19  
++
++// Month
++01
++
++// Day
++01
++
++// Minute
++01
++
++// Second
++01
++
++// Random Number 1
++9A
++
++// Random Number 2
++0B
++
++// Number of attachments
++00
++
++//-----------------------------------------------------------------------------
++1D                                      // GS: End of Server Report, start of Metadata
++
++// Locker Code $ followed by RAIDA ID and 16 byte GUID
++24 0B 41 42 43 44 45 46 47 41 42 43 44 45 46 47 77 72
++
++// Locker Code $ followed by RAIDA ID and 16 byte GUID
++24 0B 41 42 43 44 45 46 47 41 42 43 44 45 46 47 77 72
++
++// Locker Code $ followed by RAIDA ID and 16 byte GUID
++24 0B 41 42 43 44 45 46 47 41 42 43 44 45 46 47 77 72
++
++// TO Address
++12 03 00 4C D8 88 
++
++// CC Address  Device Contorl Two
++13 03 00 4C D8 88 
++
++// BCC Address 
++14 03 00 4C D8 88 
++
+**
++// SEPARATORS
++//-----------------------------------------------------------------------------
++1c                                      // FS: End of Server Report, start of Metadata
++//
++//
 +// Number of key/value pairs
 +06
 +
@@ -48,16 +121,7 @@ All the values are shown in hex. This email is 86 bytes in length.
 +060002983f0200                          // Element 1: Mailbox {6, 2, 147352}
 +0600022e670400                          // Element 2: Mailbox {6, 2, 288558}
 +
-+// Pair 5: Timestamp
-+19                                      // Key ID: 25
-+04                                      // Value Length: 4 bytes
-+68cfb6ad                                // Value: 1758443181 (little-endian)
-+
-+// Pair 6: From Mailbox
-+13                                      // Key ID: 19
-+07                                      // Value Length: 7 bytes
-+060002a078e803                          // Value: Mailbox {6, 2, 65566880}
-+
+
 +// SEPARATORS
 +//-----------------------------------------------------------------------------
 +1c                                      // FS: End of Metadata, Start of Styles
