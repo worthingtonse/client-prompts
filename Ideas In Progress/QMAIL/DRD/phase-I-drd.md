@@ -124,7 +124,6 @@ Sample Request:
 ```c
 CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH
 SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE  //session ID
-LK LK LK LK LK LK LK LK LK LK LK LK LK LK LK LK  //Locker key for payment. The bytes will be all zeros if payment is not required. 
 Update CBD file Query . This might be like Update Mailboxes SET AliaseID "Bill Johnson" Where Mailbox ID equals Session_Mailbox_ID
 E3 E3
 ```
