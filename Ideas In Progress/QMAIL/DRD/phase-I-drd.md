@@ -74,7 +74,7 @@ erDiagram
 
 ##
 ```
-/directory_root/
+Q/QMail/
 └── mailboxes/
     └── 000634FC89A4E6/
         ├── .avatar.png
@@ -124,7 +124,8 @@ Sample Request:
 ```c
 CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH
 SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE  //session ID
-Update CBD file
+LK LK LK LK LK LK LK LK LK LK LK LK LK LK LK LK  //Locker key for payment. The bytes will be all zeros if payment is not required. 
+Update CBD file Query . This might be like Update Mailboxes SET AliaseID "Bill Johnson" Where Mailbox ID equals Session_Mailbox_ID
 E3 E3
 ```
 
@@ -144,16 +145,29 @@ Key Code | Value Bytes | Name & Description | Validation
 202-230 | 8 | QMail[2-40] CT CT IP IP IP IP PT PT  | coin id (Must be 0x0006, ip address, port
 231 | 8 | QMail[31] CT CT IP IP IP IP PT PT | coin id (Must be 0x0006, ip address, port
 
+Example Data Sent to the Server shown in Decimal: 
+```
+0 1 3 //This means the number of key pairs will be 3 key pairs
+1 2 0.6  //Payment coin is two bytes long and is Cloudcoin 0x06
+2 16 34 54 34 75 243 174 34 54 34 75 243 174 34 54 34 75 // locker code takes 16 bytes and then we see the 16 bytes
+11 4 S E A N // Aliase name is four bytes long and is SEAN (except it will be in ASCII code)
+```
+
 
 Return Status Codes
 ```C
 STATUS_SUCCESS = 250
-ERROR_FEW_COINS_IN_LOCKER = 153,
+ERROR_NOT_ENOUGH_COINS_IN_LOCKER = 153,
 ERROR_LOCKER_EMPTY_OR_NOT_EXISTS = 179,
 ERROR_INVALID_PARAMETER = 198,
 ```
+Body of response:
+```
+If there is a database error we could put a description of the error here.
+E3 E3
+```
 
-Nothing in Response Body
+Nothing in Response Body if no Error
 ```
 E3 E3
 ```
@@ -193,7 +207,7 @@ ERROR_DATABASE_REPORTED_AN_ERROR = 10,
 
 Response Body:
 ```C
-CBDF File
+CBDF File // There will be a lot of bytes here based on the info below
 E3 E3
 ```
 
@@ -211,15 +225,15 @@ Key Code | Value Bytes | Name & Description
 Variable Fields. Note that in the case of it returning more than one row, we will see the IDs repeat.
 The following shows three rows being returned: 
 ```
-0A 10 ca8d0787f2a84b4babf1ef9f3d118b16 // Column Code (key), Length of value, Value )These are ficticious)
-02 0F 4b4babfca8d0787f2a81ef9f3d118b
-06 03 1ef9f3
-0A 0E 4babf1ef9f3d11ca8d0787f2a84b
-02 0E 81ef9f3d114b4babfca8d0787f2a
-06 02 1ef9
-0A 10 ca8d0787f2a84b4babf1ef9f3d118b16
-02 0F 4b4babfca8d0787f2a81ef9f3d118b
-06 03 1ef9f3
+0A 10 ca 8d 07 87 f2 a8 4b 4b ab f1 ef 9f 3d 11 8b 16 // Column Code (key), Length of value, Value )These are ficticious)
+02 0F 4b 4b ab fc a8 d0 78 7f 2a 81 ef 9f 3d 11 8b
+06 03 1e f9 f3
+0A 0E 4b ab f1 ef 9f 3d 11 ca 8d 07 87 f2 a8 4b
+02 0E 81 ef 9f 3d 11 4b 4b ab fc a8 d0 78 7f 2a
+06 02 1e f9
+0A 10 ca 8d 07 87 f2 a8 4b 4b ab f1 ef 9f 3d 11 8b 16
+02 0F 4b 4b ab fc a8 d0 78 7f 2a 81 ef 9f 3d 11 8b
+06 03 1e f9 f3
 ```
 
 
