@@ -152,13 +152,9 @@ These are the ones available for Phase I but many optional
 | 1 | Qmail ID | 16 | The GUID the sender assigned to this email | * | 1 |
 | 2 | Subject | 1 | The UTF-8 encoded text of the subject line  | | 1 |
 |12| "Number of Attachments" | 1 | How many files are associated with the qmail. Limit 255| Δ | 2 |
-|251 13| "To Array" | 2 * 1 | 251(array) 13(To:s). Next 2 bytes = number of elements. 3rd Byte describes number of bytes per element. 7 bytes per mailbox address. | Δ| 1 |
-| 14| "CC Array" | {2,1} | An array of "CC:" 7 byte mailbox addresses | Δ| 1 |
+| 14| "CC Array Member" | 7 | An array of "CC:" 7 byte mailbox addresses | Δ| 1 |
 | 19| "From Mailbox" | 1| Cloudcoin (0x0006), Denomination (1 byte), Serial Number (4 bytes)| | 1 |
 | 25 | "Timestamp" | 4 | Value: 1758443181 = "Sunday, September 21, 2025 8:26:21 AM" | * | 1 |
-| 250 | "Escape to Array" | 1 Byte of array elements. 1 Byte of length per element | Multiplication by byte | * | 1 |
-| 251 | "Escape to Array" | 2 Byte of array elements. 1 Byte of length per element  | Multiplication by byte  | * | 1 |
-
 
 ## Markup Contol Characters
 In Phase I, we only use six of them:
