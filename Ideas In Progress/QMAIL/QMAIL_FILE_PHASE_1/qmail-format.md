@@ -15,6 +15,11 @@ FS (File Seperator)
         The text starts here and keeps going until there are is no more writing.
 ```
 
+## Meta Data
+The meta data is the data about the email but not the email itself. The meta data is made up of two parts:
+1. The RAIDA Report: data from the RAIDA that is confirmed and reliable. This is of fixed length and does not change.
+2. The User Report: data from the user that may not be true. 
+
 ## Hello World QMail (Phase I example)
 The following is an actual qmail file used in Phase I. The message is simply "Hello World!". It can show some status messages.
 
@@ -60,19 +65,19 @@ All the values are shown in hex. This email is 86 bytes in length.
 +// Second
 +01
 +
-+// Random Number 1
++// Random Number 1 just to make sure the ID is unique 
 +9A
 +
-+// Random Number 2
++// Reserved for future use.
 +0B
 +
 +// Number of attachments
 +00
 +
 +//-----------------------------------------------------------------------------
-+1D                                      // GS: End of Server Report, start of Metadata
++1D                                      // GS: End of Server Report, start of User Report. The fize of this part will vary and depends
 +
-+// Locker Code $ followed by RAIDA ID and 16 byte GUID
++// Locker Code $ followed by RAIDA ID and 16 byte GUID //
 +24 0B 41 42 43 44 45 46 47 41 42 43 44 45 46 47 77 72
 +
 +// Locker Code $ followed by RAIDA ID and 16 byte GUID
