@@ -23,14 +23,14 @@ The meta data is the data about the email but not the email itself. The meta dat
 ## Meta Part Command Codes for Phase I
 Command codes show what the bytes following the command code mean. The lenght of the bytes after a Meta Command code is fixed. 
 
-Name | Code in Hex | Code in Decimal | Bytes that Follow| Byte Meanings| Value if not included | Description 
+Name | Code in Hex | Code in Decimal | Bytes including command code| Byte Meanings| Value if not included | Description 
 ---|---|---|---|---|---|---
-Address | 0x02 | 2 | 7 | Address type To, CC, BCC, MM or From one byte, Coin ID 2 bytes, Denomination 1 bytes, Serial Number 4 bytes. | No CC | A mailbox address that the email was set to besides the receiver  |
-Locker Code | 0x24 | 36 | Between 1 and 256 | index 0 says how many bytes follow.* | Subject bytes (UTF-8) up to 255 bytes.| No Subject  
+Address | 0x02 | 2 | 16 | Address type To, CC, BCC, MM or From one byte, Coin ID 2 bytes, Denomination 1 bytes, Serial Number 4 bytes. | No CC | A mailbox address that the email was set to besides the receiver  |
+Locker Code | 0x24 | 36 | 16 | Raida that sent the locker code, 14 bytes of locker code | The locker codes are missing the last two FF FF which are assumed to be there.| No Locker codes
 
 
 ## Body Part Command Codes for Phase I
-These ones have a code followed by the length. The subject only uses one byte to describe the length. The text uses 2 bytes to describe the length of the text. 
+These have a code followed by the length. The subject only uses one byte to describe the length. The text uses 2 bytes to describe the length of the text. 
 Name | Code in Hex | Code in Decimal | Bytes that Follow| Byte Meanings| Value if not included | Description 
 ---|---|---|---|---|---|---
 Subject | 0x01 | varies | Between 0 and 255  | index 1 says how many bytes follow.* | Subject bytes (UTF-8) up to 255 bytes.| No Subject  
