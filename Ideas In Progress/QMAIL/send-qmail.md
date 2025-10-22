@@ -58,7 +58,7 @@ Before receiving email, users must:
 
 ## API Endpoints
 
-### Send QMail Service
+## Send QMail Service
 
 Transfers files from user's computer to receiver's mail folder on QMail servers.
 
@@ -78,13 +78,21 @@ The request uses Compact Binary Document Format (CBDF) with fixed and variable s
 
 | Field | Size (bytes) | Description |
 |-------|--------------|-------------|
-| Email Half GUID | 8 | Unique identifier for this email across all servers |
+| Year Number Sent| 1 | The year the email was sent Assumes year is 2000 + this byte |
+| Month Number Sent | 1 | Month 1-12 that email was sent |
+| Day Number Sent | 1| day 1 to 31 |
+| Minute | 1 | 1 to 59 |
+| Second | 1 | 1 to 59 |
+| Random | 1 | 0 to 255 just incase two emails are sent during the same second |
+| Future Use | 2 | Two bytes that can be put to use in the future if needed |
 | File Type/Index | 1 | File type identifier (see File Types table) |
-| Sender ID | 6 | 2-byte coin ID + 1-byte denomination + 4-byte serial |
+| Sender ID ? Not sure if we need this  | 6 | 2-byte coin ID + 1-byte denomination + 4-byte serial The session number may have this info|
 | Primary Receiver ID | 6 | 2-byte coin ID + 1-byte denomination + 4-byte serial |
 | RAID Type | 2 | How the data is spread out of the QMail servers including fault tolerance data. See [RAID Standard](raid-codes.md) |
 | Stripe Number | 1 | Stripe index (0 to N, max 32 servers) |
 | Of Number | 1 | Total number of stripes |
+| Session ID | 8 | Session ID created during previous authentication with tickets |
+| Locker Key | 16 | Last four bytes should be FF FF FF FF|
 
 **Note**: Phase I uses coin ID `0x0006`.
 
@@ -96,11 +104,11 @@ The request uses Compact Binary Document Format (CBDF) with fixed and variable s
 | 2 | CCs Array | 6 bytes per recipient | Carbon copy recipients |
 | 3 | BCCs Array | 6 bytes per recipient | Blind carbon copy recipients |
 | 4 | Ticket Array | Variable | RAIDA authentication tickets |
-| 5 | Session ID | GUID | Previously authenticated session token |
-| 6 | Peer-to-Peer Secret CBDF | Variable | Private user identification data |
-| 7 | Group ID | GUID | Reserved for future group functionality |
+| 5 | Session ID | GUID | Previously authenticated session token  
+| 6 | Peer-to-Peer Secret CBDF | Variable | Private user identification data Phase II  |
+| 7 | Group ID | GUID | Reserved for future group functionality Phase II |
 | 8 | Version Number | Variable | File version (default: 0) |
-| 9 | Subject Stripe | 256 bytes | RAID type + stripe info + subject text (253 bytes) |
+| 9 | Subject Stripe | 256 bytes | RAID type + stripe info + subject text (253 bytes) Phase II |
 | 10-12 | Shuffle Table Shards | Variable | RAID shuffle table (Phase II) |
 
 **Recipient Format**: Each recipient entry contains:
@@ -124,7 +132,7 @@ ERROR_LOCKER_EMPTY_OR_NOT_EXISTS = 179
 ERROR_INVALID_PARAMETER = 198
 ```
 
-## File Types
+### File Types
 
 | Type ID | Name | Description |
 |---------|------|-------------|
@@ -137,7 +145,7 @@ ERROR_INVALID_PARAMETER = 198
 | 6 | QDATA | File management for QData servers |
 | 10-255 | Attachment N | File attachments (10 = first attachment, etc.) |
 
-## Storage Duration
+### Storage Duration
 
 Files can be stored for varying durations based on the storage code:
 
