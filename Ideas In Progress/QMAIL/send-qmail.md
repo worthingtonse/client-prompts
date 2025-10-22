@@ -24,7 +24,7 @@ Files on QMail servers use a structured naming convention:
 - **Attachments**: `{qmail-id}.stripe{XXX}.type{ZZZ}.v{BBB}.bin`
 
 Where:
-- `{qmail-id}`: Half-GUID identifier (8 bytes)
+- `{qmail-id}`: Half-GUID iden (6 bytes)
 - `{XX}-{Y}`: Stripe number and total stripes
 - `{ZZZ}`: File type identifier (3 digits)
 - `{AAA}`: Days until expiration (3 digits)
@@ -78,6 +78,7 @@ The request uses Compact Binary Document Format (CBDF) with fixed and variable s
 
 | Field | Size (bytes) | Description |
 |-------|--------------|-------------|
+| Qmail GUID| 16 | The unique ID for the email |
 | Year Number Sent| 1 | The year the email was sent Assumes year is 2000 + this byte |
 | Month Number Sent | 1 | Month 1-12 that email was sent |
 | Day Number Sent | 1| day 1 to 31 |
