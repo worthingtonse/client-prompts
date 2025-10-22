@@ -17,8 +17,24 @@ FS (File Seperator)
 
 ## Meta Data
 The meta data is the data about the email but not the email itself. The meta data is made up of two parts:
-1. The RAIDA Report: data from the RAIDA that is confirmed and reliable. This is of fixed length and does not change.
-2. The User Report: data from the user that may not be true. 
+1. 16 bytes that are fixed
+2. Other information that can varry but will show in chunks of 16 bytes each. 
+
+## Meta Part Command Codes for Phase I
+Command codes show what the bytes following the command code mean. The lenght of the bytes after a Meta Command code is fixed. 
+
+Name | Code in Hex | Code in Decimal | Bytes that Follow| Byte Meanings| Value if not included | Description 
+---|---|---|---|---|---|---
+Address | 0x02 | 2 | 7 | Address type To, CC, BCC, MM or From one byte, Coin ID 2 bytes, Denomination 1 bytes, Serial Number 4 bytes. | No CC | A mailbox address that the email was set to besides the receiver  |
+Locker Code | 0x24 | 36 | Between 1 and 256 | index 0 says how many bytes follow.* | Subject bytes (UTF-8) up to 255 bytes.| No Subject  
+
+
+## Body Part Command Codes for Phase I
+These ones have a code followed by the length. The subject only uses one byte to describe the length. The text uses 2 bytes to describe the length of the text. 
+Name | Code in Hex | Code in Decimal | Bytes that Follow| Byte Meanings| Value if not included | Description 
+---|---|---|---|---|---|---
+Subject | 0x01 | varies | Between 0 and 255  | index 1 says how many bytes follow.* | Subject bytes (UTF-8) up to 255 bytes.| No Subject  
+Text | 0x02 | 2 | varies | Between 0 and 65584 | index 1 and 2 big endian says how many bytes will follow | UTF-8 | No Text|
 
 ## Hello World QMail (Phase I example)
 The following is an actual qmail file used in Phase I. The message is simply "Hello World!". It can show some status messages.
@@ -28,27 +44,9 @@ All the values are shown in hex. This email is 86 bytes in length.
 ```c
 +// METADATA
 +//-----------------------------------------------------------------------------
-+// FIXED PART
-+// Coin Group
-+00                                    
-+
-+// Coin ID
-+06                            
-+
-+// From Denomination
-+04                       
-+
-+// From Addres 1st Octet
-+00                                    
-+
-+// From Addres 2nd Octet
-+5C                                   
-+
-+// From Addres 3rd Octet
-+14                                 
-+
-+// From Addres 4th Octet
-+B8                                   
++// FIXED PART THAT IS ALWAYS THE SAME LENGTH AND ALL DATA IS REQUIRED. THE LENGTH IS ALWAY 16 BYTES
++// Address. 0x00 = To, 0x01 = cc, 0x02 = BCC, 0x03 = Mass Mailing, 0x04 = From, 0x05 = group
++04  00 00 06  03  00 4C D8 88 
 +                       
 +// Year -2000  UTC 
 +19  
@@ -68,74 +66,38 @@ All the values are shown in hex. This email is 86 bytes in length.
 +// Random Number 1 just to make sure the ID is unique 
 +9A
 +
-+// Reserved for future use.
-+0B
 +
 +// Number of attachments
 +00
++// VARIABLE PART OF THE META DATA THAT IS NOT REQUIRED. ALWAYS IN GROUPS OF 16 BYTES.
++// Locker Code $ followed by RAIDA ID and 16 byte GUID minus the 2 FF FFs that are assumed //
++24  0B  CE EC F2 28 7D 6A 4C 37 B3 21 DF 59 FF FF  // Code 24 (locker code) from RAIDA 11 (0x0B). Locker codes (14 bytes) always end in FF FF FF FF so last 2 bytes are assumed to be FF FF 
 +
-+//-----------------------------------------------------------------------------
-+1D                                      // GS: End of Server Report, start of User Report. The fize of this part will vary and depends
++24  01  DF 5D DD 5C 6A 72 4A 40 BC AE 55 B5 FF FF // Locker Code for Raida 1
 +
-+// Locker Code $ followed by RAIDA ID and 16 byte GUID //
-+24 0B 41 42 43 44 45 46 47 41 42 43 44 45 46 47 77 72
++24  10  BE 8F E2 F4 26 E6 4E B4 B8 CA A6 20 FF FF  // Locke code from RAIDA 16
 +
-+// Locker Code $ followed by RAIDA ID and 16 byte GUID
-+24 0B 41 42 43 44 45 46 47 41 42 43 44 45 46 47 77 72
++//  Addresses 0x00 = To, 0x01 = cc, 0x02 = BCC, 0x03 = Mass Mailing, 0x04 = From, 0x05 = group
++02  00 00 06  03  00 4C D8 88  00 00 00 00 00 00 00 // Last seven bytes are reserved for future use. 
 +
-+// Locker Code $ followed by RAIDA ID and 16 byte GUID
-+24 0B 41 42 43 44 45 46 47 41 42 43 44 45 46 47 77 72
++02  00 00 06  04  00 B8 CA A6  00 00 00 00 00 00 00 // Last seven bytes are reserved for future use. 
 +
-+// TO Address
-+12 03 00 4C D8 88 
++// CC Address 
++02  01 06  05  00 DD 5C 6A  00 00 00 00 00 00 00 // Last seven bytes are reserved for future use. 
 +
-+// CC Address  Device Contorl Two
-+13 03 00 4C D8 88 
-+
-+// BCC Address 
-+14 03 00 4C D8 88 
-+
-**
 +// SEPARATORS
 +//-----------------------------------------------------------------------------
-+1c                                      // FS: End of Server Report, start of Metadata
-+//
-+//
-+// Number of key/value pairs
-+06
-+
-+// Pair 1: QMail ID (GUID)
-+01                                      // Key ID: 1
-+10                                      // Value Length: 16 bytes
-+bf7b94b391a246b58e48545dd8f13101        // Value: The GUID
-+
-+// Pair 2: Subject
-+02                                      // Key ID: 2
-+0c                                      // Value Length: 12 bytes
-+48656c6c6f20576f726c6421                // Value: "Hello World!"
-+
-+// Pair 3: Number of Attachments
-+0c                                      // Key ID: 12
-+01                                      // Value Length: 1 byte
-+04                                      // Value: 4
-+
-+// Pair 4: To Array
-+fb0d                                    // Key ID: 251, 13 (Array of To:)
-+0200                                    // Element Count: 2 (little-endian)
-+07                                      // Element Length: 7 bytes
-+060002983f0200                          // Element 1: Mailbox {6, 2, 147352}
-+0600022e670400                          // Element 2: Mailbox {6, 2, 288558}
-+
-
-+// SEPARATORS
++1c                                      // FS: End of Metadata, Start of Styles. In Phase I, Styles is empty. 
 +//-----------------------------------------------------------------------------
-+1c                                      // FS: End of Metadata, Start of Styles
 +1c                                      // FS: End of Styles, Start of Markup
 +
-+// BODY
-+//-----------------------------------------------------------------------------
++01  // Key ID 1 (Subject)
++05  // Value Length: 5 bytes
++48 65 6c 6c 6f           // Value: "Hello"
++
 +02                                      // STX: Start of Text
-+48656c6c6f20576f726c6421                // Body: "Hello World!"
++0C                                      // Number of bytes in the text tha follows: 12
++48 65 6c 6c 6f 20 57 6f 72 6c 64 21                // Body: "Hello World!"
 
 ```
 
