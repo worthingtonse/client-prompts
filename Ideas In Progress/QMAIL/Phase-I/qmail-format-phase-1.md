@@ -26,10 +26,12 @@ Command codes show what the bytes following the command code mean. The lenght of
 Name | Code in Hex | Code in Decimal | Bytes including command code| Byte Meanings| Value if not included | Description 
 ---|---|---|---|---|---|---
 Address | 0x40 | 64 | 16 | Address type To, CC, BCC, MM or From one byte, Coin ID 2 bytes, Denomination 1 bytes, Serial Number 4 bytes. | No CC | A mailbox address that the email was set to besides the receiver  |
-Locker Code | 0x24 | 36 | 16 | Raida that sent the locker code, 14 bytes of locker code | The locker codes are missing the last two FF FF which are assumed to be there.| No Locker codes
 Stripe Info | 0x23 | 35 | 32 | Stripe number , of Total Stripes, QMail Server IP (16 bytes. Last four are the IPv4), QMail Server Port (2 bytes), RAID Type | | Error
-Shuffle Shard information | 0x3F | 63 | 32 | One row of the shuffle table. This will be between 2 and 32 characters long | | Error
 
+<!--
+Locker Code | 0x24 | 36 | 16 | Raida that sent the locker code, 14 bytes of locker code | The locker codes are missing the last two FF FF which are assumed to be there.| No Locker codes
+Shuffle Shard information | 0x3F | 63 | 32 | One row of the shuffle table. This will be between 2 and 32 characters long | | Error
+-->
 
 ## Styles Part Command Codes for Phase I
 The Styles Part will be left empty. 
@@ -63,6 +65,9 @@ Meaning of bytes:
 +// METADATA
 +//-----------------------------------------------------------------------------
 +// FIXED PART THAT IS ALWAYS THE SAME LENGTH AND ALL DATA IS REQUIRED. THE LENGTH IS ALWAY 16 BYTES
++
++// EMAIL GUID
++ 99 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
 +// Address. 0x00 = To, 0x01 = cc, 0x02 = BCC, 0x03 = Mass Mailing, 0x04 = From, 0x05 = group
 +04  00 00 06  03  00 4C D8 88 
 +                       
@@ -128,7 +133,7 @@ This is the structure of a QMail file for Phase I that is just for sending a tex
 | 0x1C| FS (File Seperator) |Seperates the Meta Part and the Styles Part| The first 0x1C ends the meta and begins the styles tables |
 
 ## Markup Contol Characters
-In Phase I, we only use six of them:
+In Phase I, we only use 3 of them:
 
 | ASCII Index Decimal | Hex | Symbol | Description | Used For |
 |-------|-----|---------|-------------|------------|
