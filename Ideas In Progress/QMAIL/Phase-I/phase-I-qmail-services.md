@@ -91,7 +91,7 @@ ST ST ST ST ST ST ST ST ST ST ST ST ST ST ST ST
 SJ SJ SJ SJ ... // The subject of the email // UTF-8
 E3 E3 //Not encrypted
 ```
-## Stripe Data
+### Stripe Data
 Index ID | Name & Description
 ---|---
 0 & 1 | RAID Header
@@ -129,7 +129,7 @@ ERROR_INVALID_PARAMETER = 198,
 ```
 
 
-## PEEK Mail
+## PEEK
 Command Group: 6  Command Code: 63 0x063F
 
 The user must first log in to get a session key. 
@@ -144,7 +144,7 @@ DT DT DT DT // Date and Time since meta data was last checked.
 E3 E3 //Not encrypted
 ```
 
-## DOWNLOAD FILE
+## DOWNLOAD
 Allows the user to go and get the file. There will probably be a limit to how many times a person can download a file. It will be genourse like ten times. The idea is the user needs to download it once per device. 
 
 ```c
