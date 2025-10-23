@@ -45,12 +45,12 @@ erDiagram
         datetime StartDateTime "The time the user account was created"
     }
 
-MAILBOX-BECONS{
+MAILBOX-BECON{
       int MailBox PK "Mailbox ID"
       int BeconID PK "Beacon ID"
       }
 
-BECONS{
+BECON{
       int BeaconID PK "The ID of the Beacon"
       int BeaconType "Primary, Secondary, So on"
       int Port "Port Number"
@@ -83,6 +83,8 @@ BECONS{
 
     MAILBOX ||--o{ MAILBOX_MAILSERVER : "has"
     MAILBOX_MAILSERVER ||--o{ MAILSERVER : "contains"
+MAILBOX ||--o{ MAILBOX-BECON : "has"
+BECON ||--o{ MAILBOX-BECON : "has"
 
 ```
 
