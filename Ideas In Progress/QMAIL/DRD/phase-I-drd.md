@@ -45,6 +45,20 @@ erDiagram
         datetime StartDateTime "The time the user account was created"
     }
 
+MAILBOX-BECONS{
+      int MailBox PK "Mailbox ID"
+      int BeconID PK "Beacon ID"
+      }
+
+BECONS{
+      int BeaconID PK "The ID of the Beacon"
+      int BeaconType "Primary, Secondary, So on"
+      int Port "Port Number"
+      Byte IPAddress "IP Address"
+      int Price "How much they charge"
+}
+
+
     SESSION {
         int SessionKey PK "The session key"
         int MailBoxID "The expected MailBoxID of the session"
