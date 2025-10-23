@@ -171,8 +171,8 @@ Encryption Type 6 uses a streamlined 32-byte header format
 | 9          | Nonce      | NO         | Nonce 1                |                                                   |
 | 10         | Nonce      | NO         | Nonce 2                |                                                   |
 | 11         | Nonce      | NO         | Nonce 3                |                                                   |
-| 12         | Nonce      | NO         | Nonce 4                |                                                   |
-| 13         | Nonce      | NO         | Nonce 5                |                                                   |
+| 12         | Nonce      | NO         | Nonce 4/ Command Group|      Command Group                                |
+| 13         | Nonce      | NO         | Nonce 5/ Command Number|      Command Number                               |
 | 14         | Nonce      | NO         | Nonce 6                |                                                   |
 | 15         | Nonce      | NO         | Nonce 7                |                                                   |
 | 16         | Nonce      | NO         | Nonce 8                |                                                   |
