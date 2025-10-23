@@ -50,7 +50,7 @@ All the values are shown in hex. This email is 310 bytes in length. It has been 
 
 ```c
 11 E3 8F 8D 56 8C 4D 70 A7 F9 C5 0D B7 16 02 CD
-40 F0 00 06 03 00 4C D8 88 19 01 01 01 01 9A 00
+40 F0 00 06 03 00 4C D8 88 19 01 01 01 01 00 00
 02 00 00 06 03 00 4C D8 88 00 00 00 00 00 00 00 
 02 00 00 06 04 00 B8 CA A6 00 00 00 00 00 00 00 
 02 01 00 06 05 00 DD 5C 6A 00 00 00 00 00 00 00
@@ -94,8 +94,8 @@ Meaning of bytes:
 +// Second
 +01
 +
-+// Random Number 1 just to make sure the ID is unique 
-+9A
++// Reserved for future use
++00
 +
 +
 +// Number of attachments
