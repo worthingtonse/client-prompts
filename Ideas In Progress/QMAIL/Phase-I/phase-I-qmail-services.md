@@ -70,6 +70,8 @@ E3 E3 //Not encrypted
 Command Group: 6  Command Code: 61 0x063D
 
 The Tell command is only sent to one QMail server that is registered as the user's Beacon server. A beacon server tells the user when they get mail. So, if a user is sending email out to 20 people, this TELL command must be sent to 20 different Beacon servers so each person can get the Tell. 
+It is up to the client to lookup the receiver's Becon server in the DRD. The client can also find backup becons in the DRD if the receiver has posted them.  
+
 
 Tell, tells the RAIDA to inform all the address owners of the existance of a file (email) so they can peek at the meta information and download it. It does this by creating a .meta file in all the addressies Email folder. 
 ```c
@@ -189,6 +191,3 @@ BI BI BI .....
 E3 E3 //Not encrypted
 ```
 
-
-
-```
