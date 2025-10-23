@@ -1,6 +1,17 @@
 # QMail Services
 This coveres the servics that run on the Qmail servers for Phase I
 
+Commands: 
+
+[Upload](#upload)
+
+[Tell](#tell)
+
+[Peek](#peek)
+
+[Download](#download)
+
+[Ping](#ping)
 
 ### File Types
 
@@ -16,6 +27,7 @@ This coveres the servics that run on the Qmail servers for Phase I
 | 0x07 | Contact | Standard Contact File|
 | 0x08 | Calendar Item | Stardard Calendar Item |
 | 0x09 | ToDo Item | For Assigining someone a ToDo item |
+| 0x0A | My Public File | File that others will be allowed to see about you. Usually avatar|
 | 0x10-0xFF | Attachment N | File attachments (0x10 = first attachment, etc.) |
 
 ### Storage Duration
@@ -32,10 +44,8 @@ Files can be stored for varying durations based on the storage code:
 **Note**: Longer storage periods incur higher fees as specified in the server's DRD.
 
 
-## Share File (Send Email and attachements)
-Command Group: 6
-
-Command Code: 60
+## UPLOAD
+Command Group: 6  Command Code: 60 0x063C
 
 Note that each file that is uploaded must have the same GUID but a different File Type/Index
 
@@ -46,26 +56,67 @@ Note that everything is Big Endian
 ```
 CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH // Challenge
 SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE // Session ID
-ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID  // Email's GUID
-LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC   // Locker Code for payment to QMail server (All zeros if empty)
-MY MY MY MY MY MY MY MY MY MY MY MY MY MY MY MY   // GUID of MyContact File (All zeros if empty)
-FT // File type
-RH RH // RAID Header
-TS TS TS TS //Time stamp
-RS // Number of Addresses Below (Up to 255)
-AD AD AD AD AD AD AD AD // Adddress (Address type, Coin Coin Type, Denomination, Serial Numbers, 
+ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID  // File Group GUID ( All zerors if not in a file group)
+LC LC LC LC LC LC LC LC LC LC LC LC  // Locker Code. Payment to QMail server without four 0xFF (All zeros if empty)
+RS RS  // 2 byes reserved for future use
+FT // File Type (See table above)
+SD // Storage Duration (See table above)
+RS RS RS RS  // 4 byes reserved for future use
 BL BL BL BL // Number of Bytes in the Data below (Big Endian)
 BI BI BI BI ..... Binary File Data
 E3 E3 //Not encrypted
 ```
 
-## Address Format:
+## TELL 
+Command Group: 6  Command Code: 61 0x063D
+
+The Tell command is only sent to one QMail server that is registered as the user's Beacon server. A beacon server tells the user when they get mail. So, if a user is sending email out to 20 people, this TELL command must be sent to 20 different Beacon servers so each person can get the Tell. 
+
+Tell, tells the RAIDA to inform all the address owners of the existance of a file (email) so they can peek at the meta information and download it. It does this by creating a .meta file in all the addressies Email folder. 
+```c
+CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH // Challenge
+SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE // Session ID
+ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID  // Email's File Group GUID Should be same as file group for emails
+LC LC LC LC LC LC LC LC LC LC LC LC  // Locker Code. Payment to QMail server without four 0xFF (All zeros if empty)
+TS TS TS TS // Time stamp
+TT // Tell Type. 0x00 for QMail sent
+AC // Address count. The number of 8 bytes addresses that follow.
+QM // QMail server Count. How many Qmail server information follows.
+SJ // Bytes in Subject
+AT // Number of attachments associated with the email. 
+RS RS RS RS RS RS RS // 7 bytes reserved for future use. 
+AD AD AD AD AD AD AD AD // Adddress (Address type, Coin Coin Type, Denomination, Serial Number)
+ST ST ST ST ST ST ST ST ST ST ST ST ST ST ST ST // Qmail server information
+ST ST ST ST ST ST ST ST ST ST ST ST ST ST ST ST
+SJ SJ SJ SJ ... // The subject of the email // UTF-8
+E3 E3 //Not encrypted
+```
+## Stripe Data
+Index ID | Name & Description
+---|---
+0 & 1 | RAID Header
+2 & 3 | QMail Server's port
+4 to 17 | IP address (Last four are IPv4) 
+18 to 31 | Reserved for future use and Phase II like verification?.  
+
+
+### User Address Format:
 Index Number | Name & Description
 ---| ---
-0 Type (See above)
+0 Type (See below)
 1 & 2 | Coin Code (0x0006)
 3 | Denominator
-4,5,67 | Serial Number
+4,5,6 & 7 | Serial Number
+
+### Address Types
+Code | Meaning
+---|---
+0x00 | Mass Mailer
+0x01 | Verification Server (Where people can go to see if the email is verified. )
+0x02 | To
+0xCC | CC
+0xBC | BCC
+
 
 
 Response Status Codes
@@ -78,10 +129,8 @@ ERROR_INVALID_PARAMETER = 198,
 ```
 
 
-## PING Command
-Command Group: 6
-
-Command Code: 61
+## PING
+Command Group: 6  Command Code: 62 0x063E
 
 The PING service allows the client to create a session with the QMail server so that the QMail server can instantly  inform the user should the QMail server receive an email from the user. This service must always use TCP and not UDP to allow the timeout to last more than 2 minutes. The ping is a keep alive and must be reissued from time to time. 
 
@@ -91,8 +140,6 @@ Sample Request:
 ```
 CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH // Challenge
 SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE // Session key
-Send Qmail CBD File
-PD PD PD ... ? // Padding to make all body bytes (except for the E3 E3 ) divisable by 32.
 E3 E3 //Not encrypted
 ```
 
@@ -101,14 +148,13 @@ The client will then wait for the QMail server to send it a message:
 Response Status Codes
 ```C
 STATUS_YOU_GOT_MAIL = 11
-STATUS_SESSION_TIMEOUT = 12
+PING_TIMEOUT = 12
+STATUS_SESSION_TIMEOUT = 13
 ```
 With this response, the client should call the PEEK Mail service. 
 
 ## PEEK Mail
-Command Group: 6
-
-Command Code: 62
+Command Group: 6  Command Code: 63 0x063F
 
 The user must first log in to get a session key. 
 
@@ -118,10 +164,32 @@ Sample Request:
 ```
 CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH // Challenge
 SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE // Session key
-PD PD PD ... ? // Padding to make all body bytes (except for the E3 E3 ) divisable by 32.
+DT DT DT DT // Date and Time since meta data was last checked. 
+E3 E3 //Not encrypted
+```
+
+## DOWNLOAD FILE
+Allows the user to go and get the file. There will probably be a limit to how many times a person can download a file. It will be genourse like ten times. The idea is the user needs to download it once per device. 
+
+```c
+CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH // Challenge
+SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE // Session ID
+ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID  // Email's File Group GUID Should be same as file group for emails
+FT // File Type
+VS // Version (optional)
+BP  // Byes per page (zero means the whole thing
+PN  // Page number (Zero means first page)
 E3 E3 //Not encrypted
 ```
 
 
-
-
+Sample Response
+```c
+FT // File Type
+VS // Version (optional)
+BP  // Byes per page (zero means the whole thing
+PN  // Page number (Zero means first page)
+BL BL BL BL // How many bytes are in the response below:
+BI BI BI .....
+E3 E3 //Not encrypted
+```
