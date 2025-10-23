@@ -16,8 +16,8 @@ FS (File Seperator)
 ```
 
 ## Meta Data
-The meta data is the data about the email but not the email itself. The meta data is made up of two parts:
-1. 16 bytes that are fixed
+The meta data is the data about the email but not the email itself. The meda data is put together by the client by assemplying data that it has gotting by downloading email stripes from QMail servers. The meta data is made up of two parts:
+1. 32 bytes that are fixed
 2. Other information that can varry but will show in chunks of 16 bytes each. 
 
 ## Meta Part Command Codes for Phase I
@@ -25,8 +25,8 @@ Command codes show what the bytes following the command code mean. The lenght of
 
 Name | Code in Hex | Code in Decimal | Bytes including command code| Byte Meanings| Value if not included | Description 
 ---|---|---|---|---|---|---
-Address | 0x40 | 64 | 16 | Address type To, CC, BCC, MM or From one byte, Coin ID 2 bytes, Denomination 1 bytes, Serial Number 4 bytes. | No CC | A mailbox address that the email was set to besides the receiver  |
-Stripe Info | 0x23 | 35 | 32 | Stripe number , of Total Stripes, QMail Server IP (16 bytes. Last four are the IPv4), QMail Server Port (2 bytes), RAID Type | | Error
+Address | 0x40 | 64 | 16 | Address type 0x02 = To, 0xCC = CC, 0xBC = BCC, 0x00 = Mass Mailer. One byte, Coin ID 2 bytes, Denomination 1 bytes, Serial Number 4 bytes. | No other addresses such as To, CC  and BCC | A mailbox address that the email was set to besides the receiver  |
+Stripe Info | 0x23 | 35 | 32 | [RAID Header](https://github.com/worthingtonse/client-prompts/blob/main/Ideas%20In%20Progress/QMAIL/raid-codes.md#raid-metadata-header-standard) ( 2 Bytes), Mail Server Port (2 bytes), For Future Use (11 bytes), QMail Server IP (16 bytes. Last four are the IPv4) | | Error
 
 <!--
 Locker Code | 0x24 | 36 | 16 | Raida that sent the locker code, 14 bytes of locker code | The locker codes are missing the last two FF FF which are assumed to be there.| No Locker codes
@@ -46,18 +46,26 @@ Text | 0x02 | 2 | varies | Between 0 and 65584 | index 1 and 2 big endian says h
 ## Hello World QMail (Phase I example)
 The following is an actual qmail file used in Phase I. The message is simply "Hello World!". It can show some status messages.
 
-All the values are shown in hex. This email is 134 bytes in length. 
+All the values are shown in hex. This email is 310 bytes in length. It has been downloaded from five different QMail Servers. 
 
 ```c
-04 00 00 06 03 00 4C D8 88 19 01 01 01 01 9A 00
-24 0B CE EC F2 28 7D 6A 4C 37 B3 21 DF 59 FF FF
-24 01 DF 5D DD 5C 6A 72 4A 40 BC AE 55 B5 FF FF
-24 10 BE 8F E2 F4 26 E6 4E B4 B8 CA A6 20 FF FF 
+11 E3 8F 8D 56 8C 4D 70 A7 F9 C5 0D B7 16 02 CD
+40 F0 00 06 03 00 4C D8 88 19 01 01 01 01 9A 00
 02 00 00 06 03 00 4C D8 88 00 00 00 00 00 00 00 
 02 00 00 06 04 00 B8 CA A6 00 00 00 00 00 00 00 
 02 01 00 06 05 00 DD 5C 6A 00 00 00 00 00 00 00
-1C 01 05 48 65 6c 6c 6f 02 0C 48 65 6c 6c 6f 20
-57 6f 72 6c 64 21     
+23 38 80 C3 51 00 00 00 00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 00 00 00 00 56 A7 13 C5
+23 38 80 C3 51 00 00 00 00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 00 00 00 00 FB 4F 0F B8 
+23 38 80 C3 51 00 00 00 00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 00 00 00 00 B9 AE 42 EE 
+23 38 80 C3 51 00 00 00 00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 00 00 00 00 A8 4A 88 5D 
+23 38 80 C3 51 00 00 00 00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 00 00 00 00 23 27 C6 6E
+1C 1C 01 05 48 65 6c 6c 6f 02 0C 48 65 6c 6c 6f
+20 57 6f 72 6c 64 21     
 ```
 Meaning of bytes:
 
@@ -67,7 +75,7 @@ Meaning of bytes:
 +// FIXED PART THAT IS ALWAYS THE SAME LENGTH AND ALL DATA IS REQUIRED. THE LENGTH IS ALWAY 16 BYTES
 +
 +// EMAIL GUID
-+ 99 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
++ 11 E3 8F 8D 56 8C 4D 70 A7 F9 C5 0D B7 16 02 CD
 +// Address. 0x00 = To, 0x01 = cc, 0x02 = BCC, 0x03 = Mass Mailing, 0x04 = From, 0x05 = group
 +04  00 00 06  03  00 4C D8 88 
 +                       
@@ -108,6 +116,9 @@ Meaning of bytes:
 +// CC Address 
 +02  01 00 06  05  00 DD 5C 6A  00 00 00 00 00 00 00 // Last seven bytes are reserved for future use. 
 +
++// Strip information
++23 38 80 C3 51 00 00 00 00 00 00 00 00 00 00 00 // RAID Header, Port Number, 11 for future use
+ 00 00 00 00 00 00 00 00 00 00 00 00 56 A7 13 C5 // IP Address
 
 +// SEPARATORS
 +//-----------------------------------------------------------------------------
