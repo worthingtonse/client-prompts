@@ -129,30 +129,6 @@ ERROR_INVALID_PARAMETER = 198,
 ```
 
 
-## PING
-Command Group: 6  Command Code: 62 0x063E
-
-The PING service allows the client to create a session with the QMail server so that the QMail server can instantly  inform the user should the QMail server receive an email from the user. This service must always use TCP and not UDP to allow the timeout to last more than 2 minutes. The ping is a keep alive and must be reissued from time to time. 
-
-The qmail sender will send their messages to many QMail servers at the same time. It is not necessary for all the QMail servers to push warning to the client. The client controls which QMail server should be the one that informs it of new messages. To reduce the amount of RAM needed by QMail servers to track sessions, the client should make a list of the four QMail servers that are closest to it (in milliseconds) and then choose from these QMail servers randomly to distribute the load. 
-
-Sample Request:
-```
-CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH // Challenge
-SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE // Session key
-E3 E3 //Not encrypted
-```
-
-The client will then wait for the QMail server to send it a message:
-
-Response Status Codes
-```C
-STATUS_YOU_GOT_MAIL = 11
-PING_TIMEOUT = 12
-STATUS_SESSION_TIMEOUT = 13
-```
-With this response, the client should call the PEEK Mail service. 
-
 ## PEEK Mail
 Command Group: 6  Command Code: 63 0x063F
 
@@ -192,4 +168,32 @@ PN  // Page number (Zero means first page)
 BL BL BL BL // How many bytes are in the response below:
 BI BI BI .....
 E3 E3 //Not encrypted
+```
+
+
+
+## PING
+Command Group: 6  Command Code: 62 0x063E
+
+The PING service allows the client to create a session with the QMail server so that the QMail server can instantly  inform the user should the QMail server receive an email from the user. This service must always use TCP and not UDP to allow the timeout to last more than 2 minutes. The ping is a keep alive and must be reissued from time to time. 
+
+The qmail sender will send their messages to many QMail servers at the same time. It is not necessary for all the QMail servers to push warning to the client. The client controls which QMail server should be the one that informs it of new messages. To reduce the amount of RAM needed by QMail servers to track sessions, the client should make a list of the four QMail servers that are closest to it (in milliseconds) and then choose from these QMail servers randomly to distribute the load. 
+
+Sample Request:
+```
+CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH // Challenge
+SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE // Session key
+E3 E3 //Not encrypted
+```
+
+The client will then wait for the QMail server to send it a message:
+
+Response Status Codes
+```C
+STATUS_YOU_GOT_MAIL = 11
+PING_TIMEOUT = 12
+STATUS_SESSION_TIMEOUT = 13
+```
+With this response, the client should call the PEEK Mail service. 
+
 ```
