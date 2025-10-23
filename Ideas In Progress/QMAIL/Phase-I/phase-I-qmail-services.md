@@ -1,5 +1,33 @@
 # QMail Services
-This coveres the actual servics used by Qmail starting with Phase I
+This coveres the servics that run on the Qmail servers for Phase I
+
+
+### File Types
+
+| Type ID | Name | Description |
+|---------|------|-------------|
+| 0x00 | QMAIL | Primary email message file |
+| 0x01 | QTEXT | Reserved for future text processing |
+| 0x02 | QCHAT | Reserved for future chat functionality |
+| 0x03 | PEER_TO_PEER_SECRET_CBDF | Private user identification data |
+| 0x04 | GROUPS_SECRET_CBDF | Private group identification data |
+| 0x05 | QPACKET | Reserved for future packet management |
+| 0x06 | QDATA | File management for QData servers |
+| 0x10-0xFF | Attachment N | File attachments (0x10 = first attachment, etc.) |
+
+### Storage Duration
+Files can be stored for varying durations based on the storage code:
+
+| Code | Duration | Calculation | Description |
+|------|----------|-------------|-------------|
+| 0x00 | Server-dependent | N/A | Free storage, server decides deletion time |
+| 0x01-0x06 | 1-6 days | Code × 1 day | Daily storage |
+| 0x07-0x0A | 1-4 weeks | (Code - 6) × 7 days | Weekly storage |
+| 0x0B-0x16 | 1-12 months | (Code - 10) × 30 days | Monthly storage |
+| 0x17-20 | 1-10 years | (Code - 22) × 365 days | Yearly storage |
+
+**Note**: Longer storage periods incur higher fees as specified in the server's DRD.
+
 
 ## Send Mail/Attachment CBDF
 Command Group: 6
