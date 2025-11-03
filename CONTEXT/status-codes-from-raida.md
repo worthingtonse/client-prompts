@@ -109,6 +109,9 @@ enum STATUS_CODE {
   ERROR_BLOCKCHAIN = 204,
   ERROR_ASSEMBLE = 205,
 
+  // For Fix service error reporting
+  ERROR_RAIDA_TIMEOUT = 206,    // RAIDA took too long to respond during Fix
+  ERROR_RAIDA_CONNECTION = 207, // Could not connect to RAIDA (DNS/port blocked)
 
 
   // For Find service
