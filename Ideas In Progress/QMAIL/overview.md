@@ -20,9 +20,9 @@ Benefits of QMail
   * **[CBDF](compact-binary-document-format.md) (Compact Binary Document Format)**: The proprietary binary format used for structuring and sending information within the QMail protocol.
   * **[Chips](chips.md)**: A RAIDA-based digital currency used to pay for services. As a form of digital cash, it does not require a public ledger, accounts, or passwords.
   * **[CloudCoin](cloudcoin.md)**: The first and default implementation of **Chips** used for QMail tips.
-  * **[DRD](distributed-resource-directory.md) (Distributed Resource Directory)**: A public directory file used to publish a user's presence and locate QMail addresses and other network resources, such as servers for RAIDA and **QKE**.
+  * **[DRD](distributed-resource-directory.md) (Distributed Resource Directory)**: A public directory file used to publish a user's presence and locate QMail addresses and other network resources, such as servers for RAIDA and **DKE**.
   * **[PMF](perfect-money-foundation.md) (Perfect Money Foundation)**: The organization that created and maintains the QMail standard and its related technologies.
-  * **[QKE](quantum-safe-key-exchange.md) (Quantum-Safe Key Exchange)**: A distributed system for securely exchanging 256-bit AES encryption keys.
+  * **[DKE](quantum-safe-key-exchange.md) (Distributed Key Exchange)**: A distributed system for securely exchanging 256-bit AES encryption keys that is quantum-safe.
   * **[QMail](qmail-protocol.md)**: An open protocol for sending and receiving quantum-safe, distributed messages. A message sent via the protocol is often called a "qmail."
   * **[qmail file](qmail-file.md)**: A file with a `.qmail` extension that contains the message content in the **CBDF** format.
   * **[STC](shuffle-transposition-cipher.md) (Shuffle Transposition Cipher)**: A method of sharding a message so that all shards are required for decryption. This is designed to prevent partial information leaks, even if an attacker gains access to some of the shards.
