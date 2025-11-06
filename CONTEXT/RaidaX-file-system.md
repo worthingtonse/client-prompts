@@ -5,7 +5,7 @@
 │   └── Data/
 │       └── 
 ├── clients/
-│   └── pro/
+│   └── core/
 │       ├───Client Server Keys
         ├───Coin Images
         ├───Drivers
