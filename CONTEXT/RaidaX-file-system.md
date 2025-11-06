@@ -1,39 +1,43 @@
 
 ```
 /opt/Q/
+├── bin/
+│   └── Data/
 ├── raidax/
 │   └── Data/
-│       └── 
+│   └── raidax_server
 ├── clients/
 │   └── core/
-│       ├───Client Server Keys
-        ├───Coin Images
-        ├───Drivers
-        ├───Performance Statistics
-        ├───temp_backup
-        ├───Themes
-        ├───Wallets
-        │   └───Default
-        │       ├───Bank
-        │       ├───Corrupted
-        │       ├───Counterfeit
-        │       ├───Duplicates
-        │       ├───Encryption_Failed
-        │       ├───Errored
-        │       ├───Export
-        │       ├───Fracked
-        │       ├───Grade
-        │       ├───Import
-        │       ├───Imported
-        │       ├───Limbo
-        │       ├───Lockered
-        │       ├───Pending
-        │       ├───Receipts
-        │       ├───Sent
-        │       ├───Suspect
-        │       ├───Trash
-        │       └───Withdrawn
-        └───Zipped Logs 
+		├── core.exe
+		└── Data
+	        ├───Client Server Keys/
+	        ├───Coin Images/
+	        ├───Drivers/
+	        ├───Performance Statistics/
+	        ├───temp_backup/
+	        ├───Themes/
+	        ├───Wallets/
+	        │   └───Default/
+	        │       ├───Bank/
+	        │       ├───Corrupted/
+	        │       ├───Counterfeit/
+	        │       ├───Duplicates/
+	        │       ├───Encryption_Failed/
+	        │       ├───Errored/
+	        │       ├───Export/
+	        │       ├───Fracked/
+	        │       ├───Grade/
+	        │       ├───Import/
+	        │       ├───Imported/
+	        │       ├───Limbo/
+	        │       ├───Lockered/
+	        │       ├───Pending/
+	        │       ├───Receipts/
+	        │       ├───Sent/
+	        │       ├───Suspect/
+	        │       ├───Trash/
+	        │       └───Withdrawn/
+	        └───Zipped Logs 
 ├── DRD/
 │   └── bin/
 │       └── data-proc
