@@ -93,5 +93,110 @@ Any thoughts on this? Do we have some read coin functions that we could alter? C
  the AN are decrypted and after the read is done, they are encrypted. 
 
 
+Let's make some simple changes to the protocol that will make it easier to implement. 
 
+We will not longer do arrays like this: 
+FB 0D ▪ 00 02 ▪ 07 ▪ {{ 00 06, 02, 00 02 3F 98 },{ 00 06, 02, 00 04 67 2E }}    
+
+We will do arrays like this will a line for each array member
+0D 07 00 06 02 00 02 3F 98  
+0D 07 00 06 02 00 04 67 2E 
+
+Please update the .md file to show this change. 
+
+The next change will be to only allow one byte values. We will need to create a discriptor table for each key that has more than one byte in it's value. 
+So the discriptor for value 0D (To address) would be:
+0D // "To:" command Key
+07 // Bytes that follow: There are seven bytes in this key's value that follow this byte
+00 // Coin Group (0-255) There are 255 coin groups each with 255 coin IDs
+06 // Coin ID (0-255)
+02 // Denomination   The 
+00 // Dotted Decimal 0    The addresses will be shown as "0.2.63.152"
+02 // Dotted Decimal 1  
+3F // Dotted Decimal 2  
+98 // Dotted Decimal 3    
+
+
+The timestamp will have one byte for year with the year 2000 assumed. So 0x19 would be 25 and we assume that it is 2025. 
+The second byte in the timestamp will be month 0x01 is January and 0x0C is December
+The third byte is the Day: 0x01 is the first day of the month and 0x1F is day 31. 
+The fourth byte of the date is the hour 0x00 is midnight and 0x17 is hour 23 of a 24 hour day. 
+The fifth byte (That we will need to add) is the minute. 0 to 56
+The sixth byte (That we will need to add) is the second. 0 to 56
+
+Any questions so with this? Remember to create a table that describes the data structure of these values. We need a structure for the To and the from mail boxes an this is for key codes 0x0D and 0x13.
+
+A7 
+03 D4 
+
+E3 F4 14 
+9E C5 05 
+0C CE 01 
+49 8B 1E 
+11 02 00 
+27 0F 01
+Looking at this QMail parser code, I can identify several bugs, with the most critical being **insufficient bounds checking** that could lead to buffer overruns:
+
+## Critical Bug: Buffer Overrun Vulnerability
+
+The main issue is that the code checks if it has read past the buffer **after** performing read operations, not before:
+
+```c
+// The check happens here, AFTER reading values
+if (p > buffer + buffer_size) {
+    fprintf(stderr, "Error: Parser read past the end of the buffer.\n");
+    // ...
+}
+```
+
+This means the code could read beyond the buffer before detecting the problem. For example:
+- `uint8_t num_pairs = *p++;` - no bounds check
+- `uint16_t key_id = *p++;` - no bounds check  
+- `memcpy(&element_count, p, sizeof(uint16_t));` - no check if 2 bytes are available
+- Reading array elements without checking if enough bytes remain
+
+## Other Issues:
+
+### 1. **Missing NULL checks after malloc**
+```c
+mail._to_mailboxes_alloc = (Mailbox*)malloc(element_count * sizeof(Mailbox));
+mail.to_mailboxes = mail._to_mailboxes_alloc;
+// If malloc fails, subsequent array access will crash
+
+mail._body_alloc = (char*)malloc(body_len + 1);
+memcpy(mail._body_alloc, p, body_len);  // Potential crash if malloc failed
+```
+
+### 2. **Potential negative body length**
+```c
+long body_len = buffer_size - body_start_offset;
+mail._body_alloc = (char*)malloc(body_len + 1);
+```
+If parsing errors cause `p` to advance beyond `buffer_size`, `body_len` becomes negative. When cast to `size_t` for malloc, this becomes a huge positive number.
+
+### 3. **Endianness assumptions**
+The code uses `memcpy` to read multi-byte values directly, assuming the file's byte order matches the system's endianness. This could cause issues on big-endian systems if the format is little-endian.
+
+## Suggested Fix for the Critical Bug:
+
+Add bounds checking before each read operation:
+
+```c
+// Example fix for reading key_id
+if (p >= buffer + buffer_size) {
+    fprintf(stderr, "Error: Unexpected end of buffer\n");
+    // Clean up and return
+    goto cleanup_error;
+}
+uint16_t key_id = *p++;
+
+// For multi-byte reads
+if (p + sizeof(uint16_t) > buffer + buffer_size) {
+    fprintf(stderr, "Error: Not enough bytes for element_count\n");
+    goto cleanup_error;
+}
+memcpy(&element_count, p, sizeof(uint16_t));
+```
+
+This prevents reading beyond the buffer boundaries and makes the parser more robust against malformed input files.
 
