@@ -1,14 +1,12 @@
 
 ```
 /opt/Q/
-├── bin/
-│   └── Data/
 ├── raidax/
-│   └── Data/
-│   └── raidax_server
+│   ├── Data/
+│   └── RAIDA.EXE
 ├── clients/
 │   └── core/
-		├── core.exe
+		├── CORE.EXE
 		└── Data
 	        ├───Client Server Keys/
 	        ├───Coin Images/
@@ -39,19 +37,18 @@
 	        │       └───Withdrawn/
 	        └───Zipped Logs 
 ├── DRD/
-│   └── bin/
-│       └── data-proc
+│   ├── Data/
+│   └── DRD.EXE
 ├── DKE/
-│   └── bin/
-│       └── data-proc
+│   ├── Data/
+│   └── DKE.EXE
 ├── QMail/
-│   └── bin/
-│       └── data-proc
+│   ├── Data/
+│   └── QMAIL.EXE
 ├── QText/
-│   └── bin/
-│       └── data-proc
-└── QWeb/
-    ├── └───Pro
-	└── assets/
-        └── brand-logo.png
+│   ├── Data/
+│   └── QTEXT.EXE
+└── QWEB/
+│   ├── Data/
+│   └── QWEB.EXE
 ```
