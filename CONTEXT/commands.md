@@ -21,7 +21,7 @@ Code | Name | Description
 11 | Swap | Services that allow people to change CloudCoin to Bitcoin or another currency
 12 | RPC | Allows people to send command to other servers. 
 13 | File System | Allows people to store files on the raida. 
-13 | File System | Allows people to store files on the raida. 
+15 | DKE | Distributed Key Exchange
 18 | DRD |Distributed Resource Director
 
 
@@ -94,6 +94,8 @@ Group ID | Group Name | Command Code (Decimal) | Command | Description
 13 | Files | 136 | Remove Object | Deletes a file
 🟥13 | Files | 107 | Show Any Folder Contents | Used by KYC officers to see list of files
 🟥13 | Files | 108 | Get Any Object | Used by KYC officers to see files
+15 | DKE | 1 | Upload Master Secret (Content Server)
+15 | DKE | 2 | Get Key Parts (Client)
 18 | DRD | 180 | Create, Update and Delete Directory User Listing
 18 | DRD | 181 | Search Directory
 18 | DRD | 182 | List User's Mail Servers
