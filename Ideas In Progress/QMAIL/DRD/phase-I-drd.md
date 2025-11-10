@@ -230,6 +230,8 @@ Nothing in Response Body if no Error
 ```
 E3 E3
 ```
+## Register QMail Server
+Allows the QMail to register itself with the DRD. 
 
 ## Search Directory
 This allows the user to search for a person in the directory. It will only warn people if they are blacklisted. 
