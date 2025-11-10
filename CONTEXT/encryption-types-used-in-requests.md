@@ -21,5 +21,5 @@ Code | Type | Description | Bytes after EN
 4 | 256 bit AES CTR | Shared Secret | Just like Encryption type 2 except uses a 256 bit key. This changes the Request Header size from 32 bytes to 48 bytes fixed. Primarily used for client - server communication. 
 5 | 256 bit AES CTR | Double Key | Bytes 24, 25, 26, 27 and 28 are used to identify a second key (DN,SN,SN,SN,SN) as well as be part of the nounce. Byte 24 is the denomination of the second key and bytes 25 though 28 are the four byte serial number of the second key. 
 6 | 256 bit AES CTR  | RAIDA Key Exchange + Session Keys | Uses 256-bit session keys from RAIDA Key Exchange. Header is 32 bytes. Bytes 1–2 = body length, 3–7 = session key ID, 8–31 bytes 8-31 are 24-byte nonce field. Designed for secure client-server tunnels with persistent session key storage.     
-7 | 256 bit AES CTR | RAIDA Key | Bytes 17 is the sending RAIDA. Bytes 25, 26, 27 and 28 are the shared RAIDA Key ID|
+7 | 256 bit AES CTR | RAIDA Key | Bytes 17 is the sending RAIDA. Bytes 18, 19, 20 and 21 are the shared RAIDA Key ID|
 
