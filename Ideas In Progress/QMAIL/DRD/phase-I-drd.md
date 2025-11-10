@@ -36,8 +36,17 @@ title: PHASE I DLD (Distributed Resource Directory)
 ---
 erDiagram
 
+    COINS {
+        int CoinID PK "Coin ID, Number Granted by the Perfect Money Foundation"
+        string PublicAlias "The client determines what they will be called"
+        string PublicDescription "The client determines what is their description"
+        string PathToAvatarFile "The public image file used by the user"
+        datetime StartDateTime "The time the coin account was created"
+    }
+
     MAILBOX {
-        int MailboxID PK "Coin ID, denomination and serial number"
+        int CoinID PK "Coin ID" 
+        int MailboxID PK "denomination and serial number"
         string PublicAlias "The client determines what they will be called"
         string PublicDescription "The client determines what is their description"
         string PathToAvatarFile "The public image file used by the user"
@@ -72,11 +81,46 @@ BECON{
     }
 
     MAILSERVER {
+        int CoinID PK "Coin ID" 
         int QMailID PK "Denomination and Serial Number"
         string PublicAlias "Name of QMail server"
         string PublicDescription "Description of server"
         string FQDN "DNS domain name"
         double flatFee "The denomination the MailServer charges to recieve an email from a sender"
+        datetime FirstRegistrationDate "The day the record was created"
+        datetime LastUpdateData "The datetime the records information was updated"
+    }
+
+
+    CONTENT_SERVER {
+        int CoinID PK "Coin ID" 
+        int ServerID PK "denomination and serial number"
+        string PublicAlias "The server determines what they will be called"
+        string PublicDescription "The server determines what is their description"
+        string PathToAvatarFile "The public image file used by the server"
+        int SendingPrice "The price the sender must pay for this user to receive"
+        datetime FirstRegistrationDate "The day the record was created"
+        datetime LastUpdateData "The datetime the records information was updated"
+    }
+
+    CONTENT_SERVER {
+        int CoinID PK "Coin ID" 
+        int ServerID PK "denomination and serial number"
+        string PublicAlias "The server determines what they will be called"
+        string PublicDescription "The server determines what is their description"
+        string PathToAvatarFile "The public image file used by the server"
+        int SendingPrice "The price the sender must pay for this user to receive"
+        datetime FirstRegistrationDate "The day the record was created"
+        datetime LastUpdateData "The datetime the records information was updated"
+    }
+
+RAIDA-DKE-DRD {
+        int CoinID PK "Coin ID" 
+        int RaidaID PK "0 to 25"
+        string IP_Address "Hex either IPv4 or IPv6"
+        int Port "Between 0 and 65,535. Usually in the 50000 range"
+        string PublicDescription "The server determines what is their description"
+        string PathToAvatarFile "The public image file used by the server"
         datetime FirstRegistrationDate "The day the record was created"
         datetime LastUpdateData "The datetime the records information was updated"
     }
