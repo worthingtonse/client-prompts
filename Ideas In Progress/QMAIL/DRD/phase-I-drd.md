@@ -183,7 +183,7 @@ Key Code | Value Length in Bytes | Value (Big-endian)
 Sample Request:
 ```c
 CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH
-SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE  //session ID
+SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE  //session ID. Only needed for encryption type 6
 Update CBD file Query . This might be like Update Mailboxes SET AliaseID "Bill Johnson" Where Mailbox ID equals Session_Mailbox_ID
 E3 E3
 ```
