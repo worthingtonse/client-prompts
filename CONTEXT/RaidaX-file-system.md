@@ -3,6 +3,10 @@
 /opt/Q/
 ├── raidax/
 │   ├── Data/
+│   ├── inter_raida_encryption_keys/
+│   │   	└── R0-256/   # The name of this folder depends on the raida id. 
+│   │  				├── R0.toml
+│   │  				├── R1.toml
 │   └── RAIDA.EXE
 ├── clients/
 │   └── core/
@@ -15,7 +19,7 @@
 	        ├───temp_backup/
 	        ├───Themes/
 	        ├───Wallets/
-	        │   └───Default/
+	        │   ├───Default/
 	        │       ├───Bank/
 	        │       ├───Corrupted/
 	        │       ├───Counterfeit/
