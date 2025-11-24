@@ -93,7 +93,6 @@ The request uses Compact Binary Document Format (CBDF) with fixed and variable s
 | Stripe Number | 1 | Stripe index (0 to N, max 32 servers) |
 | Of Number | 1 | Total number of stripes |
 | Session ID | 8 | Session ID created during previous authentication with tickets |
-| Locker Key | 16 | Last four bytes should be FF FF FF FF|
 
 **Note**: Phase I uses coin ID `0x0006`.
 
@@ -111,6 +110,7 @@ The request uses Compact Binary Document Format (CBDF) with fixed and variable s
 | 8 | Version Number | Variable | File version (default: 0) |
 | 9 | Subject Stripe | 256 bytes | RAID type + stripe info + subject text (253 bytes) Phase II |
 | 10-12 | Shuffle Table Shards | Variable | RAID shuffle table (Phase II) |
+| 13 | Locker Key| Variable | It maybe something like 'VK5-U44B' but it could very long like a pass phrase|
 
 **Recipient Format**: Each recipient entry contains:
 - 2 bytes: Coin type (0x0006 for Phase I)
