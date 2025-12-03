@@ -1,5 +1,6 @@
 # Fake words that can be used as email addresses
 Made up words are words that sound like they should be real words, but aren't. Our fake word generator has hundreds of made up words for you to find and look at.
+```
 refurn
 skizzle
 acirassi
@@ -351,6 +352,7 @@ etio
 edul
 deve
 srum
+```
 hani
 mota
 cigu
