@@ -151,6 +151,73 @@ The architecture separates the key exchange from the data transfer for maximum s
 
 **Secure Tunnel (Direct Connection)**: The client then establishes a direct TCP connection to the content server. All traffic over this connection is encrypted using the derived key and follows the Encryption Type 6 protocol specified below.
 
+## 2.0 Packet Structure For Establishing Encryption Type 6 Sessions none RAIDA severs
+
+NOTE: If the content server (DKE, DRD, QMail..) is on a RAIDA, then this session establishment is unnessary and encryption type 1 or another can be used. 
+
+This header and payload must be sent first to establish a session so that commands can be issued to the content server. The first packet is made up of two parts, the Header which is unencrypted and the Payload that is encrypted. The header describes how the content server can create the key that the client used to encrypt the payload. 
+
+### 2.1 Full Header Structure (32 Bytes Total) Unencrypted
+
+| Byte Index | Group      | Code       | Field Name             | Value/Notes                                        |
+|------------|------------|------------|------------------------|---------------------------------------------------|
+| 0          | Header     | VE         | Version/Encryption Type| `0x06` – Combined version and encryption type      |
+| 1          | Encryption | BL `u16`   | Body Length (High Byte)| High-order byte (HOB) of body length in bytes      |
+| 2          | Encryption | BL `u16`   | Body Length (Low Byte) | Low-order byte (LOB) of body length in bytes       |
+| 3          | Encryption | KI         | Key ID Byte 0          | First byte of 5-byte session key identifier        |
+| 4          | Encryption | KI         | Key ID Byte 1          | Second byte of session key identifier              |
+| 5          | Encryption | KI         | Key ID Byte 2          | Third byte of session key identifier               |
+| 6          | Encryption | KI         | Key ID Byte 3          | Fourth byte of session key identifier              |
+| 7          | Encryption | KI         | Key ID Byte 4          | Fifth byte of session key identifier               |
+| 8          | Bitmap      | BM         | RAIDA Bitmap 0        | **32-bit bitmap** indicating which RAIDA servers responded successfully|
+| 9          | Bitmap      | BM         | RAIDA Bitmap  1                |                                                   |
+| 10         | Bitmap      | BM         | RAIDA Bitmap  2                |                                                   |
+| 11         | Bitmap      | BM         | RAIDA Bitmap  3                |                                                   |
+| 12         | Nonce      | NO         | Timestamp 0|     Timestamp                               |
+| 13         | Nonce      | NO         | Timestamp 1|              |
+| 14         | Nonce      | NO         | Timestamp 2        |                                                   |
+| 15         | Nonce      | NO         | Timestamp 3         |                                                   |
+| 16         | Nonce      | NO         | Timestamp 4         |                                                   |
+| 17         | Nonce      | NO         | Timestamp 5          |                                                   |
+| 18         | Nonce      | NO         | Timestamp 6         |                                                   |
+| 19         | Nonce      | NO         | Timestamp 7         |                                                   |
+| 20         | Nonce      | NO         | Client_SN  0           |   that uniquely identifies the client             |
+| 21         | Nonce      | NO         | Client_SN  1            |                                                   |
+| 22         | Nonce      | NO         | Client_SN  2            |                                                   |
+| 23         | Nonce      | NO         | Client_SN  3         |                                                   |
+| 24         | Nonce      | NO         | Client_SN  4  |                                                   |
+| 25         | Nonce      | NO         | Key Set ID    |   The key set used by the content server          |
+| 26         | Nonce      | NO         | CS_ID         |    Used to identify the content server              |
+| 27         | Nonce      | NO         | CS_ID         |                                                   |
+| 28         | Nonce      | NO         | CS_ID         |                                                   |
+| 29         | Nonce      | NO         | CS_ID         |                                                   |
+| 30         | Nonce      | NO         | CS_ID         |                                                   |
+| 31         | Nonce      | NO         | CS_ID         |                                                   |
+
+### 2.2 Full Payload Structure (32 Bytes Total) Unencrypted
+| 0         |       |   DN   |    Denomination    |    Client's ID coin (such as mail box ID)        |
+| 1         |       |  SN    |   Serial Number     |                                                   |
+| 2         |       |   SN   |    Serial Number      |                                                   |
+| 3         |       |   SN   |   Serial Number       |                                                   |
+| 4         |       |   SN   |  Serial Number        |                                                   |
+| 5         |       |   PD   |  Padding      |                                                   |
+| 6         |       |    PD  |    Padding    |                  0x00 0x00                                 |
+| 7         |       |  SI    |   Session Identifier 0     |   Random Number created by the client         |
+| 8         |       |  SI    |   Session Identifier 1     |   Random Number created by the client         |
+| 9         |       |  SI    |   Session Identifier 2     |   Random Number created by the client         |
+| A         |       |  SI    |   Session Identifier 3     |   Random Number created by the client         |
+| B         |       |  SI    |   Session Identifier 4     |   Random Number created by the client         |
+| C         |       |  SI    |   Session Identifier 5     |   Random Number created by the client         |
+| D         |       |  SI    |   Session Identifier 6     |   Random Number created by the client         |
+| E         |       |  SI    |   Session Identifier 7     |   Random Number created by the client         |
+| +100      |       |  Tickets |   Tickets from other RADA     |   Tickets from other RADA      |
+| +4      |       |  Null Bytes |   Placeholder     |       |
+| +32      |       |  HMAC |   An HMAC-SHA256 digest of all preceding payload bytes (from 
+Denomination to Tickets)     |    calculated using the DKE encryption_key as the key.      |
+
+Packet Trailer: A 2-byte trailer (\xE3\xE3) is appended to the end of the encrypted payload.
+
+
 ## 2.0 Header Structure
 
 Encryption Type 6 uses a streamlined 32-byte header format
@@ -204,17 +271,6 @@ Encryption Type 6 uses a streamlined 32-byte header format
 
 The 24-byte Nonce field has a dual purpose, critical for establishing the session securely.
 
-### 3.1 First Packet Nonce (Key Setup)
-
-For the very first packet sent with a new Key ID, the nonce is structured to carry the key derivation information.
-
-| Byte Range | Field Name        | Size    | Description                                                             |
-|------------|-------------------|---------|-------------------------------------------------------------------------|
-| 8–11       | RAIDA Bitmap      | 4 bytes | **32-bit bitmap** indicating which RAIDA servers responded successfully |
-| 12–19      | Timestamp         | 8 bytes | **64-bit timestamp** from the key derivation process                    |
-| 20–24      | Client_SN         | 5 bytes | **5-byte client identifier** that uniquely identifies the client        |
-| 25         | Key_ID            | 1 byte  | **1-byte key set identifier** for the key exchange process              |
-| 26–31      | CS_ID (Truncated) | 6 bytes | **First 6 bytes of CS_ID**, used to identify the content server         |
 
 
 ### 3.2 Subsequent Packet Nonce (Data Transfer)
