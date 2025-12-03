@@ -159,61 +159,62 @@ This header and payload must be sent first to establish a session so that comman
 
 ### 2.1 Full Header Structure (32 Bytes Total) Unencrypted
 
-| Byte Index | Group      | Code       | Field Name             | Value/Notes                                        |
-|------------|------------|------------|------------------------|---------------------------------------------------|
-| 0          | Header     | VE         | Version/Encryption Type| `0x06` – Combined version and encryption type      |
-| 1          | Encryption | BL `u16`   | Body Length (High Byte)| High-order byte (HOB) of body length in bytes      |
-| 2          | Encryption | BL `u16`   | Body Length (Low Byte) | Low-order byte (LOB) of body length in bytes       |
-| 3          | Encryption | KI         | Key ID Byte 0          | First byte of 5-byte session key identifier        |
-| 4          | Encryption | KI         | Key ID Byte 1          | Second byte of session key identifier              |
-| 5          | Encryption | KI         | Key ID Byte 2          | Third byte of session key identifier               |
-| 6          | Encryption | KI         | Key ID Byte 3          | Fourth byte of session key identifier              |
-| 7          | Encryption | KI         | Key ID Byte 4          | Fifth byte of session key identifier               |
-| 8          | Bitmap      | BM         | RAIDA Bitmap 0        | **32-bit bitmap** indicating which RAIDA servers responded successfully|
-| 9          | Bitmap      | BM         | RAIDA Bitmap  1                |                                                   |
-| 10         | Bitmap      | BM         | RAIDA Bitmap  2                |                                                   |
-| 11         | Bitmap      | BM         | RAIDA Bitmap  3                |                                                   |
-| 12         | Nonce      | NO         | Timestamp 0|     Timestamp                               |
-| 13         | Nonce      | NO         | Timestamp 1|              |
-| 14         | Nonce      | NO         | Timestamp 2        |                                                   |
-| 15         | Nonce      | NO         | Timestamp 3         |                                                   |
-| 16         | Nonce      | NO         | Timestamp 4         |                                                   |
-| 17         | Nonce      | NO         | Timestamp 5          |                                                   |
-| 18         | Nonce      | NO         | Timestamp 6         |                                                   |
-| 19         | Nonce      | NO         | Timestamp 7         |                                                   |
-| 20         | Nonce      | NO         | Client_SN  0           |   that uniquely identifies the client             |
-| 21         | Nonce      | NO         | Client_SN  1            |                                                   |
-| 22         | Nonce      | NO         | Client_SN  2            |                                                   |
-| 23         | Nonce      | NO         | Client_SN  3         |                                                   |
-| 24         | Nonce      | NO         | Client_SN  4  |                                                   |
-| 25         | Nonce      | NO         | Key Set ID    |   The key set used by the content server          |
-| 26         | Nonce      | NO         | CS_ID         |    Used to identify the content server              |
-| 27         | Nonce      | NO         | CS_ID         |                                                   |
-| 28         | Nonce      | NO         | CS_ID         |                                                   |
-| 29         | Nonce      | NO         | CS_ID         |                                                   |
-| 30         | Nonce      | NO         | CS_ID         |                                                   |
-| 31         | Nonce      | NO         | CS_ID         |                                                   |
+| Byte Index | Group      | Code       | Field Name      | Value/Notes                                      |
+|------------|------------|------------|-----------------|--------------------------------------------------|
+| 0          | Header     | VE         | Version/Enc     | `0x06` – Combined version and encryption type    |
+| 1          | Encryption | BL `u16`   | Body Length (High) | High-order byte (HOB) of body length          |
+| 2          | Encryption | BL `u16`   | Body Length (Low)  | Low-order byte (LOB) of body length           |
+| 3          | Encryption | KI         | Key ID Byte 0   | 1st byte of 5-byte session key identifier        |
+| 4          | Encryption | KI         | Key ID Byte 1   | 2nd byte of session key identifier               |
+| 5          | Encryption | KI         | Key ID Byte 2   | 3rd byte of session key identifier               |
+| 6          | Encryption | KI         | Key ID Byte 3   | 4th byte of session key identifier               |
+| 7          | Encryption | KI         | Key ID Byte 4   | 5th byte of session key identifier               |
+| 8          | Bitmap     | BMR        | AIDA Bitmap 0   | 32-bit Bitmap (Bits 0-7): Server Response Flags  |
+| 9          | Bitmap     | BMR        | AIDA Bitmap 1   | Bits 8-15 of RAIDA Status Bitmap                 |
+| 10         | Bitmap     | BMR        | AIDA Bitmap 2   | Bits 16-23 of RAIDA Status Bitmap                |
+| 11         | Bitmap     | BMR        | AIDA Bitmap 3   | Bits 24-31 of RAIDA Status Bitmap                |
+| 12         | Nonce      | NO         | Timestamp 0     | Timestamp (MSB / Byte 0)                         |
+| 13         | Nonce      | NO         | Timestamp 1     | Timestamp Byte 1                                 |
+| 14         | Nonce      | NO         | Timestamp 2     | Timestamp Byte 2                                 |
+| 15         | Nonce      | NO         | Timestamp 3     | Timestamp Byte 3                                 |
+| 16         | Nonce      | NO         | Timestamp 4     | Timestamp Byte 4                                 |
+| 17         | Nonce      | NO         | Timestamp 5     | Timestamp Byte 5                                 |
+| 18         | Nonce      | NO         | Timestamp 6     | Timestamp Byte 6                                 |
+| 19         | Nonce      | NO         | Timestamp 7     | Timestamp (LSB / Byte 7)                         |
+| 20         | Nonce      | NO         | Client_SN 0     | Client Serial Num (Byte 0)                       |
+| 21         | Nonce      | NO         | Client_SN 1     | Client Serial Num (Byte 1)                       |
+| 22         | Nonce      | NO         | Client_SN 2     | Client Serial Num (Byte 2)                       |
+| 23         | Nonce      | NO         | Client_SN 3     | Client Serial Num (Byte 3)                       |
+| 24         | Nonce      | NO         | Client_SN 4     | Client Serial Num (Byte 4) (See Note 1)          |
+| 25         | Nonce      | NO         | Key Set ID      | The key set used by the content server           |
+| 26         | Nonce      | NO         | CS_ID 0         | Content Server ID (Byte 0)                       |
+| 27         | Nonce      | NO         | CS_ID 1         | Content Server ID (Byte 1)                       |
+| 28         | Nonce      | NO         | CS_ID 2         | Content Server ID (Byte 2)                       |
+| 29         | Nonce      | NO         | CS_ID 3         | Content Server ID (Byte 3)                       |
+| 30         | Nonce      | NO         | CS_ID 4         | Content Server ID (Byte 4)                       |
+| 31         | Nonce      | NO         | CS_ID 5         | Content Server ID (Byte 5)                       |
 
 ### 2.2 Full Payload Structure (32 Bytes Total) Unencrypted
-| 0         |       |   DN   |    Denomination    |    Client's ID coin (such as mail box ID)        |
-| 1         |       |  SN    |   Serial Number     |                                                   |
-| 2         |       |   SN   |    Serial Number      |                                                   |
-| 3         |       |   SN   |   Serial Number       |                                                   |
-| 4         |       |   SN   |  Serial Number        |                                                   |
-| 5         |       |   PD   |  Padding      |                                                   |
-| 6         |       |    PD  |    Padding    |                  0x00 0x00                                 |
-| 7         |       |  SI    |   Session Identifier 0     |   Random Number created by the client         |
-| 8         |       |  SI    |   Session Identifier 1     |   Random Number created by the client         |
-| 9         |       |  SI    |   Session Identifier 2     |   Random Number created by the client         |
-| A         |       |  SI    |   Session Identifier 3     |   Random Number created by the client         |
-| B         |       |  SI    |   Session Identifier 4     |   Random Number created by the client         |
-| C         |       |  SI    |   Session Identifier 5     |   Random Number created by the client         |
-| D         |       |  SI    |   Session Identifier 6     |   Random Number created by the client         |
-| E         |       |  SI    |   Session Identifier 7     |   Random Number created by the client         |
-| +100      |       |  Tickets |   Tickets from other RADA     |   Tickets from other RADA      |
-| +4      |       |  Null Bytes |   Placeholder     |       |
-| +32      |       |  HMAC |   An HMAC-SHA256 digest of all preceding payload bytes (from 
-Denomination to Tickets)     |    calculated using the DKE encryption_key as the key.      |
+| Byte Index | Group | Code    | Field Name           | Value/Notes                                                                         |
+|------------|-------|---------|----------------------|-------------------------------------------------------------------------------------|
+| 0          |       | DN      | Denomination         | Client's ID coin (such as mail box ID)                                              |
+| 1          |       | SN      | Serial Number        |                                                                                     |
+| 2          |       | SN      | Serial Number        |                                                                                     |
+| 3          |       | SN      | Serial Number        |                                                                                     |
+| 4          |       | SN      | Serial Number        |                                                                                     |
+| 5          |       | PD      | Padding              |                                                                                     |
+| 6          |       | PD      | Padding              | 0x00 0x00                                                                           |
+| 7          |       | SI      | Session Identifier 0 | Random Number created by the client                                                 |
+| 8          |       | SI      | Session Identifier 1 | Random Number created by the client                                                 |
+| 9          |       | SI      | Session Identifier 2 | Random Number created by the client                                                 |
+| A          |       | SI      | Session Identifier 3 | Random Number created by the client                                                 |
+| B          |       | SI      | Session Identifier 4 | Random Number created by the client                                                 |
+| C          |       | SI      | Session Identifier 5 | Random Number created by the client                                                 |
+| D          |       | SI      | Session Identifier 6 | Random Number created by the client                                                 |
+| E          |       | SI      | Session Identifier 7 | Random Number created by the client                                                 |
+| +100       |       | Tickets | Tickets from other RAIDA | Tickets from other RAIDA                                                        |
+| +4         |       | Null Bytes | Placeholder       |                                                                                     |
+| +32        |       | HMAC    | HMAC-SHA256 digest   | Digest of all preceding payload bytes (Denomination to Tickets) using DKE encryption_key |
 
 Packet Trailer: A 2-byte trailer (\xE3\xE3) is appended to the end of the encrypted payload.
 
