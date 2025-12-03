@@ -219,9 +219,9 @@ This header and payload must be sent first to establish a session so that comman
 Packet Trailer: A 2-byte trailer (\xE3\xE3) is appended to the end of the encrypted payload.
 
 
-## 2.0 Header Structure
+## 2.0 Post Session Header Structure
 
-Encryption Type 6 uses a streamlined 32-byte header format
+After the session is established, use this header. They body/payload of the call will depend on the Command group and command specified in bytes 12 and 13. 
 
 ### 2.1 Full Header Structure (32 Bytes Total)
 
