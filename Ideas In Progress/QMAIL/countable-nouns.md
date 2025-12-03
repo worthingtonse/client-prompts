@@ -1,3 +1,4 @@
+```
 Apple
 Airplane
 Animal
@@ -374,6 +375,7 @@ Zip code
 Zebra crossing
 Zigzag
 Zookeeper
+```
 Zinc
 Zest
 
