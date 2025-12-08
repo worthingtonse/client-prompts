@@ -30,6 +30,8 @@ This is basically the same information the Tell send to the Beacon.
 
 | Byte Range | Field         | Size          | Description           |
 | ---------- | ------------- | ------------- | --------------------- |
+| 0       |  `TS` | 1 byte      | How many tells in this response    |
+| 1-2      |  `TT` | 2 bytes      | How many tells are still on the beacon server and need to be downloaded via PEEK    |
 | 8–23       | `GG ... GG`   | 16 bytes      | File GUID             |
 | 24–31      | `LC ... LC`   | 8 bytes       | Locker Code (payment) |
 | 32–35      | `TT TT TT TT` | 4 bytes       | Client Timestamp      |
@@ -42,6 +44,8 @@ This is basically the same information the Tell send to the Beacon.
 | 48..       | `AD ...`      | AC × 8 bytes  | Address List   |
 | ..         | `SV ...`      | QC × 32 bytes | Server List  that includes the two byte RAID code          |
 
+The response returns an array of tells. 
+The TT tells the client that it needs to call PEEK some more to get all the tells. 
 
 Response Status:
 
@@ -55,25 +59,6 @@ Version B: Standard RAIDA (New Architecture)
 Auth: Sender's Coin (Type 1 Header).
 
 Behavior: Runs on Beacon (R13). processes payment (Import/Split/Export) and creates .meta file.
-
-Request Structure (Decrypted Body):
-
-Plaintext
-| Byte Range | Field         | Size     | Description                              |
-| ---------- | ------------- | -------- | ---------------------------------------- |
-| 0–15       | `GG ... GG`   | 16 bytes | File GUID                                |
-| 16–23      | `LC ... LC`   | 8 bytes  | Locker Code (payment)                    |
-| 24–27      | `TT TT TT TT` | 4 bytes  | Client Timestamp                         |
-| 28         | `AC`          | 1 byte   | Address Count                            |
-| 29         | `SL`          | 1 byte   | Subject Length                           |
-| 30..       | `AD ...`      | variable | Address List (Target SNs)                |
-| ..         | `SB ...`      | SL bytes | Subject String                           |
-| ..         | `LO ...`      | variable | Location Map (e.g., “Stripe 0: RAIDA 5”) |
-
-Response Status:
-
-STATUS_SUCCESS (0)
-
 
 
 Version B: Standard RAIDA (New Architecture)
