@@ -79,7 +79,7 @@ Tell, tells the RAIDA to inform all the address owners of the existance of a fil
 ```c
 SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE // Session ID
 ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID  // Email's File Group GUID Should be same as file group for emails
-LC LC LC LC LC LC LC LC LC LC LC LC  // Locker Code. Payment to QMail server without four 0xFF (All zeros if empty)
+LC LC LC LC LC LC LC LC LC LC LC LC  // Locker Code. Payment to Tell server without four 0xFF (All zeros if empty)
 🔴 LC LC LC LC LC LC LC LC LC LC LC LC  // Locker Code to pay the reciever (RAIDA will Peek)
 TS TS TS TS // Time stamp
 TT // Tell Type. 0x00 for QMail sent
