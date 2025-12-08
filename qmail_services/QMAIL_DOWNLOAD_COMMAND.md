@@ -8,17 +8,24 @@ Request Structure (Decrypted Body):
 
 Plaintext
 
-[00-15] SE SE SE SE SE SE SE SE                          // Session ID (8 bytes)
-[16-31] GG GG GG GG GG GG GG GG GG GG GG GG GG GG GG GG  // File GUID (16 bytes)
-[32]    FT                                               // File Type (1 byte)
-[33]    VR                                               // Version (1 byte)
-[34]    BP                                               // Bytes Per Page Code (1 byte)
-[35]    PN                                               // Page Number (1 byte - for large files)
+| Byte Range | Field                     | Size     | Description                        |
+| ---------- | ------------------------- | -------- | ---------------------------------- |
+| 0–7        | `SE SE SE SE SE SE SE SE` | 8 bytes  | Session ID                         |
+| 8–23       | `GG ... GG`               | 16 bytes | File GUID                          |
+| 24         | `FT`                      | 1 byte   | File Type                          |
+| 25         | `VR`                      | 1 byte   | Version                            |
+| 26         | `BP`                      | 1 byte   | Bytes-Per-Page Code                |
+| 27         | `PN`                      | 1 byte   | Page Number (used for large files) |
+
 Response Status:
 
-STATUS_SUCCESS: Followed by file binary data. from /opt/raidax/public_uploads/a1/b2/<GUID>/stripe05-25_type0_v0.qmail
+| Status                   | Meaning                      |
+| ------------------------ | ---------------------------- |
+| **STATUS_SUCCESS**       | Followed by file binary data |
+| **ERROR_FILE_NOT_EXIST** | GUID or stripe not found     |
 
-ERROR_FILE_NOT_EXIST: GUID/Stripe not found.
+storage path example : /opt/raidax/public_uploads/a1/b2/<GUID>/stripe05-25_type0_v0.qmail
+
 
 Version B: Standard RAIDA (New Architecture)
 Auth: Receiver's Coin (Type 1 Header).
@@ -29,11 +36,14 @@ Request Structure (Decrypted Body):
 
 Plaintext
 
-[00-15] GG GG GG GG GG GG GG GG GG GG GG GG GG GG GG GG  // File GUID (16 bytes)
-[16]    FT                                               // File Type
-[17]    VR                                               // Version
-[18]    BP                                               // Bytes Per Page Code
-[19]    PN                                               // Page Number
+| Byte Range | Field       | Size     | Description         |
+| ---------- | ----------- | -------- | ------------------- |
+| 0–15       | `GG ... GG` | 16 bytes | File GUID           |
+| 16         | `FT`        | 1 byte   | File Type           |
+| 17         | `VR`        | 1 byte   | Version             |
+| 18         | `BP`        | 1 byte   | Bytes-Per-Page Code |
+| 19         | `PN`        | 1 byte   | Page Number         |
+
 Response Status:
 
 STATUS_SUCCESS: Followed by file binary data (Server looks in /opt/raidax/public_uploads/...).
