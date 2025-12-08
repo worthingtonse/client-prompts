@@ -8,11 +8,18 @@ Request Structure (Decrypted Body):
 
 Plaintext
 
-[00-15] SE SE SE SE SE SE SE SE                           // Session ID (8 bytes)
-[16-19] TS TS TS TS                                      // Since Timestamp (4 bytes)
+| Byte Range | Field         | Size    | Description       |
+| ---------- | ------------- | ------- | ----------------- |
+| 0–7        | `SE ... SE`   | 8 bytes | Session ID        |
+| 8–11       | `TS TS TS TS` | 4 bytes | “Since” Timestamp |
+
 Response Status:
 
-STATUS_SUCCESS: Returns CBDF payload containing list of .meta files found. which are present at /opt/raidax/mailboxes/500200/inbox/
+| Status             | Meaning                                               |
+| ------------------ | ----------------------------------------------------- |
+| **STATUS_SUCCESS** | Returns CBDF payload containing list of `.meta` files |
+
+meta files can be  present at /opt/raidax/mailboxes/500200/inbox/ where 500200 is the recivers identity
 
 Version B: Standard RAIDA (New Architecture)
 Auth: Receiver's Coin (Type 1 Header).
@@ -21,7 +28,10 @@ Request Structure (Decrypted Body):
 
 Plaintext
 
-[00-03] TS TS TS TS                                      // Since Timestamp (4 bytes)
+| Byte Range | Field         | Size    | Description       |
+| ---------- | ------------- | ------- | ----------------- |
+| 0–3        | `TS TS TS TS` | 4 bytes | “Since” Timestamp |
+
 Response Status:
 
 STATUS_SUCCESS: Returns list of .meta files (binary or CBDF) found in /opt/raidax/mailboxes/<SN/DEN>/inbox/.

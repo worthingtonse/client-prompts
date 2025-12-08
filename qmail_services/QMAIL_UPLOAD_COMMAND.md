@@ -10,23 +10,27 @@ Request Structure (Decrypted Body):
 
 Plaintext
 
-[00-15] SE SE SE SE SE SE SE SE                          // Session ID (8 bytes)
-[16-31] GG GG GG GG GG GG GG GG GG GG GG GG GG GG GG GG  // File GUID (16 bytes)
-[32-39] LC LC LC LC LC LC LC LC                          // Locker Code (8 bytes - Payment)
-[40-41] RS RS                                            // Reserved (2 bytes)
-[42]    FT                                               // File Type (1 byte)
-[43]    SD                                               // Storage Duration (1 byte)
-[44-47] RS RS RS RS                                      // Reserved (4 bytes)
-[48-51] LL LL LL LL                                      // Data Length (4 bytes)
-[52-53] RR RR                                            // RAID Header (2 bytes: Index/Total)
-[54..]  DD DD DD ...                                     // File Data (Chunk content)
+| Byte Range | Field         | Size     | Description               |
+| ---------- | ------------- | -------- | ------------------------- |
+| 0–7        | `SE ... SE`   | 8 bytes  | Session ID                |
+| 8–23       | `GG ... GG`   | 16 bytes | File GUID                 |
+| 24–31      | `LC ... LC`   | 8 bytes  | Locker Code (Payment)     |
+| 32–33      | `RS RS`       | 2 bytes  | Reserved                  |
+| 34         | `FT`          | 1 byte   | File Type                 |
+| 35         | `SD`          | 1 byte   | Storage Duration          |
+| 36–39      | `RS ... RS`   | 4 bytes  | Reserved                  |
+| 40–43      | `LL LL LL LL` | 4 bytes  | Data Length               |
+| 44–45      | `RR RR`       | 2 bytes  | RAID Header (Index/Total) |
+| 46..       | `DD ...`      | variable | File Data (Chunk content) |
+
 Response Status:
 
-STATUS_SUCCESS (0): File saved successfully.
+| Status                     | Meaning                        |
+| -------------------------- | ------------------------------ |
+| **STATUS_SUCCESS (0)**     | File saved successfully        |
+| **ERROR_PAYMENT_REQUIRED** | Locker code invalid or missing |
+| **ERROR_SESSION_TIMEOUT**  | Session expired or not found   |
 
-ERROR_PAYMENT_REQUIRED: Locker code invalid or empty.
-
-ERROR_SESSION_TIMEOUT: Session ID not found.
 
 Version B: Standard RAIDA (New  proposed Architecture) 
 Auth: Standard RAIDA Type 1 Header (Uses Coin SN/AN).
@@ -41,8 +45,11 @@ Plaintext
 
 // Note: User Identity is derived from the Coin used to encrypt.
 
-[00-01] RR RR                                            // RAID Header (2 bytes: Index/Total)
-[02..]  DD DD DD ...                                     // File Data (Chunk content)
+| Byte Range | Field    | Size     | Description               |
+| ---------- | -------- | -------- | ------------------------- |
+| 0–1        | `RR RR`  | 2 bytes  | RAID Header (Index/Total) |
+| 2..        | `DD ...` | variable | File Data (Chunk content) |
+
 (Note: If the simplified flow moves Payment to the Beacon, the UPLOAD command just needs the data. If specific metadata like Duration/Type is needed here for naming, it is prepended).
 
 Response Status:

@@ -8,7 +8,10 @@ Request Structure (Decrypted Body):
 
 Plaintext
 
-[00-15] SE SE SE SE SE SE SE SE   // Session ID (8 bytes)
+| Byte Range | Field                     | Size     | Description                        |
+| ---------- | ------------------------- | -------- | ---------------------------------- |
+| 0–7        | `SE SE SE SE SE SE SE SE` | 8 bytes  | Session ID                         |
+
 Response Status:
 
 (No immediate response - Socket held open).
