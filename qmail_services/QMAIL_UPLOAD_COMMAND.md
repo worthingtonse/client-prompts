@@ -53,8 +53,9 @@ Plaintext
 
 (Note: If the simplified flow moves Payment to the Beacon, the UPLOAD command just needs the data. If specific metadata like Duration/Type is needed here for naming, it is prepended).
 
-Response Status:
-
-STATUS_SUCCESS (0)
-
-ERROR_WRONG_RAIDA (If user is not assigned to this server in user.txt)
+## RESPONSE STATUS
+--------------------------------------------------------------------------------
+```plaintext
+[00]    ST                                               // Status Code (1 byte)
+                                                         // 250 (0xFA): STATUS_SUCCESS
+```
