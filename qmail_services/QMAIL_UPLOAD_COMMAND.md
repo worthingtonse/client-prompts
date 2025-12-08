@@ -25,11 +25,13 @@ Plaintext
 
 Response Status:
 
+```plaintext
 [00]    ST                                               // Status Code (1 byte)
                                                          // 250 (0xFA): STATUS_SUCCESS
                                                          // 253 (0xFD): ERROR_PAYMENT_REQUIRED
                                                          // 254 (0xFE): ERROR_INVALID_PACKET_LENGTH
                                                          // 240 (0xF0): ERROR_FILESYSTEM
+```
 
 Version B: Standard RAIDA (New  proposed Architecture) 
 Auth: Standard RAIDA Type 1 Header (Uses Coin SN/AN).
