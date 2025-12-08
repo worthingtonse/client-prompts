@@ -12,13 +12,16 @@ Plaintext
 | ---------- | ------------------------- | -------- | ---------------------------------- |
 | 0–7        | `SE SE SE SE SE SE SE SE` | 8 bytes  | Session ID                         |
 
-Response Status:
-
-(No immediate response - Socket held open).
-
-On Data: Returns CBDF payload of .meta file.
-
-STATUS_SESSION_TIMEOUT: If Session invalid.
+## RESPONSE STATUS
+--------------------------------------------------------------------------------
+```plaintext
+// Immediate: None (Socket held open).
+// On Event (New Mail): Returns file content.
+// On Error:
+[00]    ST                                               // Status Code (1 byte)
+                                                         // 254 (0xFE): ERROR_INVALID_PACKET_LENGTH
+                                                         // 241 (0xF1): STATUS_SESSION_TIMEOUT
+```
 
 Version B: Standard RAIDA (New Architecture)
 Auth: Receiver's Coin (Type 1 Header).
@@ -31,10 +34,9 @@ Plaintext
 
 (Empty Body)
 // The user identity is fully contained in the encrypted Packet Header or we can include it in the body.
-Response Status:
-
-(Socket held open).
-
-On Data: Returns raw content of .meta file.
-
-STATUS_SUCCESS: If no mail (after timeout).
+## RESPONSE STATUS
+--------------------------------------------------------------------------------
+```plaintext
+// Immediate: None (Socket held open).
+// On Event: Returns file content.
+```
