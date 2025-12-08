@@ -53,6 +53,7 @@ These services generally use [Encryption Type 6](https://github.com/worthingtons
 
 Sample Request:
 Note that everything is Big Endian
+
 ```
 SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE // Session ID
 ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID  // File Group GUID ( All zerors if not in a file group)
@@ -74,10 +75,12 @@ It is up to the client to lookup the receiver's Becon server in the DRD. The cli
 
 
 Tell, tells the RAIDA to inform all the address owners of the existance of a file (email) so they can peek at the meta information and download it. It does this by creating a .meta file in all the addressies Email folder. 
+🔴 Not implemented yet
 ```c
 SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE // Session ID
 ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID  // Email's File Group GUID Should be same as file group for emails
 LC LC LC LC LC LC LC LC LC LC LC LC  // Locker Code. Payment to QMail server without four 0xFF (All zeros if empty)
+🔴 LC LC LC LC LC LC LC LC LC LC LC LC  // Locker Code to pay the reciever (RAIDA will Peek)
 TS TS TS TS // Time stamp
 TT // Tell Type. 0x00 for QMail sent
 AC // Address count. The number of 8 bytes addresses that follow.
