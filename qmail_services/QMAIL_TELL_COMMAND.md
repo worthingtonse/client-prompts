@@ -26,10 +26,10 @@ Plaintext
 
 Response Status:
 
-| Status                     | Meaning                                |
-| -------------------------- | -------------------------------------- |
-| **STATUS_SUCCESS (0)**     | Meta file created in recipient inboxes |
-| **ERROR_PAYMENT_REQUIRED** | Locker code empty or invalid           |
+| Status                            | Meaning                                |
+| --------------------------        | -------------------------------------- |
+| **STATUS_SUCCESS (0)** (250)      | Meta file created in recipient inboxes |
+| **ERROR_PAYMENT_REQUIRED** (253)  | Locker code empty or invalid           |
 
 
 Version B: Standard RAIDA (New Architecture)
