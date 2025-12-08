@@ -1,4 +1,4 @@
-CMD_UPLOAD (Command 60)
+# CMD_UPLOAD (Command 60)
 Description: Uploads a file stripe (chunk) to the  qmail server. The server saves it to a nested directory structure based on the file's GUID.
 
 Version A: With RKE/DRD (Current Code)
@@ -6,7 +6,7 @@ Auth: Relies on a pre-established Session key and session ID.
 
 Encryption: Type 6 (AES-256 using Session Key).
 
-Request Structure (Decrypted Body):
+## Request Structure (Decrypted Body):
 
 Plaintext
 
@@ -23,7 +23,7 @@ Plaintext
 | 44–45      | `RR RR`       | 2 bytes  | RAID Header (Index/Total) |
 | 46..       | `DD ...`      | variable | File Data (Chunk content) |
 
-Response Status:
+## Response Status:
 
 ```plaintext
 [00]    ST                                               // Status Code (1 byte)
@@ -32,6 +32,8 @@ Response Status:
                                                          // 254 (0xFE): ERROR_INVALID_PACKET_LENGTH
                                                          // 240 (0xF0): ERROR_FILESYSTEM
 ```
+## Response Body
+No response body
 
 Version B: Standard RAIDA (New  proposed Architecture) 
 Auth: Standard RAIDA Type 1 Header (Uses Coin SN/AN).
