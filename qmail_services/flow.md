@@ -1,4 +1,4 @@
-# OPTION 1: Legacy RKE/DRD Flow (Current Code)
+# OPTION 1: RKE/DRD Flow (Current Code)
 
 ## System Architecture
 - **Authentication:** Relies on Session IDs (8 bytes) and session keys established via RKE Handshake (Type 6).
