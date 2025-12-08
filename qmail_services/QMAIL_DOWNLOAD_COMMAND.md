@@ -19,9 +19,16 @@ Plaintext
 
 Response Status:
 
-| Status                   | Meaning                      |
-| ------------------------ | ---------------------------- |
-| **STATUS_SUCCESS**       | Followed by file binary data |
+```plaintext
+[00]    ST                                               // Status Code (1 byte, 250=Success)
+[01]    FT                                               // File Type Echo (1 byte)
+[02]    VR                                               // Version Echo (1 byte)
+[03]    BP                                               // Bytes Per Page Echo (1 byte)
+[04]    PN                                               // Page Number Echo (1 byte)
+[05-08] LL LL LL LL                                      // Data Chunk Length (4 bytes, Big Endian)
+[09..]  DD DD ...                                        // File Binary Data
+```
+error code: 
 | **ERROR_FILE_NOT_EXIST** | GUID or stripe not found     |
 
 storage path example : /opt/raidax/public_uploads/a1/b2/<GUID>/stripe05-25_type0_v0.qmail
@@ -45,5 +52,9 @@ Plaintext
 | 19         | `PN`        | 1 byte   | Page Number         |
 
 Response Status:
-
+```plaintext
+// Same Response Structure as Option 1.
+[00]    ST                                               // Status Code
+[01..]  Header Echo + Length + Data
+```
 STATUS_SUCCESS: Followed by file binary data (Server looks in /opt/raidax/public_uploads/...).
