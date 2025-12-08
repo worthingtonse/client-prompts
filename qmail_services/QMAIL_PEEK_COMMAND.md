@@ -13,7 +13,38 @@ Plaintext
 | 0–7        | `SE ... SE`   | 8 bytes | Session ID        |
 | 8–11       | `TS TS TS TS` | 4 bytes | “Since” Timestamp |
 
-## RESPONSE STATUS
+
+## Response Body
+This is basically the same information the Tell send to the Beacon.
+
+| Byte Range | Field         | Size          | Description           |
+| ---------- | ------------- | ------------- | --------------------- |
+| 0       |  `TS` | 1 byte      | How many tells in this response    |
+| 1-2      |  `TT` | 2 bytes      | How many tells are still on the beacon server and need to be downloaded via PEEK    |
+| 8–23       | `GG ... GG`   | 16 bytes      | File GUID             |
+| 24–31      | `LC ... LC`   | 8 bytes       | Locker Code (payment) |
+| 32–35      | `TT TT TT TT` | 4 bytes       | Client Timestamp      |
+| 36         | `TY`          | 1 byte        | Tell Type             |
+| 37         | `AC`          | 1 byte        | Address Count         |
+| 38         | `QC`          | 1 byte        | QMail Server Count    |
+| 39         | `SL`          | 1 byte        | Reserved         |
+| 40         | `AT`          | 1 byte        | Reserved   |
+| 41–47      | `RS ... RS`   | 7 bytes       | Reserved              |
+| 48..       | `AD ...`      | AC × 8 bytes  | Address List   |
+| ..         | `SV ...`      | QC × 32 bytes | Server List  that includes the two byte RAID code          |
+
+The response returns an array of tells. 
+The TT tells the client that it needs to call PEEK some more to get all the tells. 
+
+## Response Status:
+
+| Status                            | Meaning                                |
+| --------------------------        | -------------------------------------- |
+| **STATUS_SUCCESS (0)** (250)      | Meta file created in recipient inboxes |
+| **ERROR_PAYMENT_REQUIRED** (253)  | Locker code empty or invalid           |
+
+
+
 --------------------------------------------------------------------------------
 ```plaintext
 [00]    ST                                               // Status Code (1 byte, 250=Success)
