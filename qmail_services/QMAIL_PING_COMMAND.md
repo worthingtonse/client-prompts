@@ -10,7 +10,9 @@ Plaintext
 
 | Byte Range | Field                     | Size     | Description                        |
 | ---------- | ------------------------- | -------- | ---------------------------------- |
+| 0-15 | CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH  | 16 bytes | Challenge/CRC |
 | 0–7        | `SE SE SE SE SE SE SE SE` | 8 bytes  | Session ID                         |
+| 0–7        | `3E 3E` | 2 bytes  | Termination bytes                        |
 
 ## RESPONSE STATUS
 --------------------------------------------------------------------------------
