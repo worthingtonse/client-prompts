@@ -1,5 +1,5 @@
 CMD_DOWNLOAD (Command 64)
-Description: Sent by Receiver to Storage Server (e.g., R5). Retrieves a specific file chunk based on GUID.
+Description: Sent by Receiver to qmail Server (e.g., R5). Retrieves a specific file chunk based on GUID.
 
 Version A: With RKE/DRD (Current Code)
 Auth: Session ID.
