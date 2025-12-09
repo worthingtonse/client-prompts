@@ -1,63 +1,42 @@
-# CMD_UPLOAD (Command 60)
-Description: Uploads a file stripe (chunk) to the  qmail server. The server saves it to a nested directory structure based on the file's GUID.
+# CMD_UPLOAD
 
-Version A: With RKE/DRD (Current Code)
-Auth: Relies on a pre-established Session key and session ID.
+**Command Group:** 6
+**Command Code:** 60
+**Description:** Uploads a binary data blob (stripe) to the storage server.
 
-Encryption: Type 6 (AES-256 using Session Key).
+## Request Payload Structure (Decrypted)
 
-## Request Structure (Decrypted Body):
+**Total Common Preamble:** 49 Bytes (Offsets 0-48).
 
-Plaintext
 
-| Byte Range | Field         | Size     | Description               |
-| ---------- | ------------- | -------- | ------------------------- |
-| 0–7        | `SE ... SE`   | 8 bytes  | Session ID                |
-| 8–23       | `GG ... GG`   | 16 bytes | File GUID                 |
-| 24–31      | `LC ... LC`   | 8 bytes  | Locker Code (Payment)     |
-| 32–33      | `RS RS`       | 2 bytes  | Reserved                  |
-| 34         | `FT`          | 1 byte   | File Type                 |
-| 35         | `SD`          | 1 byte   | Storage Duration          |
-| 36–39      | `RS ... RS`   | 4 bytes  | Reserved                  |
-| 40–43      | `LL LL LL LL` | 4 bytes  | Data Length               |
-| 44–45      | `RR RR`       | 2 bytes  | RAID Header (Index/Total) |
-| 46..       | `DD ...`      | variable | File Data (Chunk content) |
+| Offset | Size | Field Name | Description |
+| :--- | :--- | :--- | :--- |
+| **00-15** | 16 | **Challenge/CRC** | Random bytes or CRC. |
+| **16-23** | 8 | **Session ID** | **Mode A:** Valid. **Mode B:** Zeros. |
+| **24-25** | 2 | **Coin Type** | Fixed `00 06`. |
+| **26** | 1 | **Denomination** | User's Denomination. |
+| **27-30** | 4 | **Serial Number** | User's Mailbox ID (Identity SN). |
+| **31-32** | 2 | **Device ID** | 16-bit Device Identifier. |
+| **33-48** | 16 | **Authenticity (AN)** | **Mode A:** Zeros. **Mode B:** Valid AN. |
+| **49-64** | 16 | **File Group GUID** | Unique 16-byte ID. |
+| **65-72** | 8 | **Locker Code** | Payment code. |
+| **73-74** | 2 | **Reserved** | Padding. |
+| **75** | 1 | **Reserved** | (Was File Type). Set to 0. |
+| **76** | 1 | **Storage Duration** | Duration code. |
+| **77-80** | 4 | **Reserved** | Padding. |
+| **81-84** | 4 | **Data Length** | Size of binary data (Big Endian). |
+| **85..** | N | **Binary Data** | The actual file content. |
+| **End** | 2 | **Terminator** | Fixed `3E 3E` (Appended **after** binary data). |
 
-## Response Status:
+## Response Structure
 
-```plaintext
-[00]    ST                                               // Status Code (1 byte)
-                                                         // 250 (0xFA): STATUS_SUCCESS
-                                                         // 253 (0xFD): ERROR_PAYMENT_REQUIRED
-                                                         // 254 (0xFE): ERROR_INVALID_PACKET_LENGTH
-                                                         // 240 (0xF0): ERROR_FILESYSTEM
-```
-## Response Body
-No response body
+**Note:** Status is returned in the Response Header. The Payload is empty on success.
 
-Version B: Standard RAIDA (New  proposed Architecture) 
-Auth: Standard RAIDA Type 1 Header (Uses Coin SN/AN).
-
-Encryption: Type 1 (AES-128 using Coin AN).
-
-Diff: No Session ID, lighter payload. Payment is usually handled at the "Tell" stage (Beacon), but if per-upload payment is needed, it stays here.
-
-Request Structure (Decrypted Body):
-
-Plaintext
-
-// Note: User Identity is derived from the Coin used to encrypt.
-
-| Byte Range | Field    | Size     | Description               |
-| ---------- | -------- | -------- | ------------------------- |
-| 0–1        | `RR RR`  | 2 bytes  | RAID Header (Index/Total) |
-| 2..        | `DD ...` | variable | File Data (Chunk content) |
-
-(Note: If the simplified flow moves Payment to the Beacon, the UPLOAD command just needs the data. If specific metadata like Duration/Type is needed here for naming, it is prepended).
-
-## RESPONSE STATUS
---------------------------------------------------------------------------------
-```plaintext
-[00]    ST                                               // Status Code (1 byte)
-                                                         // 250 (0xFA): STATUS_SUCCESS
-```
+### Status Codes
+| Code | Hex | Name | Meaning |
+| :--- | :--- | :--- | :--- |
+| **250** | `FA` | `STATUS_SUCCESS` | File saved successfully. |
+| **166** | `A6` | `ERROR_PAYMENT_REQUIRED`| Locker code invalid or insufficient funds. |
+| **16** | `10` | `ERROR_INVALID_PACKET_LENGTH` | Payload too short or malformed. |
+| **194** | `C2` | `ERROR_FILESYSTEM` | Server failed to write to disk. |
+| **18** | `12` | `ERROR_WRONG_RAIDA` | User is not assigned to this server. |
