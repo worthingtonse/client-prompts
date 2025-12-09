@@ -1,56 +1,45 @@
-CMD_TELL (Command 61)
-Description: Sent by the Sender to the Beacon (R13). It notifies the system that a file has been uploaded, provides metadata, and pays the fee.
+# CMD_TELL
 
-Version A: With RKE/DRD (Current Code)
-Auth: Session ID.
+**Command Group:** 6
+**Command Code:** 61
+**Description:** Notifies the Beacon of a new message.
 
-Request Structure (Decrypted Body):
+## Request Payload Structure (Decrypted)
 
-Plaintext
-
-| Byte Range | Field         | Size          | Description           |
-| ---------- | ------------- | ------------- | --------------------- |
-| 0–7        | `SE ... SE`   | 8 bytes       | Session ID            |
-| 8–23       | `GG ... GG`   | 16 bytes      | File GUID             |
-| 24–31      | `LC ... LC`   | 8 bytes       | Locker Code (payment) |
-| 32–35      | `TT TT TT TT` | 4 bytes       | Client Timestamp      |
-| 36         | `TY`          | 1 byte        | Tell Type             |
-| 37         | `AC`          | 1 byte        | Address Count         |
-| 38         | `QC`          | 1 byte        | QMail Server Count    |
-| 39         | `SL`          | 1 byte        | Subject Length        |
-| 40         | `AT`          | 1 byte        | Attachment Count      |
-| 41–47      | `RS ... RS`   | 7 bytes       | Reserved              |
-| 48..       | `AD ...`      | AC × 8 bytes  | Address List          |
-| ..         | `SV ...`      | QC × 32 bytes | Server List           |
-| ..         | `SB ...`      | SL bytes      | Subject String        |
-
-Response Status:
-
-| Status                            | Meaning                                |
-| --------------------------        | -------------------------------------- |
-| **STATUS_SUCCESS (0)** (250)      | Meta file created in recipient inboxes |
-| **ERROR_PAYMENT_REQUIRED** (253)  | Locker code empty or invalid           |
+**Total Common Preamble:** 49 Bytes (Offsets 0-48).
 
 
-Version B: Standard RAIDA (New Architecture)
-Auth: Sender's Coin (Type 1 Header).
+| Offset | Size | Field Name | Description |
+| :--- | :--- | :--- | :--- |
+| **00-15** | 16 | **Challenge/CRC** | Random bytes or CRC. |
+| **16-23** | 8 | **Session ID** | **Mode A:** Valid. **Mode B:** Zeros. |
+| **24-25** | 2 | **Coin Type** | Fixed `00 06`. |
+| **26** | 1 | **Denomination** | User's Denomination. |
+| **27-30** | 4 | **Serial Number** | User's Mailbox ID. |
+| **31-32** | 2 | **Device ID** | 16-bit Device Identifier. |
+| **33-48** | 16 | **Authenticity (AN)** | **Mode A:** Zeros. **Mode B:** Valid AN. |
+| **49-64** | 16 | **File Group GUID** | Unique 16-byte ID. |
+| **65-72** | 8 | **Locker Code** | Payment code. |
+| **73-76** | 4 | **Timestamp** | Client Time (Big Endian). |
+| **77** | 1 | **Tell Type** | Type of notification. |
+| **78** | 1 | **Address Count** | Number of recipients (AC). |
+| **79** | 1 | **Server Count** | Number of storage servers (QC). |
+| **80** | 1 | **Reserved** | (Was Subject Len). Set to 0. |
+| **81** | 1 | **Reserved** | (Was Attach Count). Set to 0. |
+| **82-88** | 7 | **Reserved** | Padding bytes (Zeros). |
+| **89..** | Var | **Recipient List** | `AC` items × 8 bytes each.<br>Item: `Type(1)+CoinID(2)+Denom(1)+SN(4)`. |
+| **..** | Var | **Stripe Map** | `QC` items × 32 bytes each.<br>Item: `Index(1)+Total(1)+ServerID(1)+Reserved(29)`. |
+| **End** | 2 | **Terminator** | Fixed `3E 3E` (Appended **after** last list item). |
 
-Behavior: Runs on Beacon (R13). processes payment (Import/Split/Export) and creates .meta file.
+## Response Structure
 
-Request Structure (Decrypted Body):
+**Note:** Status is returned in the Response Header. Payload is empty.
 
-Plaintext
-| Byte Range | Field         | Size     | Description                              |
-| ---------- | ------------- | -------- | ---------------------------------------- |
-| 0–15       | `GG ... GG`   | 16 bytes | File GUID                                |
-| 16–23      | `LC ... LC`   | 8 bytes  | Locker Code (payment)                    |
-| 24–27      | `TT TT TT TT` | 4 bytes  | Client Timestamp                         |
-| 28         | `AC`          | 1 byte   | Address Count                            |
-| 29         | `SL`          | 1 byte   | Subject Length                           |
-| 30..       | `AD ...`      | variable | Address List (Target SNs)                |
-| ..         | `SB ...`      | SL bytes | Subject String                           |
-| ..         | `LO ...`      | variable | Location Map (e.g., “Stripe 0: RAIDA 5”) |
-
-Response Status:
-
-STATUS_SUCCESS (0)
+### Status Codes
+| Code | Hex | Name | Meaning |
+| :--- | :--- | :--- | :--- |
+| **250** | `FA` | `STATUS_SUCCESS` | Notification created successfully. |
+| **166** | `A6` | `ERROR_PAYMENT_REQUIRED`| Payment failed or locker empty. |
+| **16** | `10` | `ERROR_INVALID_PACKET_LENGTH` | Malformed header or lists. |
+| **194** | `C2` | `ERROR_FILESYSTEM` | Failed to write .meta file. |
+| **18** | `12` | `ERROR_WRONG_RAIDA` | Recipient not found on this Beacon. |
