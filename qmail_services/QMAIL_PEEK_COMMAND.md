@@ -27,6 +27,7 @@
 | **00** | 1 | **Tell Count (TS)** | How many tells are in this response packet. |
 | **01-02** | 2 | **Total Tells (TT)**| How many tells remain on the beacon. |
 | **03-07** | 5 | **Reserved** | Padding/Alignment bytes. |
+| QMail Array | 0 | QMail index[n] | The following can be repeated for every qmail|
 | **08-23** | 16 | **File GUID** | Unique ID of the file. |
 | **24-31** | 8 | **Locker Code** | Payment code. |
 | **32-35** | 4 | **Timestamp** | Client Timestamp. |
