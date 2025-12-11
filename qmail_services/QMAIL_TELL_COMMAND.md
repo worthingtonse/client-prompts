@@ -33,7 +33,7 @@
 
 Receippient Types
 
-Code | Meaning
+Code | Name | Meaning
 ---|---|---
 0 | To | Who the message is addessed to
 1 | CC | copy sent to 
