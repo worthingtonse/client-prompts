@@ -35,9 +35,10 @@
 ## File Types
 
 Type | Meaning
+---|---
 0 | Meta data about the email. Includes the subjects and id's of the attachments. 
 1 | qmail. The styling and body of the qmail. 
-2 | Resurved
+2 | Reserved (could be web page, instant message, CloudCoin, crypto key, etc. 
 10 | first attachment
 11 | second attachment.
 12 | attachments indexed to 255. 
