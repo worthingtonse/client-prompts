@@ -53,3 +53,15 @@ Code | Name | Meaning
 | **16** | `10` | `ERROR_INVALID_PACKET_LENGTH` | Malformed header or lists. |
 | **194** | `C2` | `ERROR_FILESYSTEM` | Failed to write .meta file. |
 | **18** | `12` | `ERROR_WRONG_RAIDA` | Recipient not found on this Beacon. |
+
+
+## Tell File kept on RAIDA
+| Offset | Size | Field Name | Description |
+| :--- | :--- | :--- | :--- |
+| **08-23** | 16 | **QMail GUID** | Unique ID of the file. |
+| **08-23** | 8 | **Sender's Address** | CoinID, DN, SNs, extra byte  |
+| **24-31** | 8 | **Locker Code** | Payment code (New code for receiver). |
+| **32-35** | 4 | **Timestamp** | Client Timestamp. |
+| **36** | 1 | **Tell Type** | Type of notification. |
+| **..** | Var | **Server List** | `QC` items × 32 bytes each (Includes 2-byte RAID code). |
+| **..** | Var | **Next Tell** | (If TS > 1, the next block repeats from Offset 08). |
