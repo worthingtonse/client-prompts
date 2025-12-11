@@ -31,6 +31,16 @@
 | **..** | Var | **Stripe Map** | `QC` items × 32 bytes each.<br>Item: `Index(1)+Total(1)+ServerID(1)+Reserved(29)`. |
 | **End** | 2 | **Terminator** | Fixed `3E 3E` (Appended **after** last list item). |
 
+Receippient Types
+
+Code | Meaning
+---|---|---
+0 | To | Who the message is addessed to
+1 | CC | copy sent to 
+2 | BCC | Blind Carbon Copy
+3 | Mass | Not implemented yet. 
+
+
 ## Response Structure
 
 **Note:** Status is returned in the Response Header. Payload is empty.
