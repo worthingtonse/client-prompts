@@ -32,6 +32,15 @@
 
 **Note:** Status is returned in the Response Header. The Payload is empty on success.
 
+### Status Codes
+| Code | Hex | Name | Meaning |
+| :--- | :--- | :--- | :--- |
+| **250** | `FA` | `STATUS_SUCCESS` | File saved successfully. |
+| **166** | `A6` | `ERROR_PAYMENT_REQUIRED`| Locker code invalid or insufficient funds. |
+| **16** | `10` | `ERROR_INVALID_PACKET_LENGTH` | Payload too short or malformed. |
+| **194** | `C2` | `ERROR_FILESYSTEM` | Server failed to write to disk. |
+| **18** | `12` | `ERROR_WRONG_RAIDA` | User is not assigned to this server. |
+
 ## File Types
 
 Type | Meaning
@@ -44,12 +53,3 @@ Type | Meaning
 12 | attachments indexed to 255. 
 
 
-
-### Status Codes
-| Code | Hex | Name | Meaning |
-| :--- | :--- | :--- | :--- |
-| **250** | `FA` | `STATUS_SUCCESS` | File saved successfully. |
-| **166** | `A6` | `ERROR_PAYMENT_REQUIRED`| Locker code invalid or insufficient funds. |
-| **16** | `10` | `ERROR_INVALID_PACKET_LENGTH` | Payload too short or malformed. |
-| **194** | `C2` | `ERROR_FILESYSTEM` | Server failed to write to disk. |
-| **18** | `12` | `ERROR_WRONG_RAIDA` | User is not assigned to this server. |
