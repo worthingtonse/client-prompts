@@ -1,7 +1,7 @@
 # Encryption Types used in the Request Headers
 
 ### ENCRYPTION RULES All SERVICES
-To make if more difficult for quantum computers to know when they have decrypted a Request Body, the Request Headers are not encrypted. Padding must often be added to the end of a body (before the terminating bytes) to make the body encryptable. Most documentation leaves this padding out of the protocol description but it should be there. Newer descriptions show the padding. 
+To make if more difficult for quantum computers to know when they have decrypted a Request Body, the Request Headers are not encrypted.
 
 ## Encryption rules about different parts of the request:
 
