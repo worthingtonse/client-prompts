@@ -8,7 +8,7 @@ To make if more difficult for quantum computers to know when they have decrypted
 Request Part | Encryption Rules | Length in bytes
 ---|---|---
  Request Headers | Not encrypted | 32 bytes if body uses encryption type 0,1,2 or 3. Encryptoin type 4 and above use 64 bytes fixed. Includes the ID's of shared secret
- Request Bodies | Encrypted using the shared secret identified in thje request header | Varries but padded to be divisable by 16 if using encryption type 1,2 or 3. Padded to 32 bytes if encryption type 4 and above. No padding if encryption type 0. 
+ Request Bodies | Encrypted using the shared secret identified in the request header | 
  Terminating Bytes | Not encrypted. | 2 bytes (0xE3E3 ) Magic numbers.   
 
 ## ENCRYPTION
