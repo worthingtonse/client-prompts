@@ -16,17 +16,18 @@
 | **24-25** | 2 | **Coin Type** | Fixed `00 06`. |
 | **26** | 1 | **Denomination** | User's Denomination. |
 | **27-30** | 4 | **Serial Number** | User's Mailbox ID (Identity SN). |
-| **31-32** | 2 | **Device ID** | 16-bit Device Identifier. |
-| **33-48** | 16 | **Authenticity (AN)** | **Mode A:** Zeros. **Mode B:** Valid AN. |
-| **49-64** | 16 | **File Group GUID** | Unique 16-byte ID. |
-| **65-72** | 8 | **Locker Code** | Payment code. |
-| **73-74** | 2 | **Reserved** | Padding. |
-| **75** | 1 | **Reserved** | (Was File Type). Set to 0. |
-| **76** | 1 | **Storage Duration** | Duration code. |
-| **77-80** | 4 | **Reserved** | Padding. |
-| **81-84** | 4 | **Data Length** | Size of binary data (Big Endian). |
-| **85..** | N | **Binary Data** | The actual file content. |
-| **End** | 2 | **Terminator** | Fixed `3E 3E` (Appended **after** binary data). |
+| **31**    | 1 | **Device ID**        | 8-bit Device Identifier. |
+| **32-47**| 16| **Authenticity (AN)**| **Mode A:** Zeros. **Mode B:** Valid AN. |
+| **48-63**| 16| **File Group GUID**  | Unique 16-byte ID. |
+| **64-71**| 8 | **Locker Code**      | Payment code. |
+| **72-73**| 2 | **Reserved**         | Padding. |
+| **74**   | 1 | **Reserved**         | (Was File Type). Set to 0. |
+| **75**   | 1 | **Storage Duration** | Duration code. |
+| **76-79**| 4 | **Reserved**         | Padding. |
+| **80-83**| 4 | **Data Length**      | Size of binary data (Big Endian). |
+| **84..** | N | **Binary Data**      | The actual file content. |
+| **End**  | 2 | **Terminator**       | Fixed `3E 3E` (Appended **after** binary data). |
+
 
 ## Response Structure
 
