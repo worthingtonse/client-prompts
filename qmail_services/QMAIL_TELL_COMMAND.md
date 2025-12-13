@@ -16,20 +16,21 @@
 | **24-25** | 2 | **Coin Type** | Fixed `00 06`. |
 | **26** | 1 | **Denomination** | User's Denomination. |
 | **27-30** | 4 | **Serial Number** | User's Mailbox ID. |
-| **31-32** | 2 | **Device ID** | 16-bit Device Identifier. |
-| **33-48** | 16 | **Authenticity (AN)** | **Mode A:** Zeros. **Mode B:** Valid AN. |
-| **49-64** | 16 | **File Group GUID** | Unique 16-byte ID. |
-| **65-72** | 8 | **Locker Code** | Payment code. |
-| **73-76** | 4 | **Timestamp** | Client Time (Big Endian). |
-| **77** | 1 | **Tell Type** | Type of notification. |
-| **78** | 1 | **Address Count** | Number of recipients (AC). |
-| **79** | 1 | **Server Count** | Number of storage servers (QC). |
-| **80** | 1 | **Reserved** | (Was Subject Len). Set to 0. |
-| **81** | 1 | **Reserved** | (Was Attach Count). Set to 0. |
-| **82-88** | 7 | **Reserved** | Padding bytes (Zeros). |
-| **89..** | Var | **Recipient List** | `AC` items × 8 bytes each.<br>Item: `Type(1)+CoinID(2)+Denom(1)+SN(4)`. |
-| **..** | Var | **Stripe Map** | `QC` items × 32 bytes each.<br>Item: `Index(1)+Total(1)+ServerID(1)+Reserved(29)`. |
-| **End** | 2 | **Terminator** | Fixed `3E 3E` (Appended **after** last list item). |
+| **31**    | 1  | **Device ID**        | 8-bit Device Identifier. |
+| **32-47**| 16 | **Authenticity (AN)**| **Mode A:** Zeros. **Mode B:** Valid AN. |
+| **48-63**| 16 | **File Group GUID**  | Unique 16-byte ID. |
+| **64-71**| 8  | **Locker Code**      | Payment code. |
+| **72-75**| 4  | **Timestamp**        | Client Time (Big Endian). |
+| **76**   | 1  | **Tell Type**        | Type of notification. |
+| **77**   | 1  | **Address Count**    | Number of recipients (AC). |
+| **78**   | 1  | **Server Count**     | Number of storage servers (QC). |
+| **79**   | 1  | **Reserved**         | (Was Subject Len). Set to 0. |
+| **80**   | 1  | **Reserved**         | (Was Attach Count). Set to 0. |
+| **81-87**| 7  | **Reserved**         | Padding bytes (Zeros). |
+| **88..** | Var| **Recipient List**   | `AC` items × 8 bytes each.<br>Item: `Type(1)+CoinID(2)+Denom(1)+SN(4)`. |
+| **..**   | Var| **Stripe Map**       | `QC` items × 32 bytes each.<br>Item: `Index(1)+Total(1)+ServerID(1)+Reserved(29)`. |
+| **End**  | 2  | **Terminator**       | Fixed `3E 3E` (Appended **after** last list item). |
+
 
 Receippient Types
 
