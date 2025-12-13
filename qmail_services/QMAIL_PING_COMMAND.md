@@ -15,9 +15,10 @@
 | **24-25** | 2 | **Coin Type** | Fixed `00 06`. |
 | **26** | 1 | **Denomination** | User's Denomination. |
 | **27-30** | 4 | **Serial Number** | User's Mailbox ID. |
-| **31-32** | 2 | **Device ID** | 16-bit Device Identifier. |
-| **33-48** | 16 | **Authenticity (AN)** | **Mode A:** Zeros. **Mode B:** Valid AN. |
-| **49-50** | 2 | **Terminator** | Fixed `3E 3E` (Appended at end). |
+| **31**    | 1  | **Device ID**        | 8-bit Device Identifier. |
+| **32-47**| 16 | **Authenticity (AN)**| **Mode A:** Zeros. **Mode B:** Valid AN. |
+| **48-49**| 2  | **Terminator**       | Fixed `3E 3E` (Appended at end). |
+
 
 ## Response Payload Structure (Tell Array)
 
