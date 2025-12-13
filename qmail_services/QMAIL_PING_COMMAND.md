@@ -28,16 +28,13 @@ This payload follows the Response Header (which contains the Status Code).
 | **00** | 1 | **Tell Count (TS)** | How many tells are in this response packet. |
 | **01-02** | 2 | **Total Tells (TT)**| How many tells remain on the beacon (Big Endian). |
 | **03-07** | 5 | **Reserved** | Padding/Alignment bytes. |
-| **08-23** | 16 | **File GUID** | Unique ID of the file. |
-| **24-31** | 8 | **Locker Code** | Payment code (New code for receiver). |
-| **32-35** | 4 | **Timestamp** | Client Timestamp. |
+| **08-23** | 16 | **File GUID** | Unique ID of the email. |
+| **24-31** | 8 | **Locker Code** | blank |
+| **32-35** | 4 | **Timestamp** | Beacon Timestamp. |
 | **36** | 1 | **Tell Type** | Type of notification. |
-| **37** | 1 | **Address Count** | Number of recipients (AC). |
+| **37** | 1 | **Reserved** | blank |
 | **38** | 1 | **Server Count** | Number of storage servers (QC). |
-| **39** | 1 | **Reserved** | (Was Subject Len). |
-| **40** | 1 | **Reserved** | (Was Attach Count). |
-| **41-47** | 7 | **Reserved** | Padding. |
-| **48..** | Var | **Address List** | `AC` items × 8 bytes each. |
+| **39-48** | 1 | **Reserved** | blank |
 | **..** | Var | **Server List** | `QC` items × 32 bytes each (Includes 2-byte RAID code). |
 | **..** | Var | **Next Tell** | (If TS > 1, the next block repeats from Offset 08). |
 
