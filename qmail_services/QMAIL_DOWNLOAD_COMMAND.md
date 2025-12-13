@@ -16,14 +16,15 @@
 | **24-25** | 2 | **Coin Type** | Fixed `00 06`. |
 | **26** | 1 | **Denomination** | User's Denomination. |
 | **27-30** | 4 | **Serial Number** | User's Mailbox ID. |
-| **31-32** | 2 | **Device ID** | 16-bit Device Identifier. |
-| **33-48** | 16 | **Authenticity (AN)** | **Mode A:** Zeros. **Mode B:** Valid AN. |
-| **49-64** | 16 | **File Group GUID** | Unique 16-byte ID. |
-| **65** | 1 | **File Type** | Type of file requested. |
-| **66** | 1 | **Version** | Version requested. |
-| **67** | 1 | **Bytes Per Page** | Page size code (0=Max, 1=1KB, 2=8KB, 3=64KB). |
-| **68** | 1 | **Page Number** | Page index to retrieve. |
-| **69-70** | 2 | **Terminator** | Fixed `3E 3E` (Appended **after** parameters). |
+| **31**    | 1  | **Device ID**        | 8-bit Device Identifier. |
+| **32-47**| 16 | **Authenticity (AN)**| **Mode A:** Zeros. **Mode B:** Valid AN. |
+| **48-63**| 16 | **File Group GUID**  | Unique 16-byte ID. |
+| **64**   | 1  | **File Type**        | Type of file requested. |
+| **65**   | 1  | **Version**          | Version requested. |
+| **66**   | 1  | **Bytes Per Page**   | Page size code (0=Max, 1=1KB, 2=8KB, 3=64KB). |
+| **67**   | 1  | **Page Number**      | Page index to retrieve. |
+| **68-69**| 2  | **Terminator**       | Fixed `3E 3E` (Appended **after** parameters). |
+
 
 ## Response Payload Structure
 
