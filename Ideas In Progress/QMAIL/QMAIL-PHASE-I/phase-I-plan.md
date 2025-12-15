@@ -1,7 +1,7 @@
 # Phase I Plan
 
 ## Phase I: Foundational Workflow
-In this initial phase, the core messaging functionality is established with a simple DRD (Distributed Resource Directory).
+In this initial phase, the core messaging functionality is esQMAIL-PHASE-IIItablished with a simple DRD (Distributed Resource Directory).
 
 Goal of this Phase: 
 1. Install Distributed Key Exchange RAIDA Server and Content Server on all RAIDA.
