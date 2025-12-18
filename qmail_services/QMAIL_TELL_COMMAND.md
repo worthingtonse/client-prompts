@@ -19,14 +19,12 @@ This is the body of the request. See other documents for how the header is organ
 | **31**    | 1  | **Device ID**        | 8-bit Device Identifier. User 0 for now for user's first desktop|
 | **32-47**| 16 | **Authenticity (AN)**| **Mode A:** Zeros. **Mode B:** Valid AN. THe password for the DN SN SN SN mail box above|
 | **48-63**| 16 | **File Group GUID**  | Unique 16-byte ID. |
-| **64-71**| 8  | **Locker Code**      | Payment code. |
+| **64-71**| 8  | **Reserved**      | |
 | **72-75**| 4  | **Timestamp**        | Client Time (Big Endian). |
 | **76**   | 1  | **Tell Type**        | Type of notification. Use 0 for qmail |
 | **77**   | 1  | **Address Count**    | Number of recipient addresses (AC) that will be listed below. |
 | **78**   | 1  | **Server Count**     | Number of storage servers (QC) that will be listed below. |
-| **79**   | 1  | **Reserved**         | 0. |
-| **80**   | 1  | **Reserved**         | 0. |
-| **81-87**| 7  | **Reserved**         | 0 |
+| **79-87**   | 1  | **Reserved**         |  |
 | **88..** | Var| **Recipient List**   | `AC` items × 8 bytes each.<br>Item: `Type(1)+CoinID(2)+Denom(1)+SN(4)`. |
 | **..**   | Var| **Stripe Map**       | `QC` items × 32 bytes each.<br>Item: `Index(1)+Total(1)+ServerID(1)+Reserved(29)`. |
 | **End**  | 2  | **Terminator**       | Fixed `3E 3E` (Appended **after** last list item). |
@@ -44,18 +42,40 @@ Code | Name | Meaning
 
 Name | bytes | Description
 ---|---|---
+Server Index| 1| This is the order in which this server array must be lined up to be put together. Starts at zero. 
+Stripe Type | 1 | Parity or Stripe, Horizontal, Vertical or Diagnal. 
 IP | 16 | Uses IP four but could use IPv6. IP 4 are the last four bytes of the 16
 Port |2| The port that the Qmail server uses
+Reserved | 12 | Reserved
 
 
-
+Stripe Info | 0x23 | 35 | 32 | [RAID Header](https://github.com/worthingtonse/client-prompts/blob/main/Ideas%20In%20Progress/QMAIL/raid-codes.md#raid-metadata-header-standard) ( 2 Bytes), Mail Server Port (2 bytes), For Future Use (11 bytes), QMail Server IP (16 bytes. Last four are the IPv4) | | Error
 
 
 ### Address List Format
-This is a list of all the addresses this tell is supposed to go to. Note that if there are addresses that are on different beacon servers, then a
-tell must be sent out for each beacon server with different users. 
+
+Address part | Bytes | Description
+---|---|---
+Address type 0x00 = To, 0x01 = CC, 0x02 = BCC, 0x03 = Mass Mailer
+Coin ID | 2 | Example: 0x0006 (6 means CloudCoinV3
+Denomination | 1 | The denomination of the coin the user has staked for the email address
+Domain ID | 1 | There will be 250 Top Level Domains. For right now we use 00 which means Qmail or blank
+Serial Number | 3 | The serial number of the mail box. 
 
 
+
+### File Types
+
+| Type ID | Name | Description |
+|---------|------|-------------|
+| 0 | QMAIL | Primary email message file |
+| 1 | QTEXT | Reserved for future text processing |
+| 2 | QCHAT | Reserved for future chat functionality |
+| 3 | PEER_TO_PEER_SECRET_CBDF | Private user identification data |
+| 4 | GROUPS_SECRET_CBDF | Private group identification data |
+| 5 | QPACKET | Reserved for future packet management |
+| 6 | QDATA | File management for QData servers |
+| 10-255 | Attachment N | File attachments (10 = first attachment, etc.) |
 
 ## Response Structure
 
@@ -71,13 +91,4 @@ tell must be sent out for each beacon server with different users.
 | **18** | `12` | `ERROR_WRONG_RAIDA` | Recipient not found on this Beacon. |
 
 
-## Tell File kept on RAIDA
-| Offset | Size | Field Name | Description |
-| :--- | :--- | :--- | :--- |
-| **08-23** | 16 | **QMail GUID** | Unique ID of the file. |
-| **08-23** | 8 | **Sender's Address** | CoinID, DN, SNs, extra byte  |
-| **24-31** | 8 | **Locker Code** | Payment code (New code for receiver). |
-| **32-35** | 4 | **Timestamp** | Client Timestamp. |
-| **36** | 1 | **Tell Type** | Type of notification. |
-| **..** | Var | **Server List** | `QC` items × 32 bytes each (Includes 2-byte RAID code). |
-| **..** | Var | **Next Tell** | (If TS > 1, the next block repeats from Offset 08). |
+
