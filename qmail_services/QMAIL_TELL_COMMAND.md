@@ -19,14 +19,14 @@ This is the body of the request. See other documents for how the header is organ
 | **31**    | 1  | **Device ID**        | 8-bit Device Identifier. User 0 for now for user's first desktop|
 | **32-47**| 16 | **Authenticity (AN)**| **Mode A:** Zeros. **Mode B:** Valid AN. THe password for the DN SN SN SN mail box above|
 | **48-63**| 16 | **Email ID GUID**  | Unique 16-byte ID. |
-| **64-71**| 8  | **Reserved**      | |
+| **64-71**| 8  | **RAID TYPE**      | Use zero for now. This means all the servers are stripes except the last one is parity|
 | **72-75**| 4  | **Timestamp**        | Client Time (Big Endian). |
 | **76**   | 1  | **Tell Type**        | Type of notification. Use 0 for qmail |
 | **77**   | 1  | **Address Count**    | Number of recipient addresses (AC) that will be listed below. |
 | **78**   | 1  | **Server Count**     | Number of storage servers (QC) that will be listed below. |
 | **79-87** | 1  | **Reserved**         |  |
-|  | Var| **Recipient List**   | `AC` Recipients × 24 bytes each.<br>Item: `Receipient Type(1)+CoinID(2)+Denom(1)+SN(4)+LockerPaymentKey(16)`. |
-|  | Var| **QMail Server**       | `QC` Servers × 32 bytes each.<br>Item: `Index(1)+Total(1)+ServerID(1)+Reserved(29)`. |
+|  | Var| **Recipient List**   | `AC` Recipients × 32 bytes each.<br>Item: `Receipient Type(1)+CoinID(2)+Denom(1)+SN(4)+LockerPaymentKey(16)+Reserved(8)`. |
+|  | Var| **QMail Server**       | `QC` Servers × 32 bytes each.<br>Item: `StripeIndex(1)+StripeType(1)+ServerID(8)+IP(16)+Port(2)+Reserved(4)`. |
 | **End**  | 2  | **Terminator**       | Fixed `3E 3E` (Appended **after** last list item). Not encrypted |
 
 
@@ -39,12 +39,13 @@ Code | Name | Meaning
 3 | Mass | Not implemented yet. 
 
 ### Server List Format
-Each server that the messages are stiped on is described here.
+Each server that the messages are striped on is described here.
 Name | bytes | Description
 ---|---|---
 Server Index| 1| This is the order in which this server array must be lined up to be put together. Starts at zero. 
 Stripe Type |  1 | Stripe 0, Parity 1, Mirror 2, Horizontal, Vertical or Diagnal. 
-IP | 16 | Uses IP four but could use IPv6. IP 4 are the last four bytes of the 16
+Stripe ID | 8 | For future use. Leave all zeros.
+IP | 16 | Uses IPv4 but could use IPv6. IPv4 are the last four bytes of the 16
 Port |2| The port that the Qmail server uses
 Reserved | 12 | Reserved
 
