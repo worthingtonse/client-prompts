@@ -24,13 +24,13 @@ This is the body of the request. See other documents for how the header is organ
 | **76**   | 1  | **Tell Type**        | Type of notification. Use 0 for qmail |
 | **77**   | 1  | **Address Count**    | Number of recipient addresses (AC) that will be listed below. |
 | **78**   | 1  | **Server Count**     | Number of storage servers (QC) that will be listed below. |
-| **79-87**   | 1  | **Reserved**         |  |
-| **88..** | Var| **Recipient List**   | `AC` Recipients × 24 bytes each.<br>Item: `Type(1)+CoinID(2)+Denom(1)+SN(4)+LockerCode(16)`. |
-| **..**   | Var| **QMail Server**       | `QC` Servers × 32 bytes each.<br>Item: `Index(1)+Total(1)+ServerID(1)+Reserved(29)`. |
+| **79-87** | 1  | **Reserved**         |  |
+|  | Var| **Recipient List**   | `AC` Recipients × 24 bytes each.<br>Item: `Receipient Type(1)+CoinID(2)+Denom(1)+SN(4)+LockerPaymentKey(16)`. |
+|  | Var| **QMail Server**       | `QC` Servers × 32 bytes each.<br>Item: `Index(1)+Total(1)+ServerID(1)+Reserved(29)`. |
 | **End**  | 2  | **Terminator**       | Fixed `3E 3E` (Appended **after** last list item). Not encrypted |
 
 
-### Receippient Types
+### Receipient Types
 Code | Name | Meaning
 ---|---|---
 0 | To | Who the message is addessed to
@@ -48,23 +48,19 @@ IP | 16 | Uses IP four but could use IPv6. IP 4 are the last four bytes of the 1
 Port |2| The port that the Qmail server uses
 Reserved | 12 | Reserved
 
-
-Stripe Info | 0x23 | 35 | 32 | [RAID Header](https://github.com/worthingtonse/client-prompts/blob/main/Ideas%20In%20Progress/QMAIL/raid-codes.md#raid-metadata-header-standard) ( 2 Bytes), Mail Server Port (2 bytes), For Future Use (11 bytes), QMail Server IP (16 bytes. Last four are the IPv4) | | Error
-
-
-### Address List Format
+### Receipient Address Format
 
 Address part | Bytes | Description
 ---|---|---
 Address type 0x00 = To, 0x01 = CC, 0x02 = BCC, 0x03 = Mass Mailer
-Coin ID | 2 | Example: 0x0006 (6 means CloudCoinV3
+Coin ID | 2 | Example: 0x0006 (6 means CloudCoinV3)
 Denomination | 1 | The denomination of the coin the user has staked for the email address
 Domain ID | 1 | There will be 250 Top Level Domains. For right now we use 00 which means Qmail or blank
 Serial Number | 3 | The serial number of the mail box. 
 
 
 
-### File Types
+### Tell Types
 
 | Type ID | Name | Description |
 |---------|------|-------------|
