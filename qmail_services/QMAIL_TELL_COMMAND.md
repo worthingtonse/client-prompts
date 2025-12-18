@@ -14,20 +14,20 @@ This is the body of the request. See other documents for how the header is organ
 | **00-15** | 16 | **Challenge/CRC** | Random bytes or CRC. |
 | **16-23** | 8 | **Session ID** | **Mode A:** Valid. **Mode B:** Zeros. Only used for encryption type 6, otherwise all zeros. |
 | **24-25** | 2 | **Coin Type** | Fixed `00 06`. |
-| **26** | 1 | **Denomination** | User's Denomination. Not used when using Encryption type 6 |
-| **27-30** | 4 | **Serial Number** | User's Mailbox ID. This is for the user's ID. Not used when using Encryption type 6 |
+| **26** | 1 | **Denomination** | Sender's Denomination. Not used when using Encryption type 6 |
+| **27-30** | 4 | **Serial Number** | Sender's Mailbox ID. This is for the user's ID. Not used when using Encryption type 6 |
 | **31**    | 1  | **Device ID**        | 8-bit Device Identifier. User 0 for now for user's first desktop|
 | **32-47**| 16 | **Authenticity (AN)**| **Mode A:** Zeros. **Mode B:** Valid AN. THe password for the DN SN SN SN mail box above|
-| **48-63**| 16 | **File Group GUID**  | Unique 16-byte ID. |
+| **48-63**| 16 | **Email ID GUID**  | Unique 16-byte ID. |
 | **64-71**| 8  | **Reserved**      | |
 | **72-75**| 4  | **Timestamp**        | Client Time (Big Endian). |
 | **76**   | 1  | **Tell Type**        | Type of notification. Use 0 for qmail |
 | **77**   | 1  | **Address Count**    | Number of recipient addresses (AC) that will be listed below. |
 | **78**   | 1  | **Server Count**     | Number of storage servers (QC) that will be listed below. |
 | **79-87**   | 1  | **Reserved**         |  |
-| **88..** | Var| **Recipient List**   | `AC` items × 8 bytes each.<br>Item: `Type(1)+CoinID(2)+Denom(1)+SN(4)`. |
-| **..**   | Var| **Stripe Map**       | `QC` items × 32 bytes each.<br>Item: `Index(1)+Total(1)+ServerID(1)+Reserved(29)`. |
-| **End**  | 2  | **Terminator**       | Fixed `3E 3E` (Appended **after** last list item). |
+| **88..** | Var| **Recipient List**   | `AC` Recipients × 24 bytes each.<br>Item: `Type(1)+CoinID(2)+Denom(1)+SN(4)+LockerCode(16)`. |
+| **..**   | Var| **QMail Server**       | `QC` Servers × 32 bytes each.<br>Item: `Index(1)+Total(1)+ServerID(1)+Reserved(29)`. |
+| **End**  | 2  | **Terminator**       | Fixed `3E 3E` (Appended **after** last list item). Not encrypted |
 
 
 ### Receippient Types
@@ -39,11 +39,11 @@ Code | Name | Meaning
 3 | Mass | Not implemented yet. 
 
 ### Server List Format
-
+Each server that the messages are stiped on is described here.
 Name | bytes | Description
 ---|---|---
 Server Index| 1| This is the order in which this server array must be lined up to be put together. Starts at zero. 
-Stripe Type | 1 | Parity or Stripe, Horizontal, Vertical or Diagnal. 
+Stripe Type |  1 | Stripe 0, Parity 1, Mirror 2, Horizontal, Vertical or Diagnal. 
 IP | 16 | Uses IP four but could use IPv6. IP 4 are the last four bytes of the 16
 Port |2| The port that the Qmail server uses
 Reserved | 12 | Reserved
