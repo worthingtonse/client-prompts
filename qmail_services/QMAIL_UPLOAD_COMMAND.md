@@ -15,9 +15,9 @@
 | **16-23** | 8 | **Session ID** | **Mode A:** Valid. **Mode B:** Zeros. |
 | **24-25** | 2 | **Coin Type** | Fixed `00 06`. |
 | **26** | 1 | **Denomination** | User's Denomination. |
-| **27-30** | 4 | **Serial Number** | User's Mailbox ID (Identity SN). |
+| **27-30** | 4 | **Serial Number** | Sender's Mailbox ID (Identity SN). |
 | **31**    | 1 | **Device ID**        | 8-bit Device Identifier. |
-| **32-47**| 16| **Authenticity (AN)**| **Mode A:** Zeros. **Mode B:** Valid AN. |
+| **32-47**| 16| **Authenticity (AN)**| Sender's Mailbox AN for that RAIDA **Mode A:** Zeros. **Mode B:** Valid AN. |
 | **48-63**| 16| **File Group GUID**  | Unique 16-byte ID. |
 | **64-71**| 8 | **Locker Code**      | Payment code. |
 | **72-73**| 2 | **Reserved**         | Padding. |
