@@ -7,9 +7,9 @@
 ## Authorization
 
 **IMPORTANT:** Authorization is via AN (Authenticity Number) ONLY.
-- Recipients do NOT need to be listed in `user.php` to receive mail
+- Recipients do NOT need to be listed in a directory to receive mail
 - The AN proves ownership of the sender's coin/mailbox
-- `user.php` is for optional profile data only (name, avatar, fees)
+- Diectories such as the stopgap `users.php` is for optional profile data only (name, avatar, fees)
 
 ## Request Payload Structure (Decrypted)
 
@@ -23,16 +23,16 @@ This is the body of the request. See other documents for how the header is organ
 | **24-25** | 2 | **Coin Type** | Fixed `00 06`. |
 | **26** | 1 | **Denomination** | Sender's Denomination. Not used when using Encryption type 6 |
 | **27-30** | 4 | **Serial Number** | Sender's Mailbox ID. This is for the user's ID. Not used when using Encryption type 6 |
-| **31**    | 1  | **Device ID**        | 8-bit Device Identifier (0-255). Reserved for future per-device tracking. |
+| **31**    | 1  | Reserved      |  |
 | **32-47**| 16 | **Authenticity (AN)**| **Mode A:** Zeros. **Mode B:** Valid AN. The password for the DN SN SN SN mail box above |
 | **48-63**| 16 | **Email ID GUID**  | Unique 16-byte ID. |
-| **64-71**| 8  | **RAID TYPE**      | Use zero for now. This means all the servers are stripes except the last one is parity |
+| **64-71**| 8  | **Reserved**     |  |
 | **72-75**| 4  | **Timestamp**        | Client Time (Big Endian). |
 | **76**   | 1  | **Tell Type**        | Type of notification. Use 0 for qmail |
 | **77**   | 1  | **Address Count**    | Number of recipient addresses (AC) that will be listed below. |
 | **78**   | 1  | **Server Count**     | Number of storage servers (QC) that will be listed below. |
 | **79-86** | 8  | **Beacon Payment Locker** | Optional 8-byte locker code for anti-DDOS payment to beacon. Zeros if no payment. |
-| **87**   | 1  | **Reserved**         | Reserved for future use. |
+| **87**   | 1  | **Reserved**         | |
 |  | Var| **Recipient List**   | `AC` Recipients × 32 bytes each.<br>Item: `Type(1)+CoinID(2)+Denom(1)+DomainID(1)+SN(3)+LockerPaymentKey(16)+Reserved(8)`. |
 |  | Var| **QMail Server**       | `QC` Servers × 32 bytes each.<br>Item: `StripeIndex(1)+StripeType(1)+LockerCode(8)+IP(16)+Port(2)+Reserved(4)`. |
 | **End**  | 2  | **Terminator**       | Fixed `3E 3E` (Appended **after** last list item). Not encrypted |
