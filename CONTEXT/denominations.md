@@ -15,7 +15,7 @@ These are used for currency. The smallest one cannot be broken into anything sma
 These denominations are all multiples of 10 thus making them metric. There is uaully a lot of confusion on how these values are encoded as bytes. 
 
 Value | Code| Signed Decimal Code | Display Format | mega units
----: |---| :---: | ---
+---: |---| :---: | --- | --- |
 0.00000001 |`0xF8` | -8 | `.0000-0001` | 1
 0.0000001|`0xF9` | -7 | `.0000-001` | 10
 0.000001|`0xFa` | -6 | `.0000-01` | 100
