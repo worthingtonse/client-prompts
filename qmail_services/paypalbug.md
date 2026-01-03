@@ -1,4 +1,5 @@
 # What Claud Said:
+```
 ================================================================================
               CONSOLIDATED PAYPAL TROUBLESHOOTING INSTRUCTIONS
               Based on analysis from: Claude Opus 4.5 and GPT-4o
@@ -249,7 +250,7 @@ Bad output (env not loaded):
                             END OF INSTRUCTIONS
 ================================================================================
 
-
+```
 ----
 
 # What Gemini Said: 
