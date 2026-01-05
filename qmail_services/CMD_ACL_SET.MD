@@ -14,9 +14,18 @@ This is necessary because unless this is done, only the sender has the right to 
 00603002365="FullControl" // the number is the sender's mailbox ID.
 [DENY]
 ```
-3. The user then calls this ACL command and changes the ACL so others can read it. 
+3. The user then calls this ACL command and changes the ACL so others can read it. The edited ACL might look like this:
+```TOML
+[ALLOW]
+00603002365="FullControl" 
+00603008934 ="Read" 
+00603003982="Read,Write" 
+00603005124="Read,AddFiles" 
+[DENY]
+```
+For right now, we will only use the Read, Write and FullControl.
 
-## Request Payload Structure (Decrypted)
+## Request Payload Structure 
 
 **Total Common Preamble:** 49 Bytes (Offsets 0-48).
 
@@ -31,8 +40,12 @@ This is necessary because unless this is done, only the sender has the right to 
 | **32-47**| 16| **Authenticity (AN)**| Sender's Mailbox AN for that RAIDA **Mode A:** Zeros. **Mode B:** Valid AN. |
 | **48-63**| 16| **File Group GUID**  | Unique 16-byte ID. |
 | **64-71**| 8 | **Locker Code**      | Payment code. |
-| **72-73**| 2 | **Reserved**         | Padding. |
-| **74**   | 1 | **Reserved**         | (Was File Type). Set to 0. |
+| **72**   | 1 | **Number of ACL records that follow**  | up to 255 |
+
+**Repeating ACL records**
+| :--- | :--- | :--- | :--- |
+| 0 | 1 | **Allow or Deny**  | 1=allow 0 = deny |
+| 1   | 7 | ****         | (Was File Type). Set to 0. |
 | **75**   | 1 | **Storage Duration** | Duration code. |
 | **76-79**| 4 | **Reserved**         | Padding. |
 | **80-83**| 4 | **Data Length**      | Size of binary data (Big Endian). |
