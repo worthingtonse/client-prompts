@@ -39,18 +39,31 @@ For right now, we will only use the Read, Write and FullControl.
 | **31**    | 1 | **Device ID**        | 8-bit Device Identifier. |
 | **32-47**| 16| **Authenticity (AN)**| Sender's Mailbox AN for that RAIDA **Mode A:** Zeros. **Mode B:** Valid AN. |
 | **48-63**| 16| **File Group GUID**  | Unique 16-byte ID. |
-| **64-71**| 8 | **Locker Code**      | Payment code. |
+| **64-71**| 8 | **Reserved**      |  |
 | **72**   | 1 | **Number of ACL records that follow**  | up to 255 |
+|  | Var| **Recipient List**   | `AC` Recipients × 32 bytes each.<br>Item: `Type or reserved(1)+CoinID(2)+Denom(1)+DomainID(1)+SN(3)+Permissions(1)+Reserved(7)`. |
+| **End**  | 2  | **Terminator**       | Fixed `3E 3E` (Appended **after** last list item). Not encrypted |
 
-**Repeating ACL records**
-| :--- | :--- | :--- | :--- |
-| 0 | 1 | **Allow or Deny**  | 1=allow 0 = deny |
-| 1   | 7 | ****         | (Was File Type). Set to 0. |
-| **75**   | 1 | **Storage Duration** | Duration code. |
-| **76-79**| 4 | **Reserved**         | Padding. |
-| **80-83**| 4 | **Data Length**      | Size of binary data (Big Endian). |
-| **84..** | N | **Binary Data**      | The actual file content. |
-| **End**  | 2 | **Terminator**       | Fixed `3E 3E` (Appended **after** binary data). |
+**Built In Groups**
+Instead of using a 7 byte mail box, they can use an 7 byte build in group.
+Group ID | Meaning
+0000001 | Everyone 
+0000002 | Autneticated Users
+
+
+**Permission Codes**
+Code | Permissions allowed
+| :--- | :--- | :--- | 
+| 0 | Full Control | Can change the ACLs and has all permissions
+| 1 | Download, Overwrite, Delete, Add File | The ability to Edit
+| 2 | Download, Delete, Add File | 
+| 3 | Download, Overwrite, Add File | 
+| 4 | Download, Overwrite, Delete| 
+| 5 | Download, Delete| 
+| 6 | Overwrite, Delete| 
+
+
+
 
 ## Response Structure
 
