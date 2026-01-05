@@ -1,16 +1,20 @@
 # Set ACL (Access Control List)
-
-After a user uploads files and before they send a Tell, the user can set access permission on all the files with the same file group (same GUID).
+**Command Group:** 6
+**Command Code:** 65?
+**Description:** After a user uploads files and before they send a Tell, the user can set access permission on all the files with the same file group (same GUID).
 
 This is necessary because unless this is done, only the sender has the right to open and download the files. 
 
 ## Workflow
-1. Sender uploads files using the CMD_UPLOAD protocol and gives the group a GUID. This GUID is the ID of what is called a "File Group" or "Resource Group".
-2. QMail server puts a file in the Senders folder (a folder named after the users denomination and SN). those files into the public folder. 
+1. Sender creates a "File Group GUID" and uses it when it calls the "CMD_UPLOAD" that puts the files on the QMail servers.
+2. QMail server puts the uploaded files into the public folder and creates a defulat ACL file that gives the sender full control. The ACL file is named something like "FILE_GROUP_GUID.ACL" where the file group guid is replaced. A real ACL file might look like: "D3FDA483A5EF40309BA24D7F92753A4F.ACL". The default contents of the file are: 
 
-**Command Group:** 6
-**Command Code:** 60
-**Description:** Uploads a binary data blob (stripe) to the storage server.
+```TOML
+[ALLOW]
+00603002365="FullControl" // the number is the sender's mailbox ID.
+[DENY]
+```
+3. The user then calls this ACL command and changes the ACL so others can read it. 
 
 ## Request Payload Structure (Decrypted)
 
