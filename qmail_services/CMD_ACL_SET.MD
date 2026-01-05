@@ -16,7 +16,6 @@ This is necessary because unless this is done, only the sender has the right to 
 
 **Total Common Preamble:** 49 Bytes (Offsets 0-48).
 
-
 | Offset | Size | Field Name | Description |
 | :--- | :--- | :--- | :--- |
 | **00-15** | 16 | **Challenge/CRC** | Random bytes or CRC. |
@@ -35,7 +34,6 @@ This is necessary because unless this is done, only the sender has the right to 
 | **80-83**| 4 | **Data Length**      | Size of binary data (Big Endian). |
 | **84..** | N | **Binary Data**      | The actual file content. |
 | **End**  | 2 | **Terminator**       | Fixed `3E 3E` (Appended **after** binary data). |
-
 
 ## Response Structure
 
