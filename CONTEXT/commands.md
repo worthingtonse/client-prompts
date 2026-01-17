@@ -47,8 +47,8 @@ Group ID | Group Name | Command Code (Decimal) | Command | Description
 2 | Healing | 60 |find|  Checks last two ANs to see if there is a match. 
 2 | Healing | 80 | fix | Accepts a bunch of tickets to ensure they are good.
 🟥2 |Healing | 51  | get-ticket by Sum | Returns proof that the tokens are good based on a sum of ANs. 
-🟥2 |Healing |  52 | get-encryption-ticket | Returns proof that the tokens are good. 
-🟥2 |Healing |  53 | fix-encryption-key | Returns proof that the tokens are good based on a sum of ANs. 
+4 |Healing |  44 | get-encryption-ticket | Returns proof that the tokens are good. 
+4 |Healing |  45 | fix-encryption-key | Returns proof that the tokens are good based on a sum of ANs. 
 3 | Treasury | 120 | Get Available SNs| Shows available serial numbers. 
 3 | Treasury |130 | Create tokens| Adds more tokens to the total tokens on the RAIDA.
 3 | Treasury |140 | Delete tokens| Removes tokens from the RAIDA.
