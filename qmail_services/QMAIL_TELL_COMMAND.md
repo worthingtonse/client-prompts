@@ -9,7 +9,7 @@
 **IMPORTANT:** Authorization is via AN (Authenticity Number) ONLY.
 - Recipients do NOT need to be listed in a directory to receive mail
 - The AN proves ownership of the sender's coin/mailbox
-- Diectories such as the stopgap `users.php` is for optional profile data only (name, avatar, fees)
+- Directories such as the stopgap `users.php` is for optional profile data only (name, avatar, fees)
 
 ## Request Payload Structure (Decrypted)
 
@@ -26,7 +26,8 @@ This is the body of the request. See other documents for how the header is organ
 | **31**    | 1  | Reserved      |  |
 | **32-47**| 16 | **Authenticity (AN)**| **Mode A:** Zeros. **Mode B:** Valid AN. The password for the DN SN SN SN mail box above |
 | **48-63**| 16 | **Email ID GUID**  | Unique 16-byte ID. |
-| **64-71**| 8  | **Reserved**     |  |
+| **64-67**| 4  | **Total File Size**  | Original body size in bytes (Big Endian). Used by receiver for exact trim after reassembly. Set to 0 if unknown. |
+| **68-71**| 4  | **Reserved**     | Reserved for future use. |
 | **72-75**| 4  | **Timestamp**        | Client Time (Big Endian). |
 | **76**   | 1  | **Tell Type**        | Type of notification. Use 0 for qmail |
 | **77**   | 1  | **Address Count**    | Number of recipient addresses (AC) that will be listed below. |
@@ -38,10 +39,10 @@ This is the body of the request. See other documents for how the header is organ
 | **End**  | 2  | **Terminator**       | Fixed `3E 3E` (Appended **after** last list item). Not encrypted |
 
 
-### Receipient Types
+### Recipient Types
 Code | Name | Meaning
 ---|---|---
-0 | To | Who the message is addessed to
+0 | To | Who the message is addressed to
 1 | CC | copy sent to 
 2 | BCC | Blind Carbon Copy
 3 | Mass | Not implemented yet. 
@@ -70,8 +71,6 @@ Each server that the messages are striped on is described here.
 | Locker Payment Key | 16 | Payment locker code for THIS recipient |
 | Reserved | 8 | Reserved for future use | 
 
-
-
 ### Tell Types
 
 | Type ID | Name | Description |
@@ -99,6 +98,4 @@ Each server that the messages are striped on is described here.
 
 **Note:** Recipients are NOT validated against `user.php`. All TELLs to this beacon are accepted.
 The beacon delivers to the recipient's inbox directory based on their address.
-
-
 
